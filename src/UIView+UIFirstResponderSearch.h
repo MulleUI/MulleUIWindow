@@ -12,6 +12,7 @@
 #import "import.h"
 
 
+
 struct UIFirstResponderSearch
 {
    UIView        *referenceView;
@@ -29,9 +30,9 @@ struct UIFirstResponderSearch
 
 
 void  UIFirstResponderSearchInit( struct UIFirstResponderSearch *p,
-                             id <UIResponder> responder,
-                             CADirection primaryDirection,
-                             CADirection secondaryDirection);
+                                  id <UIResponder> responder,
+                                  CADirection primaryDirection,
+                                  CADirection secondaryDirection);
 
 
 static inline UIView   *UIFirstResponderSearchGetResult( struct UIFirstResponderSearch *p)

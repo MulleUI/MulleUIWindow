@@ -146,7 +146,7 @@
          // _currentWindowInfo if a thread is active
          // whereas the thread doesn't touch _previousWindowInfo
          _previousWindowInfo = info->window;
-         sendEvent = YES;
+         sendEvent           = YES;
       }
    }
 

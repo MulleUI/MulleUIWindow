@@ -11,7 +11,6 @@ endif()
 # contents selected with patternfile ??-source--sources
 #
 set( SOURCES
-src/CGFrameInfo+UTF8String.m
 src/UIFont.m
 src/UIPasteboard.m
 src/UITrackingArea.m

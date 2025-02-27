@@ -13,7 +13,6 @@
 #define _mulle_ui_window__export_h__
 
 
-#import "CGFrameInfo+UTF8String.h"
 #import "MulleObjCLoader+MulleUIWindow.h"
 #import "UIFont.h"
 #import "UIPasteboard.h"

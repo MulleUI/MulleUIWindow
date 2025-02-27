@@ -60,7 +60,6 @@ src/include.h
 # contents selected with patternfile ??-header--public-headers
 #
 set( PUBLIC_HEADERS
-src/CGFrameInfo+UTF8String.h
 src/MulleObjCLoader+MulleUIWindow.h
 src/MulleUIWindow.h
 src/UIFont.h
