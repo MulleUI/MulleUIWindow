@@ -12,6 +12,21 @@
  */
 
 // To remove the following dependency (headers and library) completely:
+//   `mulle-sde dependency remove MulleUIPureWindow`
+// (Use 351B9014-576D-48A2-9B6D-5D25A5AAA0B0 instead of MulleUIPureWindow, if there are duplicate entries)
+//
+// You can tweak the following #import with these commands:
+//    remove #import      : `mulle-sde dependency mark MulleUIPureWindow no-header`
+//    rename              : `mulle-sde dependency|library set MulleUIPureWindow include whatever.h`
+//    reorder             : `mulle-sde dependency move MulleUIPureWindow <up|down>`
+//    toggle #import      : `mulle-sde dependency mark MulleUIPureWindow [no-]import`
+//    toggle public       : `mulle-sde dependency mark MulleUIPureWindow [no-]public`
+//    toggle optional     : `mulle-sde dependency mark MulleUIPureWindow [no-]require`
+//    remove for platform : `mulle-sde dependency mark MulleUIPureWindow no-platform-<uname>`
+//        (use `mulle-sourcetree-to-c --unames` to list known values)
+#import <MulleUIPureWindow/MulleUIPureWindow.h>   // MulleUIPureWindow
+
+// To remove the following dependency (headers and library) completely:
 //   `mulle-sde dependency remove MulleUIView`
 // (Use 432508D4-21E7-4787-8C7E-726645522382 instead of MulleUIView, if there are duplicate entries)
 //
@@ -40,21 +55,6 @@
 //    remove for platform : `mulle-sde dependency mark MulleCA no-platform-<uname>`
 //        (use `mulle-sourcetree-to-c --unames` to list known values)
 #import <MulleCA/MulleCA.h>   // MulleCA
-
-// To remove the following dependency (headers and library) completely:
-//   `mulle-sde dependency remove MulleInvocationQueue`
-// (Use C260734E-5ADF-4DF6-B1B5-0AEFC5D2A9D4 instead of MulleInvocationQueue, if there are duplicate entries)
-//
-// You can tweak the following #import with these commands:
-//    remove #import      : `mulle-sde dependency mark MulleInvocationQueue no-header`
-//    rename              : `mulle-sde dependency|library set MulleInvocationQueue include whatever.h`
-//    reorder             : `mulle-sde dependency move MulleInvocationQueue <up|down>`
-//    toggle #import      : `mulle-sde dependency mark MulleInvocationQueue [no-]import`
-//    toggle public       : `mulle-sde dependency mark MulleInvocationQueue [no-]public`
-//    toggle optional     : `mulle-sde dependency mark MulleInvocationQueue [no-]require`
-//    remove for platform : `mulle-sde dependency mark MulleInvocationQueue no-platform-<uname>`
-//        (use `mulle-sourcetree-to-c --unames` to list known values)
-#import <MulleInvocationQueue/MulleInvocationQueue.h>   // MulleInvocationQueue
 
 #ifdef __has_include
 # if __has_include( "_MulleUIWindow-include.h")

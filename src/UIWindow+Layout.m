@@ -5,9 +5,7 @@
 
 #import "import-private.h"
 
-#import "CGFrameInfo+UTF8String.h"
 #import "UIWindow+RenderQueue.h"
-#import "UIWindow+UIWindow.h"
 #import "UIWindow+DebugPrivate.h"
 
 #ifdef DEBUG
@@ -55,8 +53,8 @@
    animationRate = UIWindowGetAnimationRate( self);
    didAnimate    = [_preLayoutAnimator animateWithAbsoluteTime:info->now
                                                  animationRate:animationRate];
-   if( _didAnimateCallback)
-      (*_didAnimateCallback)( self, info, 0);
+   if( _didAnimateViewsCallback)
+      (*_didAnimateViewsCallback)( self, info, 0);
 
    MulleWindowProfileEnd();
 
@@ -97,8 +95,8 @@
    animationRate = UIWindowGetAnimationRate( self);
    didAnimate    = [_postLayoutAnimator animateWithAbsoluteTime:info->now
                                                   animationRate:animationRate];
-   if( _didAnimateCallback)
-      (*_didAnimateCallback)( self, info, 1);
+   if( _didAnimateViewsCallback)
+      (*_didAnimateViewsCallback)( self, info, 1);
 
    MulleWindowProfileEnd();
 
@@ -109,6 +107,19 @@
    return( displayBits);
 }
 
+
+#if DEBUG_DUPLICATE_LAYOUT
+- (void) initCategory
+{
+   _mulle__pointerset_init( &_layoutedViews, 64, MulleObjCInstanceGetAllocator( self));
+}
+
+
+- (void) deallocCategory
+{
+   _mulle__pointerset_done( &_layoutedViews, MulleObjCInstanceGetAllocator( self));
+}
+#endif
 
 
 - (void) layout
@@ -126,19 +137,17 @@
    [self->_view setFrame:bounds];
    [self->_view layout];
 
+   // this is for debugging
+   assert( [self->_view autoresizingMask] == UIViewAutoresizingScaleToFill ||
+           [self->_view autoresizingMask] == UIViewAutoresizingFlexibleSize);
+   assert( UIEdgeInsetsEqualToEdgeInsets( [self->_view padding], UIEdgeInsetsZero));
+   assert( UIEdgeInsetsEqualToEdgeInsets( [self->_view margins], UIEdgeInsetsZero));
+
 #if DEBUG_DUPLICATE_LAYOUT
    _mulle__pointerset_reset( &_layoutedViews);
    _isLayouting = NO;
 #endif
    _quadtreeNeedsSetup = YES;
-}
-
-
-- (void) _dealloc
-{
-#if DEBUG_DUPLICATE_LAYOUT
-   _mulle__pointerset_done( &_layoutedViews, MulleObjCInstanceGetAllocator( self));
-#endif
 }
 
 
@@ -150,8 +159,8 @@
    /*
     * Layout
     */
-   if( _willLayoutCallback)
-      (*_willLayoutCallback)( self, info);
+   if( _willLayoutViewsCallback)
+      (*_willLayoutViewsCallback)( self, info);
 
    //
    // do layout before the animation step, as this may generate animations
@@ -163,8 +172,8 @@
 #if LAYOUT_ANIMATIONS
    [self endLayout];
 #endif
-   if( _didLayoutCallback)
-      (*_didLayoutCallback)( self, info);
+   if( _didLayoutViewsCallback)
+      (*_didLayoutViewsCallback)( self, info);
 
    MulleWindowProfileEnd();
 }
@@ -174,17 +183,19 @@
 // will be followed by "UIWindowDefaultPrepareRenderQueue", which will 
 // call animateFrame: below after setting up the drawing queue
 //
-UIWindowDisplayBits
-   UIWindowDefaultLayout( UIWindow *self,
-                          struct CGFrameInfo *info,
-                          UIWindowDisplayBits displayBits)
+UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
+                                                  struct CGFrameInfo *info,
+                                                  UIWindowDisplayBits displayBits)
 {
+   UIWindowDisplayBits   animationDisplayBits;
    //_viewsNeedTrackingAreaUpdate = NO;
 
-   displayBits |= [self willLayoutWithAbsoluteTime:info->now];
-   displayBits |= [self preLayoutAnimations:info];
+   animationDisplayBits  = [self willLayoutWithAbsoluteTime:info->now];
+   animationDisplayBits |= [self preLayoutAnimations:info];
 
-   if( (displayBits & (UIWindowDisplayNeedsLayout|UIWindowDisplayDidAnimate)))
+   // if original displayBits contained layout request, of if there are
+   // preLayoutAnimations, we run the layouter
+   if( (displayBits & UIWindowDisplayNeedsLayout) || animationDisplayBits)
    {
       [self layoutFrame:info];
       displayBits |= UIWindowDisplayNeedsRedraw | UIWindowDisplayNeedsAnimation;
@@ -202,8 +213,8 @@ UIWindowDisplayBits
 }
 
 
-- (UIWindowDisplayBits) animateFrame:(struct CGFrameInfo *) info
-                         displayBits:(UIWindowDisplayBits) displayBits
+- (UIWindowDisplayBits) animateViewsInFrame:(struct CGFrameInfo *) info
+                                displayBits:(UIWindowDisplayBits) displayBits
 {
    BOOL                   didAnimate;
    mulle_relativetime_t   animationRate;
@@ -227,8 +238,8 @@ UIWindowDisplayBits
    // have no didAnimate callback, because we would like to pipeline
    // with rendering, or but the animation step into the render part ?
    //
-   if( _didAnimateCallback)
-      didAnimate |= (*_didAnimateCallback)( self, info, 2);
+   if( _didAnimateViewsCallback)
+      didAnimate |= (*_didAnimateViewsCallback)( self, info, 2);
 
    if( didAnimate)
    {

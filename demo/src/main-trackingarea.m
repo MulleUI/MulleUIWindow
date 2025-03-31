@@ -102,7 +102,7 @@ void   setupScene( UIWindow *window)
    frame   = CGSizeCenterInRect( CGSizeMake( 200, 200), [contentView contentRect]);
    subview = [TrackingView viewWithFrame:frame];
    [subview setDebuggingFlags:[window debuggingFlags]];
-   [subview setDebugNameUTF8String:"tracking"];
+   [subview setNameUTF8String:"tracking"];
    [subview setColors:CGColorMakeGreen()];
    [subview setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
 

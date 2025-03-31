@@ -86,7 +86,7 @@ void   setupSceneInWindow( UIWindow *window)
                               CGRectMakeWithOriginAndSize( CGPointZero, [scrollView contentSize]),
                               CGContentModeCenterPoint);
    view  = [TrackingView viewWithFrame:frame];
-   [view setDebugNameUTF8String:"tracking"];
+   [view setNameUTF8String:"tracking"];
    [view setColors:CGColorMakeBlue()];
 
    [[scrollView contentView] addSubview:view];

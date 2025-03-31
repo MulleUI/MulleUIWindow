@@ -35,8 +35,8 @@
 - (UIWindowDisplayBits) postLayoutAnimations:(struct CGFrameInfo *) info;
 
 // returns YES if animation ran
-- (UIWindowDisplayBits) animateFrame:(struct CGFrameInfo *) info
-                         displayBits:(UIWindowDisplayBits) displayBits;
+- (UIWindowDisplayBits) animateViewsInFrame:(struct CGFrameInfo *) info
+                                displayBits:(UIWindowDisplayBits) displayBits;
 
 @end
 
@@ -72,7 +72,7 @@
 
 
 UIWindowDisplayBits
-   UIWindowDefaultLayout( UIWindow *self,
+   UIWindowDefaultLayoutViews( UIWindow *self,
                           struct CGFrameInfo *info,
                           UIWindowDisplayBits displayBits);
 

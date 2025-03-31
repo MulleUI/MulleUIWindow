@@ -148,7 +148,7 @@ UI_VIEW_ANIMATABLE_PROPERTIES;
    [transaction begin];
 
    [transaction setAnimationID:animationID];
-   [transaction setContext:context];
+   [transaction setAnimationContext:context];
    [transaction setAnimationDuration:2.0];
    [transaction setAnimationRepeatCount:1.0];
    [transaction setAnimationCurve:UIViewAnimationCurveEaseInOut];

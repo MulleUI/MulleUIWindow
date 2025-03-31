@@ -105,6 +105,7 @@ static void   setupSceneInBareWindow( UIWindow *window, CGColor color)
 
    view  = [UIView viewWithFrame:frame];
    [view setBackgroundColor:color];
+   [view setAutoresizingMask:UIViewAutoresizingScaleToFill];
    [(CGGraphicsLayer *) [view layer] setDrawCallback:drawStuff];
    [window setView:view];
 }

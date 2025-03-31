@@ -113,28 +113,28 @@ void   setupScene( UIWindow *window)
    frame  = UIEdgeInsetsInsetRect( frame, insets);
 
    view  = [UIView viewWithFrame:frame];
-   [view setDebugNameUTF8String:"parent"];
+   [view setNameUTF8String:"parent"];
    [view setAutoresizingMask:UIViewAutoresizingScaleToFill];
    [view setBackgroundColor:CGColorMakeYellow()];
    [view setPadding:UIEdgeInsetsMake( 4.0, 4.0, 4.0, 4.0)];
 
    frame   = CGRectMake( 20, 40, 200, 200);
    subview = [SensitiveView viewWithFrame:frame];
-   [subview setDebugNameUTF8String:"green"];
+   [subview setNameUTF8String:"green"];
    [subview setColors:CGColorMakeGreen()];
    setupTrackingRectangles( subview, window, NO);
    [view addSubview:subview];
 
    frame   = CGRectMake( 120, 20, 50, 300);
    subview = [SensitiveView viewWithFrame:frame];
-   [subview setDebugNameUTF8String:"blue"];
+   [subview setNameUTF8String:"blue"];
    [subview setColors:CGColorMakeBlue()];
    setupTrackingRectangles( subview, window, NO);
    [view addSubview:subview];
 
    frame   = CGRectMake( 50, 120, 200, 50);
    subview = [SensitiveView viewWithFrame:frame];
-   [subview setDebugNameUTF8String:"red"];
+   [subview setNameUTF8String:"red"];
    [subview setColors:CGColorMakeRed()];
    setupTrackingRectangles( subview, window, NO);
    [view addSubview:subview];
@@ -142,14 +142,14 @@ void   setupScene( UIWindow *window)
    // now the same setup just reverse
    frame   = CGRectMake( 400, 120, 200, 50);
    subview = [SensitiveView viewWithFrame:frame];
-   [subview setDebugNameUTF8String:"red"];
+   [subview setNameUTF8String:"red"];
    [subview setColors:CGColorMakeRed()];
    setupTrackingRectangles( subview, window, YES);
    [view addSubview:subview];
 
    frame   = CGRectMake( 470, 20, 50, 300);
    subview = [SensitiveView viewWithFrame:frame];
-   [subview setDebugNameUTF8String:"blue"];
+   [subview setNameUTF8String:"blue"];
    [subview setColors:CGColorMakeBlue()];
    setupTrackingRectangles( subview, window, YES);
    [view addSubview:subview];
@@ -157,7 +157,7 @@ void   setupScene( UIWindow *window)
 
    frame   = CGRectMake( 370, 40, 200, 200);
    subview = [SensitiveView viewWithFrame:frame];
-   [subview setDebugNameUTF8String:"green"];
+   [subview setNameUTF8String:"green"];
    [subview setColors:CGColorMakeGreen()];
    setupTrackingRectangles( subview, window, YES);
    [view addSubview:subview];

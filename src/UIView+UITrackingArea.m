@@ -7,7 +7,6 @@
 
 #import <MulleUIView/UIView+DebugPrivate.h>
 #import "UIWindow+UITrackingArea.h"
-#import "UIWindow+NSTimer.h"
 #import "UITrackingArea.h"
 
 

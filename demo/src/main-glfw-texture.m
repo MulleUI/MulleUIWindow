@@ -86,7 +86,7 @@ static void   init_texture()
 //
 // pretty much unchanged.
 //
-static int   display( GLFWOSWindow *window)
+static UIWindowDisplayBits   display( GLFWOSWindow *window_in)
 {
    static GLint faces[][4] = {{4,5,6,7},
                               {1,2,6,5},
@@ -141,7 +141,7 @@ static int   display( GLFWOSWindow *window)
    }
    glFlush();
 
-   return( 0);
+   return( 1);
 }
 
 
@@ -185,7 +185,11 @@ void   update()
 // this loses some functions, also the signature is different
 static void   timerCallback( NSTimer *timer, id userInfo)
 {
+   GLFWOSWindow *window = MULLE_OBJC_CLASS_CAST( GLFWOSWindow, userInfo);
+
+   [window os_activateGraphicsContext];
    update();
+   [window os_deactivateGraphicsContext];
 //
 //  glutPostRedisplay();
 //  glutTimerFunc(delay, timer, 0);
@@ -208,7 +212,9 @@ static void   receiveWindowEvents( GLFWOSWindow *window, UIWindowEvent *event)
    case UIWindowEventTypeResize            :
    case UIWindowEventTypeFramebufferResize :
       size = [window os_framebufferSize];
+      [window os_activateGraphicsContext];
       reshape( size.width, size.height);
+      [window os_deactivateGraphicsContext];
    }
 
    [window displayFrameIfNeeded:mulle_absolutetime_now()];
@@ -242,7 +248,7 @@ int   main( int argc, char *argv[])
       timer = [[[NSTimer alloc] mulleInitWithRelativeTimeInterval:0.0
                                                    repeatInterval:delay/1000.0
                                                          callback:timerCallback
-                                                         userInfo:nil] autorelease];
+                                                         userInfo:window] autorelease];
       [app addTimer:timer
    forTimerReceiver:app];   
    

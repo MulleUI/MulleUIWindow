@@ -51,6 +51,8 @@ static void   setupSceneInView( UIView *contentView)
    UIView   *view;
    CGRect   frame;
 
+   assert( contentView);
+
    frame = [contentView contentRect];
    frame = UIEdgeInsetsInsetRect( frame, UIEdgeInsetsMake( 10, 10, 10, 10));
 

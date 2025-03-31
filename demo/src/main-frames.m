@@ -42,7 +42,7 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *context)
    struct NVGcontext       *vg;
    UIWindow                *window;
 
-   osWindow = [context OSWindow];
+   osWindow = (GLFWOSWindow *) [context OSWindow];
    window   = (UIWindow *) [osWindow parentWindow];
    assert( window);
 
@@ -221,13 +221,17 @@ int   main( int argc, char *argv[])
             styleMask |= UIWindowStyleRetainedOnMainThread;
 
       if( ! isDoubleBuffered)
+      {
          if( isRetained == NO && isMainThread == YES)
+         {
             styleMask |= UIWindowStyleSingleBuffer;
+         }
          else
          {
             mulle_fprintf( stderr, "single buffer only supported for volatile mode\n");
             return( 1);
          }
+      }
 
       styleMask |= UIWindowStyleResizable;
       //

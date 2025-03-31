@@ -13,7 +13,6 @@ endif()
 set( SOURCES
 src/main-candycrash.m
 src/main-copy-window2.m
-src/main-copy-window3.m
 src/main-copy-window.m
 src/main-cursor.m
 src/main-demo.m

@@ -11,8 +11,6 @@ endif()
 # contents selected with patternfile ??-source--sources
 #
 set( SOURCES
-src/UIFont.m
-src/UIPasteboard.m
 src/UITrackingArea.m
 src/UIView+CAAnimation.m
 src/UIView+RenderQueue.m
@@ -20,19 +18,14 @@ src/UIView+UIFirstResponderSearch.m
 src/UIView+UIFirstResponder.m
 src/UIView+UITrackingArea.m
 src/UIView+UIWindow.m
-src/UIWindow+CGGeometry.m
 src/UIWindow+FrameInfo.m
-src/UIWindow+InvocationQueue.m
 src/UIWindow+Layout.m
-src/UIWindow+NSTimer.m
 src/UIWindow+OneFrame.m
 src/UIWindow+RenderQueue.m
-src/UIWindow+Thread.m
+src/UIWindow+Render.m
 src/UIWindow+UIEvent.m
-src/UIWindow+UIPasteboard.m
 src/UIWindow+UIResponder.m
 src/UIWindow+UITrackingArea.m
-src/UIWindow+UIWindow.m
 src/UIWindow.m
 )
 

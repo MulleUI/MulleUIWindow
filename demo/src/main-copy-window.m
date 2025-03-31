@@ -1,6 +1,21 @@
 #import "import.h"
 
 
+#ifndef WINDOW1_STYLEMASK
+# define WINDOW1_STYLEMASK    UIWindowStyleMaskDefault
+#endif
+#ifndef WINDOW2_STYLEMASK
+# define WINDOW2_STYLEMASK    UIWindowStyleMaskDefault
+#endif
+
+#ifndef WINDOW1_FRAMERATE
+# define WINDOW1_FRAMERATE    60.0
+#endif
+#ifndef WINDOW2_FRAMERATE
+# define WINDOW2_FRAMERATE    UIWindowFrameRateUnsynced
+#endif
+
+
 //
 // in this demo, we screenshot window 1 and display it in window2
 //
@@ -93,7 +108,7 @@ static void  drawStuff( CALayer *layer, CGContext *context)
    CGPoint   a;
    CGPoint   b;
 
-   MulleUICLog( "%td", [context numberOfFrames]);
+   // MulleUICLog( "%td", [context numberOfFrames]);
 
    canvas      = [layer canvas];
    rect        = UIEdgeInsetsInsetRect( canvas, UIEdgeInsetsMake( 50, 50, 50, 50));
@@ -128,25 +143,25 @@ static void   setupSceneInWindow( UIWindow *window)
 }
 
 
-static void  copyStuff( CALayer *layer, CGContext *context)
-{
-   CGFloat      diameter;
-   CGRect       rect;
-   NVGcontext   *vg;
-
-   rect = [layer canvas];
-   rect = UIEdgeInsetsInsetRect( rect, UIEdgeInsetsMake( 2, 2, 2, 2));
-   diameter = CGFloatMinimum( CGRectGetWidth( rect), CGRectGetHeight( rect));
-
-   vg = CGContextGetNVGContext( context);
-   nvgBeginPath( vg);
-   {
-      nvgCircle( vg, CGRectGetMidX( rect), CGRectGetMidY( rect), diameter / 2.0);
-      nvgStrokeColor( vg, CGColorMakeWithRGBA( 1.0, 1.0, 1.0, 1.0));
-      nvgStrokeWidth( vg, 4.0);
-   }
-   nvgStroke( vg);
-}
+//static void  copyStuff( CALayer *layer, CGContext *context)
+//{
+//   CGFloat      diameter;
+//   CGRect       rect;
+//   NVGcontext   *vg;
+//
+//   rect = [layer canvas];
+//   rect = UIEdgeInsetsInsetRect( rect, UIEdgeInsetsMake( 2, 2, 2, 2));
+//   diameter = CGFloatMinimum( CGRectGetWidth( rect), CGRectGetHeight( rect));
+//
+//   vg = CGContextGetNVGContext( context);
+//   nvgBeginPath( vg);
+//   {
+//      nvgCircle( vg, CGRectGetMidX( rect), CGRectGetMidY( rect), diameter / 2.0);
+//      nvgStrokeColor( vg, CGColorMakeWithRGBA( 1.0, 1.0, 1.0, 1.0));
+//      nvgStrokeWidth( vg, 4.0);
+//   }
+//   nvgStroke( vg);
+//}
 
 
 static void   setupCopyInWindow( UIWindow *window)
@@ -175,50 +190,61 @@ int   main( int argc, char *argv[])
    BOOL            closed[ 2];
    NSUInteger      styleMask;
 
-   styleMask = UIWindowStyleMaskDefault;
-   styleMask = UIWindowsStyleMaskBySetting( styleMask, UIWindowStyleRetained, NO);
 
    app = [UIApplication sharedInstance];
    {
-
+      styleMask = UIWindowsStyleMaskBySetting( WINDOW1_STYLEMASK, UIWindowStyleRetained, NO);
       window[ 0] = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 400.0)
-                             titleUTF8String:"Demo"
+                             titleUTF8String:"Source"
                                    styleMask:styleMask];
       [window[ 0] setBackgroundColor:CGColorMakeWithRGBA( 1.0, 0.0, 0.0, 1.0)];
       setupSceneInWindow( window[ 0]);
-      [window[ 0] setFrameRateHz:60.0];
+      [window[ 0] setFrameRateHz:WINDOW1_FRAMERATE];
 //      [window[ 0] setFrameRate:UIWindowFrameRateUnsynced];
 
       [app addWindow:window[ 0]];
 
+      styleMask = UIWindowsStyleMaskBySetting( WINDOW2_STYLEMASK, UIWindowStyleRetained, NO);
       window[ 1] = [UIWindow windowWithFrame:CGRectMake( 400.0, 0.0, 400.0, 400.0)
-                             titleUTF8String:"Demo"
+                             titleUTF8String:"Destination"
                                    styleMask:styleMask];
       [window[ 1] setBackgroundColor:CGColorMakeWithRGBA( 0.0, 1.0, 0.0, 1.0)];
       setupCopyInWindow( window[ 1]);
-      [window[ 1] setFrameRate:UIWindowFrameRateUnsynced];
+      [window[ 1] setFrameRate:WINDOW2_FRAMERATE];
       [app addWindow:window[ 1]];
 
       closed[ 0] = NO;
       closed[ 1] = NO;
-      while( ! closed[ 0] || ! closed[ 1])
+
+      // run as long a destination is open
+      while( ! closed[ 1])
       {
          if( ! closed[ 0])
          {
             closed[ 0] = ! [window[ 0] processOneFrame];
             if( closed[ 0])
+            {
+               [window[ 0] mullePerformFinalize];
+               window[ 0] = nil;
                fprintf( stderr, "0 closed\n");
+            }
          }
 
          if( ! closed[ 1])
          {
             if( ! closed[ 0])
             {
-               image     = [window[ 0] screenshotBitmapImage];
-               assert( image);
-               imageView = (UIImageView *) [[window[ 1] view] findViewWithTag:1];
-               assert( imageView);
-               [imageView setImage:image];
+               // we need this autoreleasepool, otherwise the generated
+               // screenshots stick around till the end of the mainThread
+               // pool (i.e. forever)
+               @autoreleasepool
+               {
+                  image = [window[ 0] screenshotBitmapImage];
+                  assert( image);
+                  imageView = (UIImageView *) [[window[ 1] view] findViewWithTag:1];
+                  assert( imageView);
+                  [imageView setImage:image];
+               }
             }
 
             closed[ 1] = ! [window[ 1] processOneFrame];

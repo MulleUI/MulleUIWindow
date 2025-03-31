@@ -1,0 +1,21 @@
+=== Testing UIWindow Category Initialization ===
+Creating a UIWindow to verify its automatic category initialization...
+UIWindow(TestCategoryA): initCategory called
+UIWindow(TestCategoryB): initCategory called
+UIWindow created
+
+Default property values from initCategory:
+Category A value: 21
+Category B value: 42
+
+Updating property values...
+After modification:
+Category A value: 84
+Category B value: 200
+
+Deallocating UIWindow...
+UIWindow(TestCategoryB): deallocCategory called
+UIWindow(TestCategoryA): deallocCategory called
+UIWindow deallocated
+
+=== Test Complete ===

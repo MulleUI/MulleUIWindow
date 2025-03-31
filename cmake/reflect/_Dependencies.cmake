@@ -12,6 +12,92 @@ if( MULLE_TRACE_INCLUDE)
 endif()
 
 #
+# Generated from sourcetree: 351B9014-576D-48A2-9B6D-5D25A5AAA0B0;MulleUIPureWindow;no-singlephase;
+# Disable with : `mulle-sourcetree mark MulleUIPureWindow no-link`
+# Disable for this platform: `mulle-sourcetree mark MulleUIPureWindow no-cmake-platform-${MULLE_UNAME}`
+# Disable for a sdk: `mulle-sourcetree mark MulleUIPureWindow no-cmake-sdk-<name>`
+#
+if( COLLECT_ALL_LOAD_DEPENDENCY_LIBRARIES_AS_NAMES)
+   list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES "MulleUIPureWindow")
+else()
+   if( NOT MULLE_UI_PURE_WINDOW_LIBRARY)
+      find_library( MULLE_UI_PURE_WINDOW_LIBRARY NAMES
+         ${CMAKE_STATIC_LIBRARY_PREFIX}MulleUIPureWindow${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+         ${CMAKE_STATIC_LIBRARY_PREFIX}MulleUIPureWindow${CMAKE_STATIC_LIBRARY_SUFFIX}
+         MulleUIPureWindow
+         NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH
+      )
+      if( NOT MULLE_UI_PURE_WINDOW_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBARIES)
+         find_library( MULLE_UI_PURE_WINDOW_LIBRARY NAMES
+            ${CMAKE_STATIC_LIBRARY_PREFIX}MulleUIPureWindow${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+            ${CMAKE_STATIC_LIBRARY_PREFIX}MulleUIPureWindow${CMAKE_STATIC_LIBRARY_SUFFIX}
+            MulleUIPureWindow
+         )
+      endif()
+      message( STATUS "MULLE_UI_PURE_WINDOW_LIBRARY is ${MULLE_UI_PURE_WINDOW_LIBRARY}")
+      #
+      # The order looks ascending, but due to the way this file is read
+      # it ends up being descending, which is what we need.
+      #
+      if( MULLE_UI_PURE_WINDOW_LIBRARY)
+         #
+         # Add MULLE_UI_PURE_WINDOW_LIBRARY to ALL_LOAD_DEPENDENCY_LIBRARIES list.
+         # Disable with: `mulle-sourcetree mark MulleUIPureWindow no-cmake-add`
+         #
+         list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES ${MULLE_UI_PURE_WINDOW_LIBRARY})
+         #
+         # Inherit information from dependency.
+         # Encompasses: no-cmake-searchpath,no-cmake-dependency,no-cmake-loader
+         # Disable with: `mulle-sourcetree mark MulleUIPureWindow no-cmake-inherit`
+         #
+         # temporarily expand CMAKE_MODULE_PATH
+         get_filename_component( _TMP_MULLE_UI_PURE_WINDOW_ROOT "${MULLE_UI_PURE_WINDOW_LIBRARY}" DIRECTORY)
+         get_filename_component( _TMP_MULLE_UI_PURE_WINDOW_ROOT "${_TMP_MULLE_UI_PURE_WINDOW_ROOT}" DIRECTORY)
+         #
+         #
+         # Search for "Definitions.cmake" and "DependenciesAndLibraries.cmake" to include.
+         # Disable with: `mulle-sourcetree mark MulleUIPureWindow no-cmake-dependency`
+         #
+         foreach( _TMP_MULLE_UI_PURE_WINDOW_NAME "MulleUIPureWindow")
+            set( _TMP_MULLE_UI_PURE_WINDOW_DIR "${_TMP_MULLE_UI_PURE_WINDOW_ROOT}/include/${_TMP_MULLE_UI_PURE_WINDOW_NAME}/cmake")
+            # use explicit path to avoid "surprises"
+            if( IS_DIRECTORY "${_TMP_MULLE_UI_PURE_WINDOW_DIR}")
+               list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_UI_PURE_WINDOW_DIR}")
+               #
+               include( "${_TMP_MULLE_UI_PURE_WINDOW_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
+               #
+               list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_UI_PURE_WINDOW_DIR}")
+               #
+               unset( MULLE_UI_PURE_WINDOW_DEFINITIONS)
+               include( "${_TMP_MULLE_UI_PURE_WINDOW_DIR}/Definitions.cmake" OPTIONAL)
+               list( APPEND INHERITED_DEFINITIONS ${MULLE_UI_PURE_WINDOW_DEFINITIONS})
+               break()
+            else()
+               message( STATUS "${_TMP_MULLE_UI_PURE_WINDOW_DIR} not found")
+            endif()
+         endforeach()
+         #
+         # Search for "MulleObjCLoader+<name>.h" in include directory.
+         # Disable with: `mulle-sourcetree mark MulleUIPureWindow no-cmake-loader`
+         #
+         if( NOT NO_INHERIT_OBJC_LOADERS)
+            foreach( _TMP_MULLE_UI_PURE_WINDOW_NAME "MulleUIPureWindow")
+               set( _TMP_MULLE_UI_PURE_WINDOW_FILE "${_TMP_MULLE_UI_PURE_WINDOW_ROOT}/include/${_TMP_MULLE_UI_PURE_WINDOW_NAME}/MulleObjCLoader+${_TMP_MULLE_UI_PURE_WINDOW_NAME}.h")
+               if( EXISTS "${_TMP_MULLE_UI_PURE_WINDOW_FILE}")
+                  list( APPEND INHERITED_OBJC_LOADERS ${_TMP_MULLE_UI_PURE_WINDOW_FILE})
+                  break()
+               endif()
+            endforeach()
+         endif()
+      else()
+         # Disable with: `mulle-sourcetree mark MulleUIPureWindow no-require-link`
+         message( SEND_ERROR "MULLE_UI_PURE_WINDOW_LIBRARY was not found")
+      endif()
+   endif()
+endif()
+
+
+#
 # Generated from sourcetree: 432508D4-21E7-4787-8C7E-726645522382;MulleUIView;no-singlephase;
 # Disable with : `mulle-sourcetree mark MulleUIView no-link`
 # Disable for this platform: `mulle-sourcetree mark MulleUIView no-cmake-platform-${MULLE_UNAME}`
@@ -178,92 +264,6 @@ else()
       else()
          # Disable with: `mulle-sourcetree mark MulleCA no-require-link`
          message( SEND_ERROR "MULLE_CA_LIBRARY was not found")
-      endif()
-   endif()
-endif()
-
-
-#
-# Generated from sourcetree: C260734E-5ADF-4DF6-B1B5-0AEFC5D2A9D4;MulleInvocationQueue;no-singlephase;
-# Disable with : `mulle-sourcetree mark MulleInvocationQueue no-link`
-# Disable for this platform: `mulle-sourcetree mark MulleInvocationQueue no-cmake-platform-${MULLE_UNAME}`
-# Disable for a sdk: `mulle-sourcetree mark MulleInvocationQueue no-cmake-sdk-<name>`
-#
-if( COLLECT_ALL_LOAD_DEPENDENCY_LIBRARIES_AS_NAMES)
-   list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES "MulleInvocationQueue")
-else()
-   if( NOT MULLE_INVOCATION_QUEUE_LIBRARY)
-      find_library( MULLE_INVOCATION_QUEUE_LIBRARY NAMES
-         ${CMAKE_STATIC_LIBRARY_PREFIX}MulleInvocationQueue${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
-         ${CMAKE_STATIC_LIBRARY_PREFIX}MulleInvocationQueue${CMAKE_STATIC_LIBRARY_SUFFIX}
-         MulleInvocationQueue
-         NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH
-      )
-      if( NOT MULLE_INVOCATION_QUEUE_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBARIES)
-         find_library( MULLE_INVOCATION_QUEUE_LIBRARY NAMES
-            ${CMAKE_STATIC_LIBRARY_PREFIX}MulleInvocationQueue${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
-            ${CMAKE_STATIC_LIBRARY_PREFIX}MulleInvocationQueue${CMAKE_STATIC_LIBRARY_SUFFIX}
-            MulleInvocationQueue
-         )
-      endif()
-      message( STATUS "MULLE_INVOCATION_QUEUE_LIBRARY is ${MULLE_INVOCATION_QUEUE_LIBRARY}")
-      #
-      # The order looks ascending, but due to the way this file is read
-      # it ends up being descending, which is what we need.
-      #
-      if( MULLE_INVOCATION_QUEUE_LIBRARY)
-         #
-         # Add MULLE_INVOCATION_QUEUE_LIBRARY to ALL_LOAD_DEPENDENCY_LIBRARIES list.
-         # Disable with: `mulle-sourcetree mark MulleInvocationQueue no-cmake-add`
-         #
-         list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES ${MULLE_INVOCATION_QUEUE_LIBRARY})
-         #
-         # Inherit information from dependency.
-         # Encompasses: no-cmake-searchpath,no-cmake-dependency,no-cmake-loader
-         # Disable with: `mulle-sourcetree mark MulleInvocationQueue no-cmake-inherit`
-         #
-         # temporarily expand CMAKE_MODULE_PATH
-         get_filename_component( _TMP_MULLE_INVOCATION_QUEUE_ROOT "${MULLE_INVOCATION_QUEUE_LIBRARY}" DIRECTORY)
-         get_filename_component( _TMP_MULLE_INVOCATION_QUEUE_ROOT "${_TMP_MULLE_INVOCATION_QUEUE_ROOT}" DIRECTORY)
-         #
-         #
-         # Search for "Definitions.cmake" and "DependenciesAndLibraries.cmake" to include.
-         # Disable with: `mulle-sourcetree mark MulleInvocationQueue no-cmake-dependency`
-         #
-         foreach( _TMP_MULLE_INVOCATION_QUEUE_NAME "MulleInvocationQueue")
-            set( _TMP_MULLE_INVOCATION_QUEUE_DIR "${_TMP_MULLE_INVOCATION_QUEUE_ROOT}/include/${_TMP_MULLE_INVOCATION_QUEUE_NAME}/cmake")
-            # use explicit path to avoid "surprises"
-            if( IS_DIRECTORY "${_TMP_MULLE_INVOCATION_QUEUE_DIR}")
-               list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_INVOCATION_QUEUE_DIR}")
-               #
-               include( "${_TMP_MULLE_INVOCATION_QUEUE_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
-               #
-               list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_INVOCATION_QUEUE_DIR}")
-               #
-               unset( MULLE_INVOCATION_QUEUE_DEFINITIONS)
-               include( "${_TMP_MULLE_INVOCATION_QUEUE_DIR}/Definitions.cmake" OPTIONAL)
-               list( APPEND INHERITED_DEFINITIONS ${MULLE_INVOCATION_QUEUE_DEFINITIONS})
-               break()
-            else()
-               message( STATUS "${_TMP_MULLE_INVOCATION_QUEUE_DIR} not found")
-            endif()
-         endforeach()
-         #
-         # Search for "MulleObjCLoader+<name>.h" in include directory.
-         # Disable with: `mulle-sourcetree mark MulleInvocationQueue no-cmake-loader`
-         #
-         if( NOT NO_INHERIT_OBJC_LOADERS)
-            foreach( _TMP_MULLE_INVOCATION_QUEUE_NAME "MulleInvocationQueue")
-               set( _TMP_MULLE_INVOCATION_QUEUE_FILE "${_TMP_MULLE_INVOCATION_QUEUE_ROOT}/include/${_TMP_MULLE_INVOCATION_QUEUE_NAME}/MulleObjCLoader+${_TMP_MULLE_INVOCATION_QUEUE_NAME}.h")
-               if( EXISTS "${_TMP_MULLE_INVOCATION_QUEUE_FILE}")
-                  list( APPEND INHERITED_OBJC_LOADERS ${_TMP_MULLE_INVOCATION_QUEUE_FILE})
-                  break()
-               endif()
-            endforeach()
-         endif()
-      else()
-         # Disable with: `mulle-sourcetree mark MulleInvocationQueue no-require-link`
-         message( SEND_ERROR "MULLE_INVOCATION_QUEUE_LIBRARY was not found")
       endif()
    endif()
 endif()

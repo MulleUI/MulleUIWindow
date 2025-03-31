@@ -74,7 +74,7 @@ void   setupSceneInWindow( UIWindow *window)
    contentRect = CGRectInset( [contentView contentRect], 10, 10);
 
    view  = [TrackingView object];
-   [view setDebugNameUTF8String:"tracking"];
+   [view setNameUTF8String:"tracking"];
    [view setColors:CGColorMakeGreen()];
 //   [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
 

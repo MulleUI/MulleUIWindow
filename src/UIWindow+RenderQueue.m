@@ -5,9 +5,9 @@
 
 #import "import-private.h"
 
+#import "UIWindow+Layout.h"
 #import "UIWindow+DebugPrivate.h"
 #import "UIView+RenderQueue.h"
-#import "CGFrameInfo+UTF8String.h"
 
 
 @implementation UIWindow ( RenderQueue)
@@ -41,8 +41,9 @@
 
    _mulle_pointerarray_reset( &_drawingQueue);
    [self createRenderQueue:&_drawingQueue];
-   if( _didCreateRenderQueueCallback)
-      (*_didCreateRenderQueueCallback)( self, info);
+
+   if( _didCreateViewsRenderQueueCallback)
+      (*_didCreateViewsRenderQueueCallback)( self, info);
 
    MulleWindowProfileEnd();
 }
@@ -71,6 +72,30 @@
       [self->_view createRenderQueue:renderQueue
                             context:&v];
    }
+}
+
+
+UIWindowDisplayBits
+   UIWindowDefaultPrepareRenderQueue( UIWindow *self,
+                                      struct CGFrameInfo *info,
+                                      UIWindowDisplayBits displayBits)
+{
+   //
+   // create the renderQueue. This will set the transforms for all
+   // the layer and calculate the actual opacity, which is then stored
+   // in layer transform and layer alpha.
+   //
+   [self createDrawingQueueForFrame:info];
+
+   //
+   // this animateFrame: runs unconditonally over the displayQueue
+   // that will be then also be used by drawFrame:
+   //
+   displayBits = [self animateViewsInFrame:info
+                              displayBits:displayBits];
+
+   UIWindowDisplayBitsLog( "returns (0x%tx)", displayBits);
+   return( displayBits);
 }
 
 @end

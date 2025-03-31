@@ -36,8 +36,8 @@ struct UIRenderQueueContext
 // this may be a good place for your view to override and copy some more
 // values into its layer, all animations have run though already
 //
-- (void)    addLayer:(id <UILayer>) layer
-       toRenderQueue:(struct mulle_pointerarray *) renderQueue
-             context:(struct UIRenderQueueContext *) v;
+- (void) addLayer:(id <UILayer>) layer
+    toRenderQueue:(struct mulle_pointerarray *) renderQueue
+          context:(struct UIRenderQueueContext *) v;
 @end
 

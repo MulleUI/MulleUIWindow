@@ -6,32 +6,40 @@
 #import "UIView+UIWindow.h"
 #import "UIView+UITrackingArea.h"
 #import "UIView+UIFirstResponder.h"
-#import "UIWindow+NSTimer.h"
 #import "UIWindow+UIResponder.h"
 #import "UIWindow+UITrackingArea.h"
 
 
 @implementation UITrackingArea 
 
-
 + (instancetype) trackingAreaWithRect:(CGRect) rect
 {
-   return( [[[self alloc] initWithRect:rect
-                               options:0
-                                 owner:nil 
-                              userInfo:nil] autorelease]);
+   UITrackingArea *obj;
+
+   obj = [self alloc];
+   obj = [obj initWithRect:rect
+                   options:0
+                     owner:nil
+                  userInfo:nil];
+   obj = [obj autorelease];
+   return(obj);
 }
 
 
 + (instancetype) trackingAreaWithRect:(CGRect) rect
                               options:(UITrackingAreaOptions) options
-                                owner:(id) owner 
+                                owner:(id) owner
                              userInfo:(id) userInfo
 {
-   return( [[[self alloc] initWithRect:rect 
-                               options:options
-                                 owner:owner 
-                              userInfo:userInfo] autorelease]);
+   UITrackingArea *obj;
+
+   obj = [self alloc];
+   obj = [obj initWithRect:rect
+                   options:options
+                     owner:owner
+                  userInfo:userInfo];
+   obj = [obj autorelease];
+   return(obj);
 }
 
 

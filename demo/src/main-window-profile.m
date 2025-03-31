@@ -5,10 +5,12 @@
 #include <math.h>
 #include <stdlib.h>
 
+// MEMO: here we are using an accumulation layer so we can remember previous
+//       stack frames visually
 
-#define DRAW_FLAT           0
 #define STOP_AFTER_FRAMES   0
 #define DUMP_AFTER_STOP     0  // produce stdout instead
+#define DEBUG_PROFILE       1
 
 
 struct mulle_utf8data   reduce_text( char *s)
@@ -46,17 +48,17 @@ struct mulle_utf8data   reduce_text( char *s)
 @implementation WindowProfileLayer
 
 
-- (instancetype) init
+- (instancetype) initWithFrame:(CGRect) frame
 {
-   self = [super init];
+   self = [super initWithFrame:frame];
    if( self)
    {
       _minimumRectWidth = 3.0;
-      _drawStacked      = NO;
+      _drawStacked      = YES;
       _drawText         = YES;
 
       _minimumHeight    = 2.0;
-      _minimumHeight    = 13.0;
+      _maximumHeight    = 13.0;
    }
    return( self);
 }
@@ -66,7 +68,6 @@ struct mulle_utf8data   reduce_text( char *s)
    UIWindowDestroyProfileQueue( _profileQueue);
    _profileQueue = queue;
 }
-
 
 
 // each rectangle we draw is temporarily stored
@@ -123,17 +124,23 @@ static void   rect_start( struct rect *r,
                          - y,
                          CGRectGetWidth( p->canvas),
                          p->height);
-   if( entry->flags.mode & MulleWindowProfileEntryFunctionIsAddress)
-      hash = mulle_pointer_hash( entry->function);
-   else
-      hash = entry->function ? _mulle_string_hash( entry->function) : 0x1848;
-
-   r->color = CGHexColorMakeWithNameAtIndex( hash);
 
    if( entry->function && ! (entry->flags.mode & MulleWindowProfileEntryFunctionIsAddress))
       r->text = entry->function;
    else
       r->text = "";
+
+   // funny red boxes are empty events, that sometimes start stacking up
+   if( ! entry->function)
+   {
+      r->color = CGHexColorCornsilk;
+      return;
+   }
+
+   hash = (entry->flags.mode & MulleWindowProfileEntryFunctionIsAddress)
+          ? mulle_pointer_hash( entry->function)
+          : _mulle_string_hash( entry->function);
+   r->color = CGHexColorMakeWithNameAtIndex( hash);
 }
 
 
@@ -180,40 +187,38 @@ static void   rect_draw( struct rect *r,
 }
 
 
-static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPaint *paint)
+- (void) debugInfo:(struct scene *)scene entries:(NSUInteger)entryCount
 {
-   static CGPoint  points[ 3] =
+   NSUInteger   i;
+   struct MulleWindowProfileEntry   *entry;
+
+   MulleUICLog( "=== PROFILE DEBUG INFO ===");
+   MulleUICLog( "Canvas: origin(%.1f, %.1f) size(%.1f, %.1f)",
+                scene->canvas.origin.x, scene->canvas.origin.y,
+                scene->canvas.size.width, scene->canvas.size.height);
+   MulleUICLog( "Time - start: %.6f end: %.6f elapsed: %.6f",
+                scene->start, scene->end, scene->elapsed);
+   MulleUICLog( "Scale: %.6f (w: %.1f / elapsed: %.6f)",
+                scene->scale, scene->w, scene->elapsed);
+   MulleUICLog( "Drawing params - minimumRectWidth: %.1f height: %.1f",
+                scene->minimumRectWidth, scene->height);
+   MulleUICLog( "Profile entries: %tu", entryCount);
+
+   i = 0;
+   mulle_structqueue_for( _profileQueue, entry)
    {
-      CGPointData(  0.0, -0.5),
-      CGPointData( -0.5,  0.5),
-      CGPointData(  0.5,  0.5)
-   };
-   CGRect     rect;
-
-   mvgSave( vg);
-   {
-      // STEPS are applied in reverse to the path
-
-      // 2. move center of scaled triangle to destination
-      mvgTranslate( vg, center);
-
-      // 1. scale (still center at 0.0)
-      mvgScale( vg, CGVectorMake( size.width, size.height));
-
-      mvgBeginPath( vg);
-      mvgMoveTo( vg, points[ 0]);
-      mvgLineTo( vg, points[ 1]);
-      mvgLineTo( vg, points[ 2]);
-      mvgClosePath( vg);
-
-      rect = CGRectMakeWithCenterPointAndSize( CGPointZero, CGSizeMake( 1.0, 1.0));
-      [paint fillWithBounds:rect
-                 NVGcontext:vg];
-
+         i++;
+         MulleUICLog("Entry #%d: timestamp=%.6f action=%s function=%s",
+                     i,
+                     entry->timestamp,
+                     entry->flags.action == MulleWindowProfileEntryBegin
+                     ? "Begin"
+                     : (entry->flags.action == MulleWindowProfileEntryEnd ? "End" : "*sync*"),
+                     entry->function ? entry->function : "(null)");
    }
-   mvgRestore( vg);
-}
 
+   MulleUICLog( "========================");
+}
 
 
 - (void) drawProfileQueueInContext:(CGContext *) context
@@ -229,6 +234,9 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
    struct CGFrameInfo               *frameInfo;
    CGFloat                          x;
    mulle_relativetime_t             timestamp;
+   NSUInteger                       entryCount;
+
+   MulleUICLog( "%#@", context);
 
    frameInfo = [context currentFrameInfo];
    assert( frameInfo);
@@ -236,28 +244,29 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
    level    = 0;
    maxLevel = 0;
    memset( &scene, 0, sizeof( scene));
-
+   entryCount = 0;
    mulle_structqueue_for( _profileQueue, entry)
    {
-      if( scene.start == 0)
+     entryCount++;
+     if( scene.start == 0)
          scene.start = entry->timestamp;
 
-      assert( entry->timestamp >= scene.start);
+     assert( entry->timestamp >= scene.start);
 
-      switch( entry->flags.action)
-      {
-      case MulleWindowProfileEntryBegin :
+     switch( entry->flags.action)
+     {
+     case MulleWindowProfileEntryBegin :
          if( ++level > maxLevel)
-            maxLevel = level;
+           maxLevel = level;
          break;
 
-      case MulleWindowProfileEntryEnd :
+     case MulleWindowProfileEntryEnd :
          if( --level < 0)
-            level = 0;
-      default :
+           level = 0;
+     default :
          break;
-      }
-      scene.end = entry->timestamp;
+     }
+     scene.end = entry->timestamp;
    }
 
    scene.drawText         = _drawText;
@@ -303,24 +312,29 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
    if( maxLevel > maxVisibleLevel)
       maxLevel = maxVisibleLevel;
 
-
    //
    // the actual "point" scale is
    // minimumRectWidth / 2.0 to CGRectGetWidth( canvas) - minimumRectWidth
-   //   |                                  |
    //
    scene.x     = _minimumRectWidth / 2.0;
    scene.w     = CGRectGetWidth( scene.canvas) - scene.minimumRectWidth;
    if( scene.w < _minimumRectWidth / 2.0)
    {
+      MulleUICLog( "Scene is too small to draw anything");
+
       // too small to draw anything
       return;
    }
    scene.x2    = scene.x + scene.w;
    scene.scale = scene.w / scene.elapsed;
 
+#if DEBUG_PROFILE
+   [self debugInfo:&scene entries:entryCount];
+#endif
+
    vg = CGContextGetNVGContext( context);
 
+#ifndef NO_PAINT_FLAMEGRAPH
    //
    // in a flamegraph we can't have more than maxLevel rects open at one time
    //
@@ -368,10 +382,10 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
          }
       }
    }
+#endif
 
-
+#ifndef NO_PAINT_MARKERS
    // paint markers for frameRate (green) and refreshRate (yellow)
-
    assert( ! isinf( scene.refreshRate));
    if( scene.refreshRate > 0.0)
    {
@@ -396,6 +410,7 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
                                       CGColorMakeWhite());
       }
    }
+#endif
 }
 
 
@@ -421,14 +436,13 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
 }
 
 
-
 static void  didSwapBuffersCallback( UIWindow *window, BOOL immediately)
 {
    struct mulle_structqueue   *profileQueue;
    UIView                     *view;
    WindowProfileLayer         *layer;
 
-//   MulleUICLog( "%#@", window);
+   // MulleUICLog( "%#@", window);
 
    profileQueue = [window extractProfileQueue];
    view         = [[window contentView] subviewWithTag:1848];
@@ -465,13 +479,15 @@ int   main( int argc, char *argv[])
    UIWindow               *window;
    UIApplication          *app;
    int                    i;
+   CGRect                 frame;
    NSUInteger             styleMask;
    NSUInteger             swapInterval;
    BOOL                   isRetained;
    BOOL                   isMainThread;
    mulle_relativetime_t   frameRate;
+   UIView                 *contentView;
    UIView                 *view;
-   CALayer                *layer;
+   CGGraphicsLayer        *layer;
 
    swapInterval = 0;
    frameRate    = 2.0;
@@ -543,15 +559,21 @@ int   main( int argc, char *argv[])
                                styleMask:styleMask];
       [window setBackgroundColor:CGColorMakeWhite()];
 
-      layer = [WindowProfileLayer layerWithFrame:[[window contentView] contentRect]];
+      contentView = [window contentView];
+
+      frame = [contentView contentRect];
+      layer = [WindowProfileLayer layerWithFrame:frame];
       view  = [UIView viewWithLayer:layer];
+      [view setBackgroundColor:CGColorMakeRed()];
+      [view setMargins:UIEdgeInsetsMake( 10.0, 10.0, 10.0, 10.0)];
       [view setAutoresizingMask:UIViewAutoresizingScaleToFill];
       [view setTag:1848];
-      [[window contentView] addSubview:view];
+      [contentView addSubview:view];
 #if ! DUMP_AFTER_STOP
       [window setDidSwapBuffersCallback:didSwapBuffersCallback];
 #endif
       [window setFrameRate:frameRate];
+      [window setSwapInterval:swapInterval];
       [UIApp addWindow:window];
    }
    return( [app runApp]);
@@ -595,3 +617,40 @@ int   main( int argc, char *argv[])
 //                     ╙▀W╥,╓╣   ╙█║        ╫M  █    ,╓▄╝╙`
 //                          ╙╙▀%▄▄▄▌,≤▄_▄≡,▐▓▓▄▄#ª▀"`
 
+
+
+#if 0
+static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPaint *paint)
+{
+   static CGPoint  points[ 3] =
+   {
+      CGPointData(  0.0, -0.5),
+      CGPointData( -0.5,  0.5),
+      CGPointData(  0.5,  0.5)
+   };
+   CGRect     rect;
+
+   mvgSave( vg);
+   {
+      // STEPS are applied in reverse to the path
+
+      // 2. move center of scaled triangle to destination
+      mvgTranslate( vg, center);
+
+      // 1. scale (still center at 0.0)
+      mvgScale( vg, CGVectorMake( size.width, size.height));
+
+      mvgBeginPath( vg);
+      mvgMoveTo( vg, points[ 0]);
+      mvgLineTo( vg, points[ 1]);
+      mvgLineTo( vg, points[ 2]);
+      mvgClosePath( vg);
+
+      rect = CGRectMakeWithCenterPointAndSize( CGPointZero, CGSizeMake( 1.0, 1.0));
+      [paint fillWithBounds:rect
+                 NVGcontext:vg];
+
+   }
+   mvgRestore( vg);
+}
+#endif

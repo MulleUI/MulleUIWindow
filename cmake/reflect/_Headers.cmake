@@ -11,8 +11,9 @@ endif()
 # contents are derived from the file locations
 
 set( INCLUDE_DIRS
-src
 src/reflect
+src/generic
+src
 )
 
 #
@@ -27,8 +28,8 @@ src/reflect/_MulleUIWindow-include-private.h
 # contents selected with patternfile ??-header--private-generic-headers
 #
 set( PRIVATE_GENERIC_HEADERS
-src/import-private.h
-src/include-private.h
+src/generic/import-private.h
+src/generic/include-private.h
 )
 
 #
@@ -52,8 +53,8 @@ src/reflect/_MulleUIWindow-provide.h
 # contents selected with patternfile ??-header--public-generic-headers
 #
 set( PUBLIC_GENERIC_HEADERS
-src/import.h
-src/include.h
+src/generic/import.h
+src/generic/include.h
 )
 
 #
@@ -62,8 +63,6 @@ src/include.h
 set( PUBLIC_HEADERS
 src/MulleObjCLoader+MulleUIWindow.h
 src/MulleUIWindow.h
-src/UIFont.h
-src/UIPasteboard.h
 src/UITrackingArea.h
 src/UIView+CAAnimation.h
 src/UIView+RenderQueue.h
@@ -72,17 +71,13 @@ src/UIView+UIFirstResponder.h
 src/UIView+UITrackingArea.h
 src/UIView+UIWindow.h
 src/UIWindow+FrameInfo.h
-src/UIWindow+InvocationQueue.h
 src/UIWindow+Layout.h
-src/UIWindow+NSTimer.h
 src/UIWindow+OneFrame.h
 src/UIWindow+RenderQueue.h
-src/UIWindow+Thread.h
+src/UIWindow+Render.h
 src/UIWindow+UIEvent.h
-src/UIWindow+UIPasteboard.h
 src/UIWindow+UIResponder.h
 src/UIWindow+UITrackingArea.h
-src/UIWindow+UIWindow.h
 src/UIWindow.h
 )
 

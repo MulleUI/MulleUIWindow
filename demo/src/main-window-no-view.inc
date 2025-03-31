@@ -73,15 +73,14 @@ static void   drawStuff( CGContext *context, CGRect canvas)
 }
 
 
-static int   display( UIWindow *window,
-                      id <UIGraphicsContext> context,
-                      struct CGFrameInfo *frameInfo,
-                      UIWindowDisplayBits displayBits)
+static UIWindowDisplayBits   display( UIPureWindow *window,
+                                      id <UIGraphicsContext> context,
+                                      struct CGFrameInfo *frameInfo,
+                                      UIWindowDisplayBits displayBits)
 {
    drawStuff( (CGContext *) context, CGFrameInfoGetContentRect( frameInfo));
-   return( 0);
+   return( 1);
 }
-
 
 int   main( int argc, char *argv[])
 {

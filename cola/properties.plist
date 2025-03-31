@@ -1,0 +1,49 @@
+{
+   project =
+   {
+      description="🛸 MulleUIWindow provides UIWindow and extends UIView functionality";
+      domain="github";
+      language="c";
+      dialect="objc";
+      name="MulleUIWindow";
+      user="MulleUI";
+      repo="MulleUIWindow";
+      homepage="https://github.com/MulleUI/MulleUIWindow";
+      license="BSD-3-LICENSED";
+   };
+   dependencies =
+   (
+      {
+         description="👁️‍🗨️ MulleUIPureWindow - Windows without Views";
+         domain="github";
+         name="MulleUIPureWindow";
+         repo="MulleUIPureWindow";
+         url="https://github.com/MulleUI/MulleUIPureWindow";
+         user="MulleUI";
+      },
+      {
+         description="![](mulle-tiny-logo-255x256.png)";
+         domain="github";
+         name="MulleUIView";
+         repo="MulleUIView";
+         url="https://github.com/MulleUI/MulleUIView";
+         user="MulleUI";
+      },
+      {
+         description="🍃 Animate properties in real time with mulle-objc";
+         domain="github";
+         name="MulleCA";
+         repo="MulleCA";
+         url="https://github.com/MulleUI/MulleCA";
+         user="MulleUI";
+      },
+      {
+         description="📒 Lists mulle-objc runtime information contained in executables.";
+         domain="github";
+         name="mulle-objc-list";
+         repo="mulle-objc-list";
+         url="https://github.com/mulle-objc/mulle-objc-list";
+         user="mulle-objc";
+      }
+   );
+}

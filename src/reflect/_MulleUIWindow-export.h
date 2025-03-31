@@ -14,8 +14,6 @@
 
 
 #import "MulleObjCLoader+MulleUIWindow.h"
-#import "UIFont.h"
-#import "UIPasteboard.h"
 #import "UITrackingArea.h"
 #import "UIView+CAAnimation.h"
 #import "UIView+RenderQueue.h"
@@ -24,17 +22,13 @@
 #import "UIView+UITrackingArea.h"
 #import "UIView+UIWindow.h"
 #import "UIWindow+FrameInfo.h"
-#import "UIWindow+InvocationQueue.h"
 #import "UIWindow+Layout.h"
-#import "UIWindow+NSTimer.h"
 #import "UIWindow+OneFrame.h"
 #import "UIWindow+RenderQueue.h"
-#import "UIWindow+Thread.h"
+#import "UIWindow+Render.h"
 #import "UIWindow+UIEvent.h"
-#import "UIWindow+UIPasteboard.h"
 #import "UIWindow+UIResponder.h"
 #import "UIWindow+UITrackingArea.h"
-#import "UIWindow+UIWindow.h"
 #import "UIWindow.h"
 
 

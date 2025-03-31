@@ -78,7 +78,7 @@ static BOOL  drawStuff( CGGraphicsLayer *layer, CGContext *context)
       frameInfo = CGFrameInfoFBMake( CGPixelSizeMakeWithSize( canvas.size), 1.0, 1.0);
       oldFrameInfo = [context bindRender:&frameInfo];
       {
-         [context bindFramebuffer:CGContextFramebufferMakeWithLayer( framebuffer)];
+         [context bindFramebuffer:CGContextFramebufferMakeWithFramebuffer( framebuffer)];
          [context clearFramebufferWithColor:CGColorMakeWithRGBA( 0.2, 0.1, 0.3, 1.0)];
          rect.origin = CGPointZero;
          rect.size   = [image size];
@@ -130,6 +130,7 @@ static void   setupSceneInBareWindow( UIWindow *window, CGColor color)
    frame = UIEdgeInsetsInsetRect( frame, UIEdgeInsetsMake( 10, 10, 10, 10));
 
    view  = [UIView viewWithFrame:frame];
+   [view setAutoresizingMask:UIViewAutoresizingScaleToFill];
    [view setBackgroundColor:color];
    [(CGGraphicsLayer *) [view layer] setDrawCallback:drawStuff];
    [window setView:view];

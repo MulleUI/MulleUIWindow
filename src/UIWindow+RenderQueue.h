@@ -22,3 +22,11 @@
 - (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue;
 
 @end
+
+
+// returns UIWindowAnimationDidHappened if animations were run
+// otherwise zero
+UIWindowDisplayBits
+   UIWindowDefaultPrepareRenderQueue( UIWindow *self,
+                                      struct CGFrameInfo *info,
+                                      UIWindowDisplayBits displayBits);

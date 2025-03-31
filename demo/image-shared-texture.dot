@@ -1,0 +1,54 @@
+digraph scenario {
+    // Set overall graph properties
+    rankdir=TB;  // Top to Bottom layout
+    node [shape=box, style="rounded,filled", fontname="Arial"];
+    edge [fontname="Arial"];
+    
+    // Define subgraphs for each thread/window/context group
+    subgraph cluster_0 {
+        label="Thread 1 Environment";
+        color=lightblue;
+        style=filled;
+        
+        thread1 [label="Thread 1", fillcolor=skyblue];
+        window1 [label="Window 1", fillcolor=lightgreen];
+        gc1 [label="Graphic Context 1", fillcolor=lightyellow];
+        image1 [label="Image 1", fillcolor=lightpink];
+        
+        thread1 -> window1 [label="manages"];
+        thread1 -> gc1 [label="controls"];
+        window1 -> gc1 [label="renders with"];
+        gc1 -> image1 [label="resource"];
+    }
+    
+    // GPUTexture node in the middle
+    texture [label="GPUTexture", shape=note, fillcolor=lightcoral];
+    
+    subgraph cluster_1 {
+        label="Thread 2 Environment";
+        color=lavender;
+        style=filled;
+        
+        thread2 [label="Thread 2", fillcolor=skyblue];
+        window2 [label="Window 2", fillcolor=lightgreen];
+        gc2 [label="Graphic Context 2", fillcolor=lightyellow];
+        image2 [label="Image 2", fillcolor=lightpink];
+        
+        thread2 -> window2 [label="manages"];
+        thread2 -> gc2 [label="controls"];
+        window2 -> gc2 [label="renders with"];
+        gc2 -> image2 [label="resource"];
+    }
+    
+    // Force vertical ordering with invisible edges
+    thread1 -> texture [style=invis];
+    texture -> thread2 [style=invis];
+    
+    // Show the images sharing the texture
+    image1 -> texture [label="references", dir=both, style=dashed, color=blue, penwidth=1.5];
+    image2 -> texture [label="references", dir=both, style=dashed, color=blue, penwidth=1.5];
+    
+    // Add thread/autorelease relationships
+    thread1 -> image1 [label="thread/autorelease", style=dotted, color=gray, penwidth=1.0, constraint=false];
+    thread2 -> image2 [label="thread/autorelease", style=dotted, color=gray, penwidth=1.0, constraint=false];
+}

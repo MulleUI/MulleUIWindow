@@ -5,10 +5,10 @@
 
 #import "import-private.h"
 
-#import "UIWindow+DebugPrivate.h"
 #import "UIView+UITrackingArea.h"
 #import "UIView+UIWindow.h"
 #import "UITrackingArea.h"
+#import "UIWindow+DebugPrivate.h"
 
 
 @implementation UIMouseTrackingEvent
