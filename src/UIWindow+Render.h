@@ -37,12 +37,9 @@
 //
 // not id <UIGraphicsContext> context is intentional
 
-//
-// The default "rawFrameCallback" used in -renderWithFrameInfo:displayBits:
-//
 
 UIWindowDisplayBits
-   UIWindowDefaultDrawViews( UIPureWindow *self_in,
+   UIWindowDefaultRenderViews( UIPureWindow *self_in,
                              id <UIGraphicsContext> context,
                              struct CGFrameInfo *info,
                              UIWindowDisplayBits displayBits);
@@ -59,19 +56,8 @@ struct UIWindowDebugInfo
 
 @interface UIWindow( Render)
 
-- (void) drawViewsInFrame:(struct CGFrameInfo *) info
-         graphicsContext:(id <UIGraphicsContext>) context;
+- (void) renderViewsInFrame:(struct CGFrameInfo *) info
+            graphicsContext:(id <UIGraphicsContext>) context;
 
-- (void) drawDebug:(struct CGFrameInfo *) info
-  graphicsDrawing:(id <UIGraphicsDrawing>) context;
-
-- (void) renderDebugInfo:(struct UIWindowDebugInfo *) p
-                 atPoint:(CGPoint) point
-                hexColor:(NSUInteger) color
-         graphicsDrawing:(id <UIGraphicsDrawing>) context;
-
-- (void) renderDisplayBits:(NSUInteger) displayBits
-                   atPoint:(CGPoint) point
-           graphicsDrawing:(id <UIGraphicsDrawing>) context;
 @end
 

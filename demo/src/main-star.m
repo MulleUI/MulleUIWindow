@@ -70,7 +70,7 @@ static CGFloat  rotation( NSUInteger frameCount, CGFloat divisor)
 #endif
 }
 
-static void   draw( CGGraphicsLayer *layer, CGContext *context)
+static BOOL   draw( CGGraphicsLayer *layer, CGContext *context)
 {
    CGRect       canvas;
    NSUInteger   frameCount;
@@ -118,6 +118,8 @@ static void   draw( CGGraphicsLayer *layer, CGContext *context)
       nvgFill( vg);
    }
    nvgRestore( vg);
+
+   return( YES);
 }
 
 
@@ -163,7 +165,7 @@ int   main( int argc, char *argv[])
                                styleMask:UIWindowStyleMaskDefault];
 
       [window setBackgroundColor:CGColorMakeWithGrayByte( 102)];
-      [window setDrawCallback:(CGGraphicsLayerDrawCallback_t *) draw];
+      [window setDrawCallback:draw];
       [window setFrameRateHz:60.0];
       [app addWindow:window];
 

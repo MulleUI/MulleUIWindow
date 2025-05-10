@@ -123,7 +123,7 @@ int   main( int argc, char *argv[])
 
    app = [UIApplication sharedInstance];
    {
-      image = (UIBitmapImage *) [UIImage imageWithContentsOfFileCString:"parrot.png"];
+      image = (UIBitmapImage *) [UIImage imageWithContentsOfFileUTF8String:"parrot.png"];
       assert( image);
 
       // for testing sharing, we use singlebuffer (to obscure a current double

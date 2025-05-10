@@ -59,7 +59,7 @@ typedef UIView   UIWindowPlane;
 
    CAAnimator                      *_preLayoutAnimator;
    CAAnimator                      *_postLayoutAnimator;
-   struct mulle_pointerarray       _drawingQueue; // layers to render
+   struct mulle_pointerarray       _renderQueue;      // layers to render
 
 @protected
    //
@@ -78,11 +78,6 @@ typedef UIView   UIWindowPlane;
    // the profile entries are 64 bytes, at 60 Hz thats 3840 bytes, so one hour
    // of tracing consumes 13,824,000 bytes 13 MB (not caring) :)
    // activate with special window flag
-
-   // used by LED display... so ugly
-   NSUInteger                      _debugDisplayBits;
-   NSUInteger                      _debugReturnBits;
-
    // used for showing menus
    char                            _oldUserInteractionEnabled;
    char                            _oldMenuPlaneHidden;
@@ -100,14 +95,14 @@ typedef UIView   UIWindowPlane;
 //
 // This is useful to add custom drawing stuff on the bottom.
 //
-@property void  (*willDrawViewsCallback)( UIWindow *window,
+@property void  (*willRenderViewsCallback)( UIWindow *window,
                                           id <UIGraphicsContext> context,
                                           struct CGFrameInfo *info);
 
 //
 // This is useful to add custom nanovg drawing stuff on top.
 //
-@property void   (*didDrawViewsCallback)( UIWindow *window,
+@property void   (*didRenderViewsCallback)( UIWindow *window,
                                           id <UIGraphicsContext> context,
                                           struct CGFrameInfo *info);
 
@@ -122,7 +117,7 @@ typedef UIView   UIWindowPlane;
 @property void   (*didLayoutViewsCallback)( UIWindow *window,
                                             struct CGFrameInfo *info);
 
-@property void   (*didCreateViewsRenderQueueCallback)( UIWindow *window,
+@property void   (*didCreateViewsDrawingQueueCallback)( UIWindow *window,
                                                        struct CGFrameInfo *info);
 
 //

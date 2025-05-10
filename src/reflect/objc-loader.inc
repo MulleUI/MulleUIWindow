@@ -1,5 +1,4 @@
       { @selector( MulleObjCLoader), @selector( MulleCA) },      // 47a9beb6;MulleObjCLoader;3422b8ab;MulleCA
-      { @selector( MulleObjCLoader), @selector( MulleFoundationBase) },      // 47a9beb6;MulleObjCLoader;efab19ea;MulleFoundationBase
       { @selector( MulleObjCLoader), @selector( MulleInvocationQueue) },      // 47a9beb6;MulleObjCLoader;9a5137b3;MulleInvocationQueue
       { @selector( MulleObjCLoader), @selector( MulleThread) },      // 47a9beb6;MulleObjCLoader;c7c34b28;MulleThread
       { @selector( MulleObjCLoader), @selector( MulleUIApplication) },      // 47a9beb6;MulleObjCLoader;55c305e6;MulleUIApplication

@@ -34,7 +34,7 @@
    UIView   *view;
    BOOL     flag;
 
-   NSCParameterAssert( ! newWindow || [newWindow isKindOfClass:[UIWindow class]]);
+   assert( ! newWindow || [newWindow isKindOfClass:[UIWindow class]]);
 
    if( _window == newWindow)
       return;

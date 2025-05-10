@@ -30,7 +30,6 @@ src/main-shared-framebuffer.m
 src/main-shared.m
 src/main-shared-singlethread.m
 src/main-star.m
-src/main-swapinterval.m
 src/main-trackingarea-animated.m
 src/main-trackingarea.m
 src/main-trackingarea-scrollview.m

@@ -24,29 +24,14 @@
    mulle_pointerarray_for( &_layoutDelegates, view)
    {
       bits         = [view willLayoutWithAbsoluteTime:renderStart];
-      UIWindowDisplayBitsLog( "-[%@ willLayoutWithAbsoluteTime:] returned (0x%tx)", view, bits);
+      UIWindowDisplayBitsLogVerbose( "-[%#@ willLayoutWithAbsoluteTime:] returned (0x%tx)", view, bits);
       displayBits |= bits;
    }
 
-   UIWindowRenderLog( "%s returns (0x%tx)", __FUNCTION__, displayBits);
+   UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( displayBits));
    return( displayBits);
 }
 
-
-- (void) createDrawingQueueForFrame:(struct CGFrameInfo *) info
-{
-   UIWindowRenderLog( "%s", CGFrameInfoUTF8String( info));
-
-   MulleWindowProfileBegin();
-
-   _mulle_pointerarray_reset( &_drawingQueue);
-   [self createRenderQueue:&_drawingQueue];
-
-   if( _didCreateViewsRenderQueueCallback)
-      (*_didCreateViewsRenderQueueCallback)( self, info);
-
-   MulleWindowProfileEnd();
-}
 
 
 - (void) setClipsToBounds:(BOOL) flag
@@ -59,7 +44,7 @@
 // not UIView because of the clipping rectangle and identity transform
 // start
 //
-- (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue
+- (void) createRenderQueue:(struct mulle_pointerarray *) queue
 {
    struct UIRenderQueueContext  v;
 
@@ -69,10 +54,29 @@
 
    //UIViewSubviewsFor( self->_view, view)
    {
-      [self->_view createRenderQueue:renderQueue
-                            context:&v];
+      [self->_view createRenderQueue:queue
+                             context:&v];
    }
 }
+
+
+- (void) createRenderQueueForFrame:(struct CGFrameInfo *) info
+{
+   UIWindowRenderLog( "%s", CGFrameInfoUTF8String( info));
+
+   MulleWindowProfileBegin();
+
+   _mulle_pointerarray_reset( &_renderQueue);
+   [self createRenderQueue:&_renderQueue];
+
+   if( _didCreateViewsDrawingQueueCallback)
+      (*_didCreateViewsDrawingQueueCallback)( self, info);
+
+   MulleWindowProfileEnd();
+
+   UIWindowRenderLog( "%td layers in the queue", _mulle_pointerarray_get_count( &_renderQueue));
+}
+
 
 
 UIWindowDisplayBits
@@ -85,7 +89,7 @@ UIWindowDisplayBits
    // the layer and calculate the actual opacity, which is then stored
    // in layer transform and layer alpha.
    //
-   [self createDrawingQueueForFrame:info];
+   [self createRenderQueueForFrame:info];
 
    //
    // this animateFrame: runs unconditonally over the displayQueue
@@ -94,7 +98,7 @@ UIWindowDisplayBits
    displayBits = [self animateViewsInFrame:info
                               displayBits:displayBits];
 
-   UIWindowDisplayBitsLog( "returns (0x%tx)", displayBits);
+   UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( displayBits));
    return( displayBits);
 }
 

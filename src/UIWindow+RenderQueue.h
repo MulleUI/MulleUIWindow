@@ -17,7 +17,7 @@
 
 - (UIWindowDisplayBits) willLayoutWithAbsoluteTime:(mulle_absolutetime_t) renderStart;
 
-- (void) createDrawingQueueForFrame:(struct CGFrameInfo *) info;
+- (void) createRenderQueueForFrame:(struct CGFrameInfo *) info;
 
 - (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue;
 

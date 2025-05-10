@@ -44,7 +44,7 @@
 
 @interface UIWindow( LayoutForward)
 
-- (void) createDrawingQueueForFrame:(struct CGFrameInfo *) info;
+- (void) createRenderQueueForFrame:(struct CGFrameInfo *) info;
 
 @end
 
@@ -73,8 +73,8 @@
 
 UIWindowDisplayBits
    UIWindowDefaultLayoutViews( UIWindow *self,
-                          struct CGFrameInfo *info,
-                          UIWindowDisplayBits displayBits);
+                               struct CGFrameInfo *info,
+                               UIWindowDisplayBits displayBits);
 
 
 //
@@ -83,15 +83,15 @@ UIWindowDisplayBits
 //        |
 //        v
 // +-----------------------------+
-// | createDrawingQueueForFrame: |  // Place [UIViews layers] in _drawingQueue
+// | createRenderQueueForFrame: |  // Place [UIViews layers] in _renderQueue
 // +-----------------------------+
 //        |
 //        v
 // +---------------+
-// | animateFrame: |                // animate those in _drawingQueue
+// | animateFrame: |                // animate those in _renderQueue
 // +---------------+
 //
 UIWindowDisplayBits
-   UIWindowDefaultPrepareDrawingQueue( UIWindow *self,
+   UIWindowDefaultPrepareRenderQueue( UIWindow *self,
                                        struct CGFrameInfo *info,
                                        UIWindowDisplayBits displayBits);

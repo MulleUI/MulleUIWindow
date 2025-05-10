@@ -26,7 +26,6 @@
          inDrag = [event buttonStates] != 0;
          [self handleTrackingAreaForInputEvent:event
                                         inDrag:inDrag];
-
       }
    }
 

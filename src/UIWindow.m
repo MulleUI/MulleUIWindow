@@ -242,7 +242,7 @@ static struct
    // initialize various plane for the future, currently only
    // _contentPlane can be used
 
-   _mulle_pointerarray_init( &_drawingQueue, 128, MulleObjCInstanceGetAllocator( self));
+   _mulle_pointerarray_init( &_renderQueue, 128, MulleObjCInstanceGetAllocator( self));
    _mulle_pointerarray_init( &_layoutDelegates, 8, MulleObjCInstanceGetAllocator( self));
    _mulle_pointerarray_init( &_controllers, 4, MulleObjCInstanceGetAllocator( self));
 
@@ -346,7 +346,7 @@ static struct
    mulle_idarray_release_all( &_enteredAreas);
    mulle_pointerarray_done( &_enteredAreas);
    mulle_pointerarray_done( &_layoutDelegates);
-   mulle_pointerarray_done( &_drawingQueue);
+   mulle_pointerarray_done( &_renderQueue);
 
 
    // now done locally in _dealloc
@@ -517,7 +517,7 @@ static struct
 }
 
 
-- (CGAffineTransform) transformForRenderQueue:(CGAffineTransform) inherited
+- (CGAffineTransform) transformForDrawingQueue:(CGAffineTransform) inherited
 {
    return( CGAffineTransformMakeIdentity());
 }

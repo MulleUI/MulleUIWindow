@@ -117,7 +117,7 @@
 
    if( ! autoresizingMask)
    {
-      UIViewEventLogVerbose( nil, "Keep area %@ as is, not autoresizing", area);
+      UIViewEventLogVerbose( nil, "Keep area %#@ as is, not autoresizing", area);
       return;
    }
 
@@ -125,7 +125,7 @@
    frame   = [area autoresizeWithContext:&context
                         autoresizingMask:autoresizingMask];
 
-   UIViewEventLogVerbose( nil, "Updating area %@ for rect %s to %s",
+   UIViewEventLogVerbose( nil, "Updating area %#@ for rect %s to %s",
                                  area,
                                  CGRectUTF8String( rect),
                                  CGRectUTF8String( frame));

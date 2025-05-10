@@ -23,9 +23,9 @@
 
 - (void) updateWithInputEvent:(UIInputEvent *) event
 {
-   self->_inputState     = event->_inputState;
-   self->_location       = CGPointMake( INFINITY, 0);
-   self->_locationView   = nil;
+   self->_inputState   = event->_inputState;
+   self->_location     = CGPointMake( INFINITY, 0);
+   self->_locationView = nil;
 }
 
 
@@ -124,7 +124,7 @@
    // TODO: tie tracking areas definitetly to views
    assert( view);
 
-   UIWindowMouseTrackingEventLog( nil, "Invalidate areas of %@", view);
+   UIWindowMouseTrackingEventLog( nil, "Invalidate areas of %#@", view);
 
    if( [self _hasEnteredAreasForView:view])
       [self _removeEnteredAreasForView:view];
@@ -164,7 +164,7 @@
       // if the rect is zero sized, there is nothing to track
       if( CGRectGetArea( rect) == 0.0)
       {
-         UIWindowMouseTrackingEventLog( nil, "ignored area %@ with empty rect %s", area, CGRectUTF8String( rect));
+         UIWindowMouseTrackingEventLog( nil, "ignored area %#@ with empty rect %s", area, CGRectUTF8String( rect));
          continue;
       }
 

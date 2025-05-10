@@ -58,10 +58,10 @@
 
    MulleWindowProfileEnd();
 
-   UIWindowRenderLog( "preLayoutAnimator did %sanimate", didAnimate ? "" : "not ");
+   UIWindowRenderLog( "did %sanimate", didAnimate ? "" : "not ");
 
    displayBits = didAnimate ? UIWindowDisplayDidAnimate : 0;
-   UIWindowDisplayBitsLog( "%s returns (0x%tx)", __FUNCTION__, displayBits);
+   UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( displayBits));
    return( displayBits);
 }
 
@@ -100,10 +100,10 @@
 
    MulleWindowProfileEnd();
 
-   UIWindowRenderLog( "postLayoutAnimator did %sanimate", didAnimate ? "" : "not ");
+   UIWindowRenderLog( "did %sanimate", didAnimate ? "" : "not ");
 
    displayBits = didAnimate ? UIWindowDisplayDidAnimate : 0;
-   UIWindowDisplayBitsLog( "%s returns (0x%tx)", __FUNCTION__, displayBits);
+   UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( displayBits));
    return( displayBits);
 }
 
@@ -180,7 +180,7 @@
 
 
 //
-// will be followed by "UIWindowDefaultPrepareRenderQueue", which will 
+// will be followed by "UIWindowDefaultPrepareRenderQueue", which will
 // call animateFrame: below after setting up the drawing queue
 //
 UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
@@ -188,7 +188,11 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
                                                   UIWindowDisplayBits displayBits)
 {
    UIWindowDisplayBits   animationDisplayBits;
+   UIWindowDisplayBits   returnBits;
+
    //_viewsNeedTrackingAreaUpdate = NO;
+
+   returnBits            = displayBits;
 
    animationDisplayBits  = [self willLayoutWithAbsoluteTime:info->now];
    animationDisplayBits |= [self preLayoutAnimations:info];
@@ -198,18 +202,19 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
    if( (displayBits & UIWindowDisplayNeedsLayout) || animationDisplayBits)
    {
       [self layoutFrame:info];
-      displayBits |= UIWindowDisplayNeedsRedraw | UIWindowDisplayNeedsAnimation;
+      returnBits |= UIWindowDisplayNeedsRedraw | UIWindowDisplayNeedsAnimation;
 
       // MEMO: this gets triggered too often
-      displayBits |= UIWindowDisplayNeedsMouseEvent;
+      returnBits |= UIWindowDisplayNeedsMouseEvent;
    }
 
-   displayBits |= [self postLayoutAnimations:info];
+   returnBits |= [self postLayoutAnimations:info];
    //if( _viewsNeedTrackingAreaUpdate)
    //   displayBits |= UIWindowDisplayNeedsMouseEvent;
 
-   UIWindowDisplayBitsLog( "%s augments (0x%tx)", __FUNCTION__, displayBits);
-   return( displayBits);
+   if( displayBits != returnBits)
+      UIWindowDisplayBitsLogVerbose( "augments (%s)", UIWindowDisplayBitsUTF8String( returnBits));
+   return( returnBits);
 }
 
 
@@ -228,7 +233,7 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
       return( displayBits);
 
    animationRate = UIWindowGetAnimationRate( self);
-   didAnimate    = [CAAnimation animateObjects:&_drawingQueue
+   didAnimate    = [CAAnimation animateObjects:&_renderQueue
                                   absoluteTime:info->now
                                  animationRate:animationRate];
    //
@@ -246,7 +251,7 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
       displayBits |= UIWindowDisplayDidAnimate;
       displayBits |= UIWindowDisplayNeedsRedraw;
    }
-   UIWindowDisplayBitsLog( "%s returns (0x%tx)", __FUNCTION__, displayBits);
+   UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( displayBits));
    return( displayBits);
 }
 

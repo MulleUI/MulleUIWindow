@@ -24,7 +24,7 @@
 //
 // During the render, animated properties will be copied down to the layers.
 //
-// Problem: animations run on the renderQueue.
+// Problem: animations run on the drawingQueue.
 
 @interface UIAnimatableViewPropertiesSnapshot : NSObject <UIAnimatableViewProperties>
 

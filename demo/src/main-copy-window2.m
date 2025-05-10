@@ -2,7 +2,7 @@
 
 
 #ifndef WINDOW1_STYLEMASK
-# define WINDOW1_STYLEMASK    UIWindowStyleBare|UIWindowStyleInvisible
+# define WINDOW1_STYLEMASK    UIWindowStyleBare|UIWindowStyleHidden
 #endif  
 
 #include "main-copy-window.m"
