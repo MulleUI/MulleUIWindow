@@ -646,9 +646,9 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
       mvgLineTo( vg, points[ 2]);
       mvgClosePath( vg);
 
-      rect = CGRectMakeWithCenterPointAndSize( CGPointZero, CGSizeMake( 1.0, 1.0));
+      rect = CGRectMakeWithCenterAndSize( CGPointZero, CGSizeMake( 1.0, 1.0));
       [paint fillWithBounds:rect
-                 NVGcontext:vg];
+                    context:context];
 
    }
    mvgRestore( vg);

@@ -130,7 +130,7 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    NSUInteger       i;
 
    diff  = CGPointSubtract( _point, b);
-   deg   = CARadiansToDegrees( CGPointGetPolarRadians( diff));
+   deg   = CARadiansAsRotationToDegrees( CGPointGetPolarRadiansAsAngle( diff));
    angle = fmodf( deg + 180.0, 360.0f);
    angle = CADegreesNormalize( angle);
    i     = (NSUInteger) (floor( angle / 360.0) * _numSegment);
@@ -185,8 +185,8 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
       overlap = _radius + [b radius] - dist;
 
       diff    = CGPointSubtract( _point, [b point]);
-      direc   = CAPolarPointMakeWithRadians( overlap * overlapFactor,
-                                             CGPointGetPolarRadians( diff));
+      direc   = CAPolarPointMake( overlap * overlapFactor,
+                                             CGPointGetPolarRadiansAsAngle( diff));
       _vector = CAPolarPointAdd( _vector, direc);
       [b setVector:CAPolarPointSubtract( [b vector], direc)];
 
@@ -328,8 +328,8 @@ static void   setupSceneInView( UIView *contentPlane)
    {
       r = CGFloatMakeRandom() * (MAX_RADIUS - MIN_RADIUS) + MIN_RADIUS;
       p = CGPointMakeRandomInRect( contentRect);
-      v = CAPolarPointMakeWithRadians( CGFloatMakeRandom(),
-                                       CADegreesToRadians( CGFloatMakeRandom() * 360));
+      v = CAPolarPointMake( CGFloatMakeRandom(),
+                            CADegreesToRadiansAsAngle( CGFloatMakeRandom() * 360));
       balls[ i] = [[Ball alloc] initWithRadius:r
                                       position:p
                                         vector:v];
@@ -367,7 +367,7 @@ int   main( int argc, char *argv[])
       // _didStopDrawingInThreadCallback, if we did we would then have to
       // release them
 
-      perf = [MulleUIPerf object];
+      perf = [MulleUIPerf instance];
       [window setFrameDelegate:perf];
 
       [app addWindow:window];

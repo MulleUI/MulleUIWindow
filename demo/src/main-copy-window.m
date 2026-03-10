@@ -113,7 +113,7 @@ static void  drawStuff( CALayer *layer, CGContext *context)
    canvas      = [layer canvas];
    rect        = UIEdgeInsetsInsetRect( canvas, UIEdgeInsetsMake( 50, 50, 50, 50));
    diameter    = CGFloatMinimum( CGRectGetWidth( rect), CGRectGetHeight( rect));
-   rect.origin = CGSizeGetCenterPointInRect( CGSizeMake( diameter, diameter), rect);
+   rect.origin = CGSizeGetCenterInRect( CGSizeMake( diameter, diameter), rect);
    rect.size   = CGSizeMake( diameter, diameter);
 
    drawColorwheel( CGContextGetNVGContext( context),
@@ -193,7 +193,7 @@ int   main( int argc, char *argv[])
 
    app = [UIApplication sharedInstance];
    {
-      styleMask = UIWindowsStyleMaskBySetting( WINDOW1_STYLEMASK, UIWindowStyleRetained, NO);
+      styleMask = UIWindowStyleMaskBySetting( WINDOW1_STYLEMASK, UIWindowStyleRetained, NO);
       window[ 0] = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 400.0)
                              titleUTF8String:"Source"
                                    styleMask:styleMask];
@@ -204,7 +204,7 @@ int   main( int argc, char *argv[])
 
       [app addWindow:window[ 0]];
 
-      styleMask = UIWindowsStyleMaskBySetting( WINDOW2_STYLEMASK, UIWindowStyleRetained, NO);
+      styleMask = UIWindowStyleMaskBySetting( WINDOW2_STYLEMASK, UIWindowStyleRetained, NO);
       window[ 1] = [UIWindow windowWithFrame:CGRectMake( 400.0, 0.0, 400.0, 400.0)
                              titleUTF8String:"Destination"
                                    styleMask:styleMask];

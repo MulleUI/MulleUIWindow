@@ -158,11 +158,11 @@ static void drawMonitor( struct NVGcontext *vg,
   // Draw big circle
   CGFloat radius = fmin(CGRectGetWidth(screenRect), CGRectGetHeight(screenRect)) * 0.3;
   circleBounds = CGRectInset( screenRect, radius / 2, radius / 2);
-  CGPoint center = CGRectGetCenterPoint(circleBounds);
+  CGPoint center = CGRectGetCenter(circleBounds);
   radius = fmin(CGRectGetWidth(circleBounds), CGRectGetHeight(circleBounds)) * 0.3;
 
   nvgBeginPath(vg);
-  mvgCircle(vg, CACircleMake( center, radius));
+  mvgCircle(vg, CACircleMakeWithCenterAndRadius( center, radius));
   mvgDrawPathWithAppearance( vg, &appearance->circle);
 
   // Draw index number (assuming index 1 for this example)
@@ -217,7 +217,7 @@ static void  drawStuff( CALayer *layer, CGContext *context)
 
    case 3 :
    case 4 :
-      CGRectPartition2x2( canvas, CGSizeMake( 20, 20), (void *) rects);
+      CGRectPartition2x2( canvas, CGSizeMake( 20, 20), (CGRect *) rects);
       p_rects = (CGRect *) rects;
       break;
 
@@ -227,7 +227,7 @@ static void  drawStuff( CALayer *layer, CGContext *context)
    case 8 :
    default :
          n = n >= 9 ? 9 : n;
-         CGRectPartition3x3( canvas, CGSizeMake( 20, 20), (void *) rects);
+         CGRectPartition3x3( canvas, CGSizeMake( 20, 20), (CGRect *) rects);
          p_rects = (CGRect *) rects;
          break;
    }

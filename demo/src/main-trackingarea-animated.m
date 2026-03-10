@@ -73,7 +73,7 @@ void   setupSceneInWindow( UIWindow *window)
    contentView = [window contentView];
    contentRect = CGRectInset( [contentView contentRect], 10, 10);
 
-   view  = [TrackingView object];
+   view  = [TrackingView instance];
    [view setNameUTF8String:"tracking"];
    [view setColors:CGColorMakeGreen()];
 //   [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -87,7 +87,7 @@ void   setupSceneInWindow( UIWindow *window)
    frame.size = CGSizeMake( 200, 100);
    [view setFrame:CGSizePlaceInRect( frame.size, contentRect, CGContentModeLeft)];
 
-   ta = [CATransaction object];
+   ta = [CATransaction instance];
    [ta begin];
    {
       [ta setAnimationAutoreverses:YES];

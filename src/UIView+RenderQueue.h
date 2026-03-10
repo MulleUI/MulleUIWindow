@@ -13,9 +13,10 @@
 
 struct UIRenderQueueContext
 {
-   CGAffineTransform   xform;
-   CGRect              clipRect;
-   CGFloat             alpha;
+   id <UIGraphicsContext>  context;
+   CGAffineTransform       xform;
+   CGRect                  clipRect;
+   CGFloat                 alpha;
 };
 
 
@@ -23,7 +24,8 @@ struct UIRenderQueueContext
 
 // all layers (are placed into the render queue, the layers get their
 // transform and alpha set
-- (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue;
+- (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue
+           graphicsContext:(id <UIGraphicsContext>) context;
 
 - (void) dumpRenderQueue:(struct mulle_pointerarray *) renderQueue;
 

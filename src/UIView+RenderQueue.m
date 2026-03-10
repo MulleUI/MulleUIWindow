@@ -39,7 +39,12 @@
 
 static inline int   CGAlphaIsTransparentWithBitDepth( float a, unsigned int depth)
 {
-   return( a < 0.5 / (1LL << depth));  // (((1LL << depth) / 2) - 1));
+   double   threshold;
+   int      is_transparent;
+
+   threshold       = 0.5 / (1LL << depth); // (((1LL << depth) / 2) - 1));
+   is_transparent  = (double) a < threshold;
+   return( is_transparent);
 }
 
 static inline int   CGAlphaIsTransparent( float a)
@@ -69,7 +74,8 @@ static inline int   CGAlphaIsTransparent( float a)
    if( [self isHidden] || [self isCulledByLayout])
       return;
 
-   v.alpha = _alpha * ctx->alpha;
+   v.context = ctx->context;
+   v.alpha   = _alpha * ctx->alpha;
    if( CGAlphaIsTransparent( v.alpha))  // assume rounding up and 16 bit color depth
       return;
 
@@ -148,6 +154,7 @@ static inline int   CGAlphaIsTransparent( float a)
 
 
 - (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue
+           graphicsContext:(id <UIGraphicsContext>) context
 {
    abort(); // only UIWindow can do this currently
 }

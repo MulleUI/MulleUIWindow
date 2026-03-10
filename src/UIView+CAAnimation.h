@@ -25,6 +25,7 @@ typedef NS_OPTIONS( NSUInteger, UIViewForgetImplicitAnimationsMode)
 };
 
 
+// MEMO: talking about class methods here...
 //
 // Doing it like this is kinda bad, because different windows could have
 // different threads but they couldn't create animations at the same time

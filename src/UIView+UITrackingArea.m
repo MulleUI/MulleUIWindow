@@ -112,8 +112,8 @@
                      inRect:(CGRect) rect
            autoresizingMask:(UIViewAutoresizing) autoresizingMask
 {
-   CGRect                   frame;
-   struct UILayoutContext   context;
+   CGRect                frame;
+   struct UILayoutInfo   info;
 
    if( ! autoresizingMask)
    {
@@ -121,9 +121,10 @@
       return;
    }
 
-   context = UILayoutContextMake( rect, UIEdgeInsetsZero);
-   frame   = [area autoresizeWithContext:&context
-                        autoresizingMask:autoresizingMask];
+   // we don't need a LayoutContext for autoresize
+   info  = UILayoutInfoMake( rect, UIEdgeInsetsZero, nil);
+   frame = [area autoresizeWithLayoutInfo:&info
+                         autoresizingMask:autoresizingMask];
 
    UIViewEventLogVerbose( nil, "Updating area %#@ for rect %s to %s",
                                  area,

@@ -12,14 +12,18 @@
 #import "import.h"
 
 
+@protocol UIGraphicsContext;
+
 
 @interface UIWindow( RenderQueue)
 
 - (UIWindowDisplayBits) willLayoutWithAbsoluteTime:(mulle_absolutetime_t) renderStart;
 
-- (void) createRenderQueueForFrame:(struct CGFrameInfo *) info;
+- (void) createRenderQueueForFrame:(struct CGFrameInfo *) info
+                   graphicsContext:(id <UIGraphicsContext>) context;
 
-- (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue;
+- (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue
+           graphicsContext:(id <UIGraphicsContext>) context;
 
 @end
 
@@ -28,5 +32,6 @@
 // otherwise zero
 UIWindowDisplayBits
    UIWindowDefaultPrepareRenderQueue( UIWindow *self,
+                                      id <UIGraphicsContext> context,
                                       struct CGFrameInfo *info,
                                       UIWindowDisplayBits displayBits);

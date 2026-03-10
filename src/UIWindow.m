@@ -74,7 +74,7 @@ static struct
    autoresizingMask = [view autoresizingMask];
    isResizable      = UIViewAutoresizingIsScaling( autoresizingMask) ||
                       UIViewAutoresizingIsFlexible( autoresizingMask);
-   styleMask = UIWindowsStyleMaskBySetting( styleMask, UIWindowStyleResizable, isResizable);
+   styleMask = UIWindowStyleMaskBySetting( styleMask, UIWindowStyleResizable, isResizable);
 
    margins = [view margins];
    frame   = [view frame];
@@ -364,28 +364,33 @@ static struct
 // gain and relinquish are tailored to transfer between the UIWindow+Thread
 // and the mainThread. Not for anything else (so far)
 //
-- (void) mulleGainAccess
+- (void) mulleGainAccessWithUniquingSet:(struct mulle_pointerset *) uniquing
 {
    // more todo
-   [super mulleGainAccess];
+   assert( mulle_pointerset_get( uniquing, self) == self);
 
-   if( _view != _responder && _view != _firstResponder)
-      [_view mulleGainAccess];
+   [super mulleGainAccessWithUniquingSet:uniquing];
 
-   [_preLayoutAnimator mulleGainAccess];
-   [_postLayoutAnimator mulleGainAccess];
+   if( mulle_pointerset_insert( uniquing, _preLayoutAnimator))
+      [_preLayoutAnimator mulleGainAccessWithUniquingSet:uniquing];
+   if( mulle_pointerset_insert( uniquing, _postLayoutAnimator))
+      [_postLayoutAnimator mulleGainAccessWithUniquingSet:uniquing];
 }
 
 
-- (void) mulleRelinquishAccess
+- (void) mulleRelinquishAccessWithUniquingSet:(struct mulle_pointerset *) uniquing
 {
-   [_postLayoutAnimator mulleRelinquishAccess];
-   [_preLayoutAnimator mulleRelinquishAccess];
+   assert( mulle_pointerset_get( uniquing, self) == self);
 
-   if( _view != _responder && _view != _firstResponder)
-      [_view mulleRelinquishAccess];
+   // at this point should we tidy up some more stuff ?
+   _mulle__pointerset_reset( &_layoutedViews);
 
-   [super mulleRelinquishAccess];
+   if( mulle_pointerset_insert( uniquing, _postLayoutAnimator))
+      [_postLayoutAnimator mulleRelinquishAccessWithUniquingSet:uniquing];
+   if( mulle_pointerset_insert( uniquing, _preLayoutAnimator))
+      [_preLayoutAnimator mulleRelinquishAccessWithUniquingSet:uniquing];
+
+   [super mulleRelinquishAccessWithUniquingSet:uniquing];
 }
 
 
@@ -436,11 +441,11 @@ static struct
    return( [UIView class]);
 }
 
+
 + (Class) windowPlaneClass
 {
    return( [UIWindowPlane class]);
 }
-
 
 
 - (UIView *) contentView
@@ -465,6 +470,19 @@ static struct
 
    [self setView:view];
 }
+
+
+- (void) setNeedsStyling
+{
+   [self setNeedsDisplayBit:UIWindowDisplayNeedsStyling];
+}
+
+
+- (BOOL) needsStyling
+{
+   return( [self needsDisplay] & UIWindowDisplayNeedsStyling ? YES : NO);
+}
+
 
 - (void) setNeedsLayout
 {

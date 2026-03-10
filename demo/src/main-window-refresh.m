@@ -49,8 +49,8 @@ int   main( int argc, char *argv[])
       [layer setTextUTF8String:"0"];
       [layer setTextBackgroundColor:CGColorMakeBlue()];
       [layer setTextColor:CGColorMakeWhite()];
-      [layer setAlignmentMode:CAAlignmentCenter];
-      [layer mulleSetVerticalAlignmentMode:MulleTextVerticalAlignmentMiddle];
+      [layer setTextAlignment:UITextAlignmentCenter];
+      [layer setTextVerticalAlignment:UITextAlignmentMiddle];
 
       view = [UIView viewWithLayer:layer];
       [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];

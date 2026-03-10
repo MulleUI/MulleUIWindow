@@ -99,7 +99,7 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *_context)
    canvas      = [layer canvas];
    rect        = UIEdgeInsetsInsetRect( canvas, UIEdgeInsetsMake( 50, 50, 50, 50));
    diameter    = CGFloatMinimum( CGRectGetWidth( rect), CGRectGetHeight( rect));
-   rect.origin = CGSizeGetCenterPointInRect( CGSizeMake( diameter, diameter), rect);
+   rect.origin = CGSizeGetCenterInRect( CGSizeMake( diameter, diameter), rect);
    rect.size   = CGSizeMake( diameter, diameter);
 
    drawColorwheel( CGContextGetNVGContext( context),
@@ -182,7 +182,7 @@ int   main( int argc, char *argv[])
       [window setFrameRate:rate];
       setupSceneInView( [window contentView]);
 
-      perf = [MulleUIPerf object];
+      perf = [MulleUIPerf instance];
       [window setFrameDelegate:perf];
 
       [app addWindow:window];

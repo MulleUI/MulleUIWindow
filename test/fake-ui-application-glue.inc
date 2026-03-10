@@ -605,7 +605,7 @@
 
 + (FakeApplication *) sharedInstance
 {
-   return [FakeApplication object];
+   return [FakeApplication instance];
 }
 
 - (id) init

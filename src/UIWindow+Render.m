@@ -95,10 +95,10 @@
 //
 // typedef struct CGWindowInfo
 // {
-//    CGRect                 frame;            // window coordinates frame
+//    CGRect         frame;            // window coordinates frame
 //    CGPixelSize    framebufferSize;  // actual pixels (frameSize * pixelRatio)
-//    CGVector               UIScale;
-//    CGFloat                pixelRatio;
+//    CGVector       UIScale;
+//    CGFloat        pixelRatio;
 // } CGWindowInfo;
 
 - (void) renderDebugInfo:(struct UIWindowDebugInfo *) p
@@ -168,31 +168,31 @@
 }
 
 
-- (void) renderViewsInFrame:(struct CGFrameInfo *) info
-            graphicsContext:(id <UIGraphicsContext>) context
+- (void) renderLayersInFrame:(struct CGFrameInfo *) info
+             graphicsContext:(id <UIGraphicsContext>) context
 {
    MulleWindowProfileBegin();
 
    [context useDefaultFont];
 
-   if( _willRenderViewsCallback)
-      (*_willRenderViewsCallback)( self, context, info);
+   if( _willRenderLayersCallback)
+      (*_willRenderLayersCallback)( self, context, info);
 
-   UIWindowRenderLogVerbose( "rendering views");
+   UIWindowRenderLogVerbose( "rendering layers");
    [context renderObjects:&_renderQueue];
-   UIWindowRenderLogVerbose( "drew views");
+   UIWindowRenderLogVerbose( "drew layers");
 
-   if( _didRenderViewsCallback)
+   if( _didRenderLayersCallback)
    {
       [context reset];
-      (*_didRenderViewsCallback)( self, context, info);
+      (*_didRenderLayersCallback)( self, context, info);
    }
 
    MulleWindowProfileEnd();
 }
 
 //
-// The default "frameCallback" used in UIPureWindowDefaultRawFrameCallback
+// The default "_frameCallback" used in UIPureWindowDefaultRawFrameCallback
 //
 UIWindowDisplayBits
    UIWindowDefaultRenderViews( UIPureWindow *self_in,
@@ -208,13 +208,13 @@ UIWindowDisplayBits
    // first two functions should happen outside of any context being
    // active or not, we are still adding bits to displayBits here
    displayBits = UIWindowDefaultLayoutViews( self, info, displayBits);
-   displayBits = UIWindowDefaultPrepareRenderQueue( self, info, displayBits);
+   displayBits = UIWindowDefaultPrepareRenderQueue( self, context, info, displayBits);
    returnBits  = displayBits & ~0xFFFF;
 
    if( displayBits & UIWindowDisplayNeedsRedraw)
    {
-      [self renderViewsInFrame:info
-               graphicsContext:context];
+      [self renderLayersInFrame:info
+                graphicsContext:context];
    }
 
    UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( returnBits));

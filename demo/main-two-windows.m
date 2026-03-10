@@ -93,7 +93,7 @@ static void  drawStuff( CALayer *layer, CGContext *context)
    canvas      = [layer canvas];
    rect        = UIEdgeInsetsInsetRect( canvas, UIEdgeInsetsMake( 50, 50, 50, 50));
    diameter    = CGFloatMinimum( CGRectGetWidth( rect), CGRectGetHeight( rect));
-   rect.origin = CGSizeGetCenterPointInRect( CGSizeMake( diameter, diameter), rect);
+   rect.origin = CGSizeGetCenterInRect( CGSizeMake( diameter, diameter), rect);
    rect.size   = CGSizeMake( diameter, diameter);
 
    drawColorwheel( CGContextGetNVGContext( context),

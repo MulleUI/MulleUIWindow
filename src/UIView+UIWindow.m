@@ -7,6 +7,7 @@
 
 #import "UIWindow+UIEvent.h"
 #import "UIWindow+UITrackingArea.h"
+#import "UIWindow+Styling.h"
 #import "UIView+UIFirstResponder.h"
 #import "UIView+UITrackingArea.h"
 
@@ -29,35 +30,42 @@
 //
 // If you change code here, also change it in UIView.m -setWindow:
 //
-- (void) setWindow:(id <UIWindow>) newWindow
+- (void) setWindow:(id <UIWindow>) aWindow
 {
-   UIView   *view;
-   BOOL     flag;
+   UIView    *view;
+   UIWindow  *window;
+   UIWindow  *oldWindow;
 
-   assert( ! newWindow || [newWindow isKindOfClass:[UIWindow class]]);
-
-   if( _window == newWindow)
+   window = MULLE_OBJC_CLASS_CAST_OR_NIL( UIWindow, aWindow);
+   if( _window == window)
       return;
 
-   [self willMoveToWindow:newWindow];
-   [(UIWindow *) self->_window removeTrackingView:self];
+   oldWindow = MULLE_OBJC_CLASS_CAST_OR_NIL( UIWindow, _window);
 
-   flag = [self resignFirstResponder];
-   if( ! flag)
+   [self willMoveToWindow:window];
+   [oldWindow removeTrackingView:self];
+
+   // we if the view moves out of the window, we force the resignation of
+   // firstResponder even if the view would say NO, but we teill it that
+   // it didResign
+   if( [self isFirstResponder])
    {
-      MulleUILog( "View won't -resignFirstResponder but gets removed from superview");
-      abort();
+      if( [oldWindow makeFirstResponder:nil])
+      {
+         [self didResignFirstResponder];
+      }
    }
 
-   self->_window = newWindow;
+   self->_window = window;
+   [window setNeedsStyling];
 
    UIViewSubviewsFor( self, view)
-      [view setWindow:newWindow];
+      [view setWindow:window];
 
    if( mulle_pointerarray_get_count( &_trackingAreas))
-      [(UIWindow *) self->_window addTrackingView:self];
+      [window addTrackingView:self];
 
-   [self didMoveToWindow:newWindow];
+   [self didMoveToWindow:window];
 }
 
 
@@ -81,17 +89,22 @@
 // this is really quite conservative, maybe too conservative
 - (UIWindowPlane *) windowPlane
 {
-   UIView   *view;
-   UIView   *parent;
-   UIView   *before;
+   UIView     *view;
+   UIView     *parent;
+   UIView     *before;
+   UIWindow   *window;
 
    before = nil;
    for( view = self; (parent = view->_superview); before = view, view = parent)
    {
    }
 
-   if( [view __isUIWindow] && [(UIWindow *) view isWindowPlane:before])
-      return( (UIWindowPlane *) before);
+   if( [view __isUIWindow])
+   {
+      window = MULLE_OBJC_CLASS_CAST( UIWindow, view);
+      if( [window isWindowPlane:before])
+         return( MULLE_OBJC_CLASS_CAST( UIWindowPlane, before));
+   }
    return( nil);
 }
 
@@ -102,9 +115,12 @@
 {
    id <UIScreen>         screen;
    struct UIScreenInfo   info;
+   UIWindow              *window;
+
+   window = MULLE_OBJC_CLASS_CAST( UIWindow, [self window]);
 
    memset( &info, 0, sizeof( info));
-   screen = [(UIWindow *) [self window] screenOrPrimaryScreen:YES];
+   screen = [window screenOrPrimaryScreen:YES];
    [screen getScreenInfo:&info];
 
    // UIScreenInfoGetPPI will return 72.0 if info is zero
@@ -118,7 +134,7 @@
 
    UIViewDisplayBitsLog( "");
 
-   window = (UIWindow *) [self window];
+   window = MULLE_OBJC_CLASS_CAST( UIWindow, [self window]);
    if( ! window)
       UIViewLog( "view has no window, so setNeedsDisplay does nothing");
    [window setNeedsDisplay];
@@ -129,7 +145,7 @@
 {
    UIWindow   *window;
 
-   window = (UIWindow *) [self window];
+   window = MULLE_OBJC_CLASS_CAST( UIWindow, [self window]);
    assert( window);
    return( [window needsLayout]);
 }

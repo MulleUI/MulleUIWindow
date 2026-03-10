@@ -56,7 +56,7 @@ struct UIWindowDebugInfo
 
 @interface UIWindow( Render)
 
-- (void) renderViewsInFrame:(struct CGFrameInfo *) info
+- (void) renderLayersInFrame:(struct CGFrameInfo *) info
             graphicsContext:(id <UIGraphicsContext>) context;
 
 @end

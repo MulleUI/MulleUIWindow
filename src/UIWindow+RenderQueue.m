@@ -45,9 +45,11 @@
 // start
 //
 - (void) createRenderQueue:(struct mulle_pointerarray *) queue
+           graphicsContext:(id <UIGraphicsContext>) context
 {
    struct UIRenderQueueContext  v;
 
+   v.context  = context;
    v.xform    = CGAffineTransformMakeIdentity();
    v.clipRect = CGRectMake( -INFINITY, -INFINITY, INFINITY, INFINITY);
    v.alpha    = 1.0;
@@ -61,16 +63,15 @@
 
 
 - (void) createRenderQueueForFrame:(struct CGFrameInfo *) info
+                   graphicsContext:(id <UIGraphicsContext>) context
 {
    UIWindowRenderLog( "%s", CGFrameInfoUTF8String( info));
 
    MulleWindowProfileBegin();
 
    _mulle_pointerarray_reset( &_renderQueue);
-   [self createRenderQueue:&_renderQueue];
-
-   if( _didCreateViewsDrawingQueueCallback)
-      (*_didCreateViewsDrawingQueueCallback)( self, info);
+   [self createRenderQueue:&_renderQueue
+           graphicsContext:context];
 
    MulleWindowProfileEnd();
 
@@ -79,8 +80,10 @@
 
 
 
+// will be called by "UIWindowDefaultRenderViews"
 UIWindowDisplayBits
    UIWindowDefaultPrepareRenderQueue( UIWindow *self,
+                                      id <UIGraphicsContext> context,
                                       struct CGFrameInfo *info,
                                       UIWindowDisplayBits displayBits)
 {
@@ -89,14 +92,15 @@ UIWindowDisplayBits
    // the layer and calculate the actual opacity, which is then stored
    // in layer transform and layer alpha.
    //
-   [self createRenderQueueForFrame:info];
+   [self createRenderQueueForFrame:info
+                   graphicsContext:context];
 
    //
    // this animateFrame: runs unconditonally over the displayQueue
    // that will be then also be used by drawFrame:
    //
-   displayBits = [self animateViewsInFrame:info
-                              displayBits:displayBits];
+   displayBits = [self animateRenderQueueLayersInFrame:info
+                                           displayBits:displayBits];
 
    UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( displayBits));
    return( displayBits);

@@ -71,5 +71,5 @@ enum
 @end
 
 
-MULLE_UI_CORE_EXTERN_GLOBAL
+MULLE_UI_WINDOW_GLOBAL
 void   UIViewMouseHoverHasEnded( UIView *self);

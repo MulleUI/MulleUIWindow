@@ -35,16 +35,17 @@
 - (UIWindowDisplayBits) postLayoutAnimations:(struct CGFrameInfo *) info;
 
 // returns YES if animation ran
-- (UIWindowDisplayBits) animateViewsInFrame:(struct CGFrameInfo *) info
+- (UIWindowDisplayBits) animateRenderQueueLayersInFrame:(struct CGFrameInfo *) info
                                 displayBits:(UIWindowDisplayBits) displayBits;
 
 @end
 
 
 
-@interface UIWindow( LayoutForward)
+@interface UIWindow( Layout_Forward)
 
-- (void) createRenderQueueForFrame:(struct CGFrameInfo *) info;
+- (void) createRenderQueueForFrame:(struct CGFrameInfo *) info
+                   graphicsContext:(id <UIGraphicsContext>) context;
 
 @end
 
@@ -77,6 +78,7 @@ UIWindowDisplayBits
                                UIWindowDisplayBits displayBits);
 
 
+#if 0
 //
 // this function will call methods in this order (if needed)
 //
@@ -93,5 +95,7 @@ UIWindowDisplayBits
 //
 UIWindowDisplayBits
    UIWindowDefaultPrepareRenderQueue( UIWindow *self,
-                                       struct CGFrameInfo *info,
-                                       UIWindowDisplayBits displayBits);
+                                      id <UIGraphicsContext> context,
+                                      struct CGFrameInfo *info,
+                                      UIWindowDisplayBits displayBits);
+#endif

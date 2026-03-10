@@ -228,7 +228,7 @@ int   main( int argc, char *argv[])
 
    [window setFrameCallback:display];
    [window setFrameRate:UIWindowFrameRateSynced];
-   //[window setFrameDelegate:[MulleUIPerf object]];
+   //[window setFrameDelegate:[MulleUIPerf instance]];
    return( UIApplicationRunWindow( window));
 }
 

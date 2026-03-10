@@ -61,7 +61,7 @@ src/generic/include.h
 # contents selected with patternfile ??-header--public-headers
 #
 set( PUBLIC_HEADERS
-src/MulleObjCLoader+MulleUIWindow.h
+src/MulleObjCDeps+MulleUIWindow.h
 src/MulleUIWindow.h
 src/UITrackingArea.h
 src/UIView+CAAnimation.h
@@ -75,6 +75,7 @@ src/UIWindow+Layout.h
 src/UIWindow+OneFrame.h
 src/UIWindow+RenderQueue.h
 src/UIWindow+Render.h
+src/UIWindow+Styling.h
 src/UIWindow+UIEvent.h
 src/UIWindow+UIResponder.h
 src/UIWindow+UITrackingArea.h

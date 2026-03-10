@@ -13,6 +13,7 @@ endif()
 set( SOURCES
 src/main-candycrash.m
 src/main-copy-window2.m
+src/main-copy-window3.m
 src/main-copy-window.m
 src/main-cursor.m
 src/main-demo.m
@@ -30,11 +31,13 @@ src/main-shared-framebuffer.m
 src/main-shared.m
 src/main-shared-singlethread.m
 src/main-star.m
+src/main-swapinterval.m
 src/main-trackingarea-animated.m
 src/main-trackingarea.m
 src/main-trackingarea-scrollview.m
 src/main-window-accumulate.m
 src/main-window-buffered.m
+src/main-window-draw-simple.m
 src/main-window-profile.m
 src/main-window-refresh.m
 src/main-window-retained.m

@@ -13,7 +13,7 @@
 #define _mulle_ui_window__export_h__
 
 
-#import "MulleObjCLoader+MulleUIWindow.h"
+#import "MulleObjCDeps+MulleUIWindow.h"
 #import "UITrackingArea.h"
 #import "UIView+CAAnimation.h"
 #import "UIView+RenderQueue.h"
@@ -26,6 +26,7 @@
 #import "UIWindow+OneFrame.h"
 #import "UIWindow+RenderQueue.h"
 #import "UIWindow+Render.h"
+#import "UIWindow+Styling.h"
 #import "UIWindow+UIEvent.h"
 #import "UIWindow+UIResponder.h"
 #import "UIWindow+UITrackingArea.h"

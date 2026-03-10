@@ -23,6 +23,7 @@ src/UIWindow+Layout.m
 src/UIWindow+OneFrame.m
 src/UIWindow+RenderQueue.m
 src/UIWindow+Render.m
+src/UIWindow+Styling.m
 src/UIWindow+UIEvent.m
 src/UIWindow+UIResponder.m
 src/UIWindow+UITrackingArea.m
@@ -33,5 +34,5 @@ src/UIWindow.m
 # contents selected with patternfile ??-source--stage2-sources
 #
 set( STAGE2_SOURCES
-src/MulleObjCLoader+MulleUIWindow.m
+src/MulleObjCDeps+MulleUIWindow.m
 )

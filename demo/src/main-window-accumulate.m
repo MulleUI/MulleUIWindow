@@ -48,7 +48,7 @@ static void   draw( CALayer *layer, CGContext *context)
          myX = x + 20 * cosf( 2 * M_PI * t + angle);
          myY = y + 20 * sin( 2 * M_PI * t + angle);
 
-         [context fillCircle:CACircleMake( CGPointMake( myX, myY), 5.0)
+         [context fillCircle:CACircleMakeWithCenterAndRadius( CGPointMake( myX, myY), 5.0)
                     hexColor:CGHexColorMakeWithColor( CGColorMakeWithRGBBytes( 20, 200, 20))];
       }
    }

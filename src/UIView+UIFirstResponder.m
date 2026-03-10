@@ -6,12 +6,9 @@
 #import <MulleUIView/UIView+DebugPrivate.h>
 
 
-
-
 @implementation UIView( UIFirstResponder)
 
 MULLE_OBJC_DEPENDS_ON_CATEGORY( UIView, UIEvent);
-
 
 - (BOOL) becomeFirstResponder
 {
@@ -19,9 +16,9 @@ MULLE_OBJC_DEPENDS_ON_CATEGORY( UIView, UIEvent);
    id <UIResponder>   firstResponder;
 
    // I think calling this too often is not good, as it does too much
-   // (later: not so much now)
-   if( [self isFirstResponder])
-      return( YES);
+   // (later: not so much now). We do this check later again soo
+   //if( [self isFirstResponder])
+   //   return( YES);
    
    UIViewEventLog( nil,  "");
 
@@ -38,7 +35,7 @@ MULLE_OBJC_DEPENDS_ON_CATEGORY( UIView, UIEvent);
          return( NO);
    }
    
-   if( [(UIWindow *) _window makeFirstResponder:self])
+   if( [window makeFirstResponder:self])
    {
       [self didBecomeFirstResponder];
       return( YES);

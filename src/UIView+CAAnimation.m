@@ -87,7 +87,7 @@ UI_VIEW_ANIMATABLE_PROPERTIES;
        subclasses might want to add more
     **/
    [self generateAnimationsForPropertiesWithSnapshot:_snapshot
-                                     animationGroup:group];
+                                      animationGroup:group];
 
    [(NSObject *) _snapshot autorelease];
    _snapshot = nil;
@@ -454,6 +454,14 @@ UI_VIEW_ANIMATABLE_PROPERTIES;
 @end
 
 
+
+@interface NSObject( IsUIVIew)
+
+- (BOOL) __isUIView;
+
+@end
+
+
 @implementation CABasicAnimation( UIView)
 
 //
@@ -474,7 +482,7 @@ UI_VIEW_ANIMATABLE_PROPERTIES;
       return( NO);
    }
 
-   return( [[self animationObject] isKindOfClass:[UIView class]]);
+   return( [[self animationObject] __isUIView]);
 }
 
 @end

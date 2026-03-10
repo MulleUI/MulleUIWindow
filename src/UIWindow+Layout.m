@@ -53,8 +53,8 @@
    animationRate = UIWindowGetAnimationRate( self);
    didAnimate    = [_preLayoutAnimator animateWithAbsoluteTime:info->now
                                                  animationRate:animationRate];
-   if( _didAnimateViewsCallback)
-      (*_didAnimateViewsCallback)( self, info, 0);
+   if( _didAnimateLayersCallback)
+      (*_didAnimateLayersCallback)( self, info, 0);
 
    MulleWindowProfileEnd();
 
@@ -95,8 +95,8 @@
    animationRate = UIWindowGetAnimationRate( self);
    didAnimate    = [_postLayoutAnimator animateWithAbsoluteTime:info->now
                                                   animationRate:animationRate];
-   if( _didAnimateViewsCallback)
-      (*_didAnimateViewsCallback)( self, info, 1);
+   if( _didAnimateLayersCallback)
+      (*_didAnimateLayersCallback)( self, info, 1);
 
    MulleWindowProfileEnd();
 
@@ -218,8 +218,8 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
 }
 
 
-- (UIWindowDisplayBits) animateViewsInFrame:(struct CGFrameInfo *) info
-                                displayBits:(UIWindowDisplayBits) displayBits
+- (UIWindowDisplayBits) animateRenderQueueLayersInFrame:(struct CGFrameInfo *) info
+                                            displayBits:(UIWindowDisplayBits) displayBits
 {
    BOOL                   didAnimate;
    mulle_relativetime_t   animationRate;
@@ -243,8 +243,8 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
    // have no didAnimate callback, because we would like to pipeline
    // with rendering, or but the animation step into the render part ?
    //
-   if( _didAnimateViewsCallback)
-      didAnimate |= (*_didAnimateViewsCallback)( self, info, 2);
+   if( _didAnimateLayersCallback)
+      didAnimate |= (*_didAnimateLayersCallback)( self, info, 2);
 
    if( didAnimate)
    {

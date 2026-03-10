@@ -257,7 +257,7 @@ int   main( int argc, char *argv[])
       // grab mouse motion events here
 //      [window setEventCallback:handleEvent];
 
-      perf = [MulleUIPerf object];
+      perf = [MulleUIPerf instance];
       [window setFrameDelegate:perf];
 
       [app addWindow:window];

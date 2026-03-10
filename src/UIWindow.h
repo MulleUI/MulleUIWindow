@@ -43,6 +43,7 @@ typedef UIView   UIWindowPlane;
    // the render. The _contextLock still needs to be observed when
    // attempting to modify the view hierarchy ?
    BOOL                            _isLayouting;
+   BOOL                            _isStyling;
 
 // These ivars are used by the rendering thread only to manage the view
 // hierarchy, layout, handle events and draw stuff. If there is no windowThread
@@ -93,18 +94,22 @@ typedef UIView   UIWindowPlane;
 @property( assign, getter=isLoadingDefaultFont) BOOL   loadDefaultFont;
 
 //
-// This is useful to add custom drawing stuff on the bottom.
+@property( retain) id                                  styler;
+
 //
-@property void  (*willRenderViewsCallback)( UIWindow *window,
-                                          id <UIGraphicsContext> context,
-                                          struct CGFrameInfo *info);
+// This is useful to add custom drawing stuff on the bottom.
+// TODO: in a multi-process scenario this more like "willPushLayersToGPU"
+@property void  (*willRenderLayersCallback)( UIWindow *window,
+                                             id <UIGraphicsContext> context,
+                                             struct CGFrameInfo *info);
 
 //
 // This is useful to add custom nanovg drawing stuff on top.
+// TODO: in a multi-process scenario this more like "didPushLayersToGPU"
 //
-@property void   (*didRenderViewsCallback)( UIWindow *window,
-                                          id <UIGraphicsContext> context,
-                                          struct CGFrameInfo *info);
+@property void   (*didRenderLayersCallback)( UIWindow *window,
+                                             id <UIGraphicsContext> context,
+                                             struct CGFrameInfo *info);
 
 
 // These callbacks will be called in this sequence for every frame.
@@ -125,9 +130,9 @@ typedef UIView   UIWindowPlane;
 // stage #1: after _postLayoutAnimator
 // stage #2: after CALayer "privat" animations
 // return YES if animations happened (and a redraw should happen)
-@property BOOL   (*didAnimateViewsCallback)( UIWindow *window,
-                                             struct CGFrameInfo *info,
-                                             NSInteger stage);
+@property BOOL   (*didAnimateLayersCallback)( UIWindow *window,
+                                              struct CGFrameInfo *info,
+                                              NSInteger stage);
 
 // the view will have the frame and bounds of the window, it contains the
 // planes if these are defined, otherwise directly the contentView
@@ -151,7 +156,10 @@ typedef UIView   UIWindowPlane;
 @property( readonly, assign) UIWindowPlane    *contentPlane;
 
 
-// Convenience for quick hacks
+
+// Convenience for quick hacks, see UIPureWindow for the standard factory
+// constructors bases on frame.
+//
 // Window will be resizable if the view is resizable
 // margins will be observed to create spacing around the view
 // if any axis is < 32 in size, 32 will be used
@@ -199,7 +207,6 @@ typedef UIView   UIWindowPlane;
 // the framebuffer
 - (void) setNeedsRedraw                      MULLE_OBJC_THREADSAFE_METHOD;
 - (BOOL) needsRedraw                         MULLE_OBJC_THREADSAFE_METHOD;
-
 
 - (CAAnimator *) preLayoutAnimator;
 - (CAAnimator *) postLayoutAnimator;
