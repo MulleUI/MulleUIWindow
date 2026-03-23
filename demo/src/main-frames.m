@@ -1,6 +1,6 @@
 #import "import.h"
 
-
+#include <GLFW/glfw3.h>
 static void  usage( void)
 {
    fprintf( stderr, "Usage: frames [frame frequency] [display mode] [other flags]\n"
@@ -22,12 +22,8 @@ static void  usage( void)
 "\n");
    exit( 1);
 }
-
-
 #define SMALL_FONT      24
 #define LARGE_FONT      32
-
-
 static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *context)
 {
    auto char               buf[ 64];
@@ -39,7 +35,6 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *context)
    NSUInteger              counter;
    struct CGFrameInfo      *info;
    struct UIOSWindowInfo   windowInfo;
-   struct NVGcontext       *vg;
    UIWindow                *window;
 
    osWindow = (GLFWOSWindow *) [context OSWindow];
@@ -47,22 +42,19 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *context)
    assert( window);
 
    canvas  = [layer canvas];
-
-   vg = CGContextGetNVGContext( context);
-
-   nvgTextColor( vg, CGColorMakeWhite());
-   nvgTextBackgroundColor( vg, CGColorMakeBlue());
-   nvgTextAlign( vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+   CGContextTextColor( context, CGColorMakeWhite());
+   CGContextTextBackgroundColor( context, CGColorMakeBlue());
+   CGContextCombinedTextAlignment( context, CGTextAlignCenter | CGTextAlignMiddle);
 
    font = [context fontWithNameUTF8String:"sans"];
    [context useFont:font];
 
-   nvgFontSize( vg, SMALL_FONT);
+   CGContextFontSize( context, SMALL_FONT);
    sprintf( buf, "frameRateLimiter : %s", [window frameRateLimiter] ? "YES" : "NO");
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 1 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 1 + 2), buf, 0);
 
    sprintf( buf, "swapInterval : %td", [window swapInterval]);
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 2 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 2 + 2), buf, 0);
 
    frameRate = [window frameRate];
    if( frameRate == UIWindowFrameRateAsync)
@@ -75,46 +67,44 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *context)
             sprintf( buf, "frameRate : synced");
          else
             sprintf( buf, "frameRate : %.2f Hz", 1.0 / frameRate);
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 3 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 3 + 2), buf, 0);
 
    [window getOSWindowInfo:&windowInfo];
 
    sprintf( buf, "slowestFrameRate : %.3f  (%.2f Hz)", UIOSWindowInfoGetSlowestFrameRate( &windowInfo), 1.0 / UIOSWindowInfoGetSlowestFrameRate( &windowInfo));
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 4 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 4 + 2), buf, 0);
 
    sprintf( buf, "fastestFrameRate : %.3f (%.2f Hz)",  UIOSWindowInfoGetFastestFrameRate( &windowInfo),  1.0 /  UIOSWindowInfoGetFastestFrameRate( &windowInfo));
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 5 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 5 + 2), buf, 0);
 
    sprintf( buf, "OSContextInfo : %s", [NSThread mulleIsMainThread] ? [osWindow os_contextInfoUTF8String] : "N/A");
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 6 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 6 + 2), buf, 0);
 
    sprintf( buf, "OSWindowInfo : %s", [NSThread mulleIsMainThread] ? [osWindow os_windowInfoUTF8String] : "N/A");
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 7 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 7 + 2), buf, 0);
 
    mulle_sprintf( buf, "thread : %@", [NSThread currentThread]);
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 8 + 2, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMinY( canvas) + SMALL_FONT * 8 + 2), buf, 0);
 
-   nvgFontSize( vg, LARGE_FONT);
+   CGContextFontSize( context, LARGE_FONT);
    sprintf( buf, "%td frames", [context numberOfFrames]);
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas), buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMidY( canvas)), buf, 0);
 
    sprintf( buf, "%.3f s", [context secondsSinceFirstRender]);
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas) + LARGE_FONT + 8, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMidY( canvas) + LARGE_FONT + 8), buf, 0);
 
    sprintf( buf, "%.2f FPS", [context numberOfFrames] / [context secondsSinceFirstRender]);
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas) + LARGE_FONT * 2 + 8, buf, NULL);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMidY( canvas) + LARGE_FONT * 2 + 8), buf, 0);
 
 //   sprintf( buf, "%.6f display+refresh", [window displayAndRefreshRate]);
-//   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas) + LARGE_FONT * 3 + 8, buf, NULL);
+//   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMidY( canvas) + LARGE_FONT * 3 + 8), buf, 0);
 
-// need this for singlebuffer and also need to flush out nvg calls
+// need this for singlebuffer and also need to flush out drawing calls
 // NO LONGER WELL SUPPORTED AS WAYLAND / EGL CAN'T DO IT
 
    glFlush();
    return( YES);
 }
-
-
 
 //static UIEvent   *handleEvent( UIView *view, UIEvent *event)
 //{
@@ -125,8 +115,6 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *context)
 //   [window setNeedsDisplay];
 //   return( nil);
 //}
-
-
 static void   setupSceneInWindow( UIWindow *window)
 {
    UIView   *view;
@@ -142,8 +130,6 @@ static void   setupSceneInWindow( UIWindow *window)
    [view setUserInteractionEnabled:YES];
    [contentView addSubview:view];
 }
-
-
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
@@ -204,8 +190,6 @@ int   main( int argc, char *argv[])
                  rate = 1.0 / rate;
                  break;
       }
-
-
    //
    // MEMO: the framerate for windows in one-thread scenario is additive
    //       the app should probably handle that
@@ -262,12 +246,8 @@ int   main( int argc, char *argv[])
 
       [app addWindow:window];
    }
-
-
    return( [app runApp]);
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,

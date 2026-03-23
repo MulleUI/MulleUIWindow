@@ -46,3 +46,33 @@ export MULLE_SOURCETREE_STASH_DIR="/tmp/MulleUIWindow/demo/stash"
 export OTHER_CFLAGS="-DMULLE_CG_GLVERSION=1"
 
 
+#
+#
+#
+export MULLE_CRAFT_PLATFORMS="${MULLE_UNAME}:windows"
+
+
+#
+#
+#
+export MULLE_SOURCETREE_PLATFORMS="${MULLE_UNAME}:windows"
+
+
+#
+#
+#
+export MULLE_CRAFT_TOOLCHAIN__WINDOWS="toolchain--linux-windows--x86_64-w64-mingw32--mulle-clang"
+
+
+#
+#
+#
+export MULLE_EMULATOR__WINDOWS="WINEDEBUG=fixme-all,err-all wine"
+
+
+#
+#
+#
+export MULLE_CRAFT_CROSS_COMPILER_ROOT__WINDOWS="/opt/mulle-clang-project-windows/latest"
+
+

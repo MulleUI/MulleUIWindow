@@ -537,6 +537,8 @@ static struct
 
 - (CGAffineTransform) transformForDrawingQueue:(CGAffineTransform) inherited
 {
+   MULLE_C_UNUSED( inherited);
+   
    return( CGAffineTransformMakeIdentity());
 }
 

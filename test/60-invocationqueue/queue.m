@@ -1,5 +1,7 @@
 #import <MulleUIWindow/MulleUIWindow.h>
 
+#include "../fake-ui-application-glue.inc"
+
 
 int   main( void)
 {

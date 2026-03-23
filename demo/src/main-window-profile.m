@@ -11,8 +11,6 @@
 #define STOP_AFTER_FRAMES   0
 #define DUMP_AFTER_STOP     0  // produce stdout instead
 #define DEBUG_PROFILE       1
-
-
 struct mulle_utf8data   reduce_text( char *s)
 {
    char   *start;
@@ -25,8 +23,6 @@ struct mulle_utf8data   reduce_text( char *s)
       return( mulle_utf8data_make( s, -1));
    return( mulle_utf8data_make( start, end - start));
 }
-
-
 
 @interface WindowProfileLayer : CAAccumulationLayer
 {
@@ -43,11 +39,7 @@ struct mulle_utf8data   reduce_text( char *s)
 
 @end
 
-
-
 @implementation WindowProfileLayer
-
-
 - (instancetype) initWithFrame:(CGRect) frame
 {
    self = [super initWithFrame:frame];
@@ -68,8 +60,6 @@ struct mulle_utf8data   reduce_text( char *s)
    UIWindowDestroyProfileQueue( _profileQueue);
    _profileQueue = queue;
 }
-
-
 // each rectangle we draw is temporarily stored
 struct rect
 {
@@ -77,8 +67,6 @@ struct rect
    CGHexColor  color;
    char        *text;
 };
-
-
 // some values together for easier passing
 struct scene
 {
@@ -98,8 +86,6 @@ struct scene
    CGFloat                w;
    CGFloat                scale;
 };
-
-
 static void   rect_start( struct rect *r,
                           struct scene *p,
                           struct MulleWindowProfileEntry *entry,
@@ -142,12 +128,10 @@ static void   rect_start( struct rect *r,
           : _mulle_string_hash( entry->function);
    r->color = CGHexColorMakeWithNameAtIndex( hash);
 }
-
-
 static void   rect_draw( struct rect *r,
                          struct scene *p,
                          struct MulleWindowProfileEntry *entry,
-                         NVGcontext *vg)
+                         CGContext *context)
 {
    CGFloat                x;
    CGColor                color;
@@ -170,23 +154,24 @@ static void   rect_draw( struct rect *r,
    color = CGColorMakeWithHexColor( r->color);
    color = CGColorEnsureContrastWithColor( color, p->backgroundColor);
 
-   mvgFillRectWithColor( vg, r->rect, color);
+   CGContextBeginPath( context);
+   CGContextRect( context, r->rect);
+   CGContextFillColor( context, color);
+   CGContextFill( context);
 
    if( p->drawText)
    {
       rect = CGRectInsetOrZero( r->rect, 1, 1);
 
       textColor = CGColorSuggestTextColor( color);
-      mvgTextColor( vg, textColor);
-      mvgTextBackgroundColor( vg, color);
-      mvgFontSize( vg, rect.size.height);
+      CGContextTextColor( context, textColor);
+      CGContextTextBackgroundColor( context, color);
+      CGContextFontSize( context, rect.size.height);
 
       displayText = reduce_text( r->text);
-      mvgTextInRect( vg, displayText.characters, displayText.length, rect, CGContentModeBottomLeft, 0);
+      CGContextTextInRect( context, displayText.characters, displayText.length, rect, CGContentModeBottomLeft, 0);
    }
 }
-
-
 - (void) debugInfo:(struct scene *)scene entries:(NSUInteger)entryCount
 {
    NSUInteger   i;
@@ -219,8 +204,6 @@ static void   rect_draw( struct rect *r,
 
    MulleUICLog( "========================");
 }
-
-
 - (void) drawProfileQueueInContext:(CGContext *) context
 {
    struct MulleWindowProfileEntry   *entry;
@@ -230,7 +213,6 @@ static void   rect_draw( struct rect *r,
    NSUInteger                       maxVisibleLevel;
    NSUInteger                       i;
    struct scene                     scene;
-   struct NVGcontext                *vg;
    struct CGFrameInfo               *frameInfo;
    CGFloat                          x;
    mulle_relativetime_t             timestamp;
@@ -331,9 +313,6 @@ static void   rect_draw( struct rect *r,
 #if DEBUG_PROFILE
    [self debugInfo:&scene entries:entryCount];
 #endif
-
-   vg = CGContextGetNVGContext( context);
-
 #ifndef NO_PAINT_FLAMEGRAPH
    //
    // in a flamegraph we can't have more than maxLevel rects open at one time
@@ -362,7 +341,7 @@ static void   rect_draw( struct rect *r,
 
             if( level < maxLevel)
             {
-               rect_draw( &rects[ level], &scene, entry, vg);
+               rect_draw( &rects[ level], &scene, entry, context);
             }
 
          default :
@@ -378,7 +357,7 @@ static void   rect_draw( struct rect *r,
          {
             fake           = *entry;
             fake.timestamp = scene.end + 0.01;
-            rect_draw( &rects[ level], &scene, &fake, vg);
+            rect_draw( &rects[ level], &scene, &fake, context);
          }
       }
    }
@@ -392,7 +371,7 @@ static void   rect_draw( struct rect *r,
       for( timestamp = scene.refreshRate; timestamp <= scene.elapsed; timestamp += scene.refreshRate)
       {
          x = scene.x + (timestamp * scene.scale);
-         mvgStrokeLineVWithColor( vg, CGPointMake( x, CGRectGetMaxY( scene.canvas) - scene.height),
+         CGContextStrokeLineVWithColor( context, CGPointMake( x, CGRectGetMaxY( scene.canvas) - scene.height),
                                       scene.height,
                                       0.5,
                                       CGColorMakeLightGray());
@@ -404,7 +383,7 @@ static void   rect_draw( struct rect *r,
       for( timestamp = scene.frameRate; timestamp <= scene.elapsed; timestamp += scene.frameRate)
       {
          x = scene.x + (timestamp * scene.scale);
-         mvgStrokeLineVWithColor( vg, CGPointMake( x, CGRectGetMaxY( scene.canvas) - scene.height),
+         CGContextStrokeLineVWithColor( context, CGPointMake( x, CGRectGetMaxY( scene.canvas) - scene.height),
                                       scene.height,
                                       0.5,
                                       CGColorMakeWhite());
@@ -412,8 +391,6 @@ static void   rect_draw( struct rect *r,
    }
 #endif
 }
-
-
 - (BOOL) drawInContext:(CGContext *) context
 {
    if( ! [super drawInContext:context])
@@ -434,8 +411,6 @@ static void   rect_draw( struct rect *r,
 
    return( YES);
 }
-
-
 static void  didSwapBuffersCallback( UIWindow *window, BOOL immediately)
 {
    struct mulle_structqueue   *profileQueue;
@@ -451,8 +426,6 @@ static void  didSwapBuffersCallback( UIWindow *window, BOOL immediately)
 }
 
 @end
-
-
 static void   usage( void)
 {
    fprintf( stderr, "\n"
@@ -472,8 +445,6 @@ static void   usage( void)
 "\n");
    exit( 1);
 }
-
-
 int   main( int argc, char *argv[])
 {
    UIWindow               *window;
@@ -542,7 +513,7 @@ int   main( int argc, char *argv[])
    if( i != argc)
       usage();
 
-   fprintf( stderr, "%s\n", [CGContext nanoVGBackendUTF8String]);
+   fprintf( stderr, "%s\n", [CGContext backendUTF8String]);
 
    app = [UIApplication sharedInstance];
    {
@@ -578,8 +549,6 @@ int   main( int argc, char *argv[])
    }
    return( [app runApp]);
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,
@@ -617,10 +586,8 @@ int   main( int argc, char *argv[])
 //                     ╙▀W╥,╓╣   ╙█║        ╫M  █    ,╓▄╝╙`
 //                          ╙╙▀%▄▄▄▌,≤▄_▄≡,▐▓▓▄▄#ª▀"`
 
-
-
 #if 0
-static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPaint *paint)
+static void   draw_triangle( CGContext *context, CGPoint center, CGSize size, CGPaint *paint)
 {
    static CGPoint  points[ 3] =
    {
@@ -630,27 +597,27 @@ static void   draw_triangle( NVGcontext *vg, CGPoint center, CGSize size, CGPain
    };
    CGRect     rect;
 
-   mvgSave( vg);
+   CGContextSave( context);
    {
       // STEPS are applied in reverse to the path
 
       // 2. move center of scaled triangle to destination
-      mvgTranslate( vg, center);
+      CGContextTranslate( context, center);
 
       // 1. scale (still center at 0.0)
-      mvgScale( vg, CGVectorMake( size.width, size.height));
+      CGContextScale( context, CGVectorMake( size.width, size.height));
 
-      mvgBeginPath( vg);
-      mvgMoveTo( vg, points[ 0]);
-      mvgLineTo( vg, points[ 1]);
-      mvgLineTo( vg, points[ 2]);
-      mvgClosePath( vg);
+      CGContextBeginPath( context);
+      CGContextMoveTo( context, points[ 0]);
+      CGContextLineTo( context, points[ 1]);
+      CGContextLineTo( context, points[ 2]);
+      CGContextClosePath( context);
 
       rect = CGRectMakeWithCenterAndSize( CGPointZero, CGSizeMake( 1.0, 1.0));
       [paint fillWithBounds:rect
                     context:context];
 
    }
-   mvgRestore( vg);
+   CGContextRestore( context);
 }
 #endif

@@ -1,8 +1,6 @@
 #define _GNU_SOURCE
 
 #import "import-private.h"
-
-
 //
 // This demo uses a frameCallback to draw stuff into an UIWindow without
 // UIViews. It's a little more convenient, than doing it with GLFWOSWindow
@@ -10,43 +8,28 @@
 //
 static void   drawStuff( CGContext *context, CGRect canvas)
 {
-   struct NVGcontext   *vg;
 
    MulleUICLog( "canvas: %s, context %#@", CGRectUTF8String( canvas), context);
-
-   vg = CGContextGetNVGContext( context);
-
    canvas.size.height  /= 3.0;
 
    // red stripe
-   nvgBeginPath( vg);
-   nvgRect( vg, canvas.origin.x,
-                canvas.origin.y,
-                canvas.size.width,
-                canvas.size.height);
-   nvgFillColor( vg, nvgRGBAf( 0.95, 0.0, 0.0, 1.0));
-   nvgFill( vg);
+   CGContextBeginPath( context);
+   CGContextRect( context, canvas);
+   CGContextFillColor( context, CGColorMakeWithRGBA( 0.95, 0.0, 0.0, 1.0));
+   CGContextFill( context);
 
    // white stripe
-   nvgBeginPath( vg);
-   nvgRect( vg, canvas.origin.x,
-                canvas.origin.y + canvas.size.height * 1,
-                canvas.size.width,
-                canvas.size.height);
-   nvgFillColor( vg, nvgRGBAf( 1.0, 1.0, 1.0, 1.0));
-   nvgFill( vg);
+   CGContextBeginPath( context);
+   CGContextRect( context, CGRectMake(canvas.origin.x, canvas.origin.y + canvas.size.height * 1, canvas.size.width, canvas.size.height));
+   CGContextFillColor( context, CGColorMakeWithRGBA( 1.0, 1.0, 1.0, 1.0));
+   CGContextFill( context);
 
    // blue stripe
-   nvgBeginPath( vg);
-   nvgRect( vg, canvas.origin.x,
-                canvas.origin.y + canvas.size.height * 2,
-                canvas.size.width,
-                canvas.size.height);
-   nvgFillColor( vg, nvgRGBAf( 0.0, 0.0, 1.0, 1.0));
-   nvgFill( vg);
+   CGContextBeginPath( context);
+   CGContextRect( context, CGRectMake(canvas.origin.x, canvas.origin.y + canvas.size.height * 2, canvas.size.width, canvas.size.height));
+   CGContextFillColor( context, CGColorMakeWithRGBA( 0.0, 0.0, 1.0, 1.0));
+   CGContextFill( context);
 }
-
-
 static int   display( UIWindow *window,
                       id <UIGraphicsContext> context,
                       struct CGFrameInfo *frameInfo,
@@ -55,8 +38,6 @@ static int   display( UIWindow *window,
    drawStuff( (CGContext *) context, CGFrameInfoGetContentRect( frameInfo));
    return( 0);
 }
-
-
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
@@ -74,8 +55,6 @@ int   main( int argc, char *argv[])
    [window setFrameDelegate:[MulleUIPerf instance]];
    return( UIApplicationRunWindow( window));
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,

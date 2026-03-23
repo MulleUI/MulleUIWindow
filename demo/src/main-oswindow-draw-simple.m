@@ -6,15 +6,11 @@
 //#define USE_UIWINDOW_CG_CONTEXT
 
 #include "draw-flag.inc"
-
-
 @interface MyWindow : GLFWOSWindow
 
 @property( retain) CGContext  *context;
 
 @end
-
-
 @implementation MyWindow
 
 - (void) finalize
@@ -30,8 +26,6 @@
 }
 
 @end
-
-
 static UIWindowDisplayBits   display( GLFWOSWindow *window_in)
 {
    MyWindow      *osWindow = MULLE_OBJC_CLASS_CAST( MyWindow, window_in);
@@ -46,13 +40,11 @@ static UIWindowDisplayBits   display( GLFWOSWindow *window_in)
 
    [context beginRender:&frameInfo];
    {
-      drawRedWhiteBlueFlag( CGContextGetNVGContext( context), canvas);
+      drawRedWhiteBlueFlag( context, canvas);
    }
    [context endRender];
    return( 0);
 }
-
-
 @implementation UIWindow( MyWindow)
 
 - (CGContext *) context
@@ -61,8 +53,6 @@ static UIWindowDisplayBits   display( GLFWOSWindow *window_in)
 }
 
 @end 
-
-
 int   main( int argc, char *argv[])
 {
    UIApplication  *app;
@@ -109,8 +99,6 @@ int   main( int argc, char *argv[])
    }
    return( [app runApp]);
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,

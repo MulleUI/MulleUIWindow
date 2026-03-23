@@ -29,11 +29,7 @@
 # define      smoothness      1.5      // > 0 < min radius
 # define      maxSegments     8
 #endif
-
-
 static id    balls[ numBalls];
-
-
 // MEMO: balls[n] are thread unsafe and global, we need to use a callback to
 //       get them safely in and out of the drawing thread
 static void   relinquishBalls( UIWindow *window, NSThread *thread)
@@ -51,8 +47,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    for( i = 0; i < numBalls; i++)
       [balls[ i] mulleGainAccess];
 }
-
-
 @interface Ball : NSObject
 {
    NSUInteger           _numSegment;
@@ -67,8 +61,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
 @property( assign) CAPolarPoint  vector;
 
 @end
-
-
 @implementation Ball
 
 - (id) initWithRadius:(CGFloat) r
@@ -104,8 +96,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    }
    return( self);
 }
-
-
 /*
  * Ball collision
  */
@@ -120,8 +110,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    p    = CGPointAdd( _point, p);
    return( p);
 }
-
-
 - (CGFloat) getBoundOffset:(CGPoint) b
 {
    CGPoint          diff;
@@ -137,8 +125,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    assert( i < _numSegment);
    return( _boundOffset[ i]);
 }
-
-
 - (void) calcBounds:(Ball *) b
 {
    NSUInteger   i;
@@ -160,8 +146,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
       }
    }
 }
-
-
 - (void) updateBounds
 {
    NSUInteger   i;
@@ -169,8 +153,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    for( i = 0; i < _numSegment; i++)
       _boundOffset[i] = _boundOffsetBuff[i];
 }
-
-
 - (void) react:(Ball *) b
 {
    CGFloat        dist;
@@ -212,8 +194,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    if( _point.y > size.height + _radius)
       _point.y = -_radius;
 }
-
-
 - (void) updateShape
 {
    NSUInteger   i;
@@ -240,8 +220,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
       _boundOffsetBuff[ i] = _boundOffset[ i] = offset;
    }
 }
-
-
 - (void) iterate:(CGSize) size
 {
    [self checkBorders:size];
@@ -251,40 +229,32 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
 
    [self updateShape];
 }
-
-
 /*
  * Ball drawing
  */
 - (BOOL) drawInContext:(CGContext *) context
 {
-   NVGcontext   *vg;
    NSUInteger   i;
    CGPoint      p;
-
-   vg = CGContextGetNVGContext( context);
-
-   nvgBeginPath( vg);
-   nvgGlobalCompositeOperation( vg, NVG_LIGHTER);
+   CGContextBeginPath( context);
+   CGContextGlobalCompositeOperation( context, CGCompositeOperationLighter);
    for( i = 0; i < _numSegment; i++)
    {
       p = [self getSidePoint:i];
       if( ! i)
-         nvgMoveTo( vg, p.x, p.y);
+         CGContextMoveTo( context, CGPointMake(p.x, p.y));
       else
-         nvgLineTo( vg, p.x, p.y);
+         CGContextLineTo( context, CGPointMake(p.x, p.y));
    }
-   nvgClosePath( vg);
+   CGContextClosePath( context);
 
    // TODO: need to smooth
-   nvgFillColor( vg, _fillColor);
-   nvgFill( vg);
+   CGContextFillColor( context, _fillColor);
+   CGContextFill( context);
    return( YES);
 }
 
 @end
-
-
 static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *_context)
 {
    CGContext    *context = _context;
@@ -310,8 +280,6 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *_context)
 
    return( YES);
 }
-
-
 static void   setupSceneInView( UIView *contentPlane)
 {
    CGRect               contentRect;
@@ -335,8 +303,6 @@ static void   setupSceneInView( UIView *contentPlane)
                                         vector:v];
    }
 }
-
-
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
@@ -372,12 +338,8 @@ int   main( int argc, char *argv[])
 
       [app addWindow:window];
    }
-
-
    return( [app runApp]);
 }
-
-
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,
 //                      ╓▄ª╙└╧▓        █           ⁿ▓▓ª╦w

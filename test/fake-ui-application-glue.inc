@@ -10,6 +10,7 @@
 @property (assign) UIOSWindowEventCallback_t windowEventsCallback;
 @property (assign) UIOSWindowRetainedEventCallback_t otherRetainedEventsCallback;
 @property (assign) UIOSWindowFrameCallback_t frameCallback;
+@property (assign) struct UIInputState inputState;
 
 // Private properties for implementation
 @property (assign) CGRect frame;
@@ -156,6 +157,10 @@
     // Fake implementation
 }
 
+- (void) os_pollInputState:(struct UIInputState *) state
+{
+}
+
 - (BOOL)os_tryActivateGraphicsContext
 {
     return YES; // Always succeeds in fake implementation
@@ -284,6 +289,7 @@
 @property (assign, readonly) UIGraphicsBackend backend;
 @property (assign) struct UIInputState inputState;
 @property (assign, getter=isInitializedFramebuffer) BOOL initializedFramebuffer;
+@property (assign, readonly) NSUInteger debuggingFlags;
 
 // Private properties for implementation
 @property (assign) UIGraphicsCompositionMode compositionMode;
@@ -552,6 +558,10 @@
 - (NSUInteger)buttonStates
 {
    return _currentButtonStates;
+}
+
+- (void) renderObjects:(struct mulle_pointerarray *) array
+{
 }
 
 @end

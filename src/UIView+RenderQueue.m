@@ -156,6 +156,9 @@ static inline int   CGAlphaIsTransparent( float a)
 - (void) createRenderQueue:(struct mulle_pointerarray *) renderQueue
            graphicsContext:(id <UIGraphicsContext>) context
 {
+   MULLE_C_UNUSED( renderQueue);
+   MULLE_C_UNUSED( context);
+
    abort(); // only UIWindow can do this currently
 }
 

@@ -7,8 +7,6 @@ static CGColor  first_colors[ 3] =
    CGColorDataBlack,
    CGColorDataYellow
 };
-
-
 static CGColor  second_colors[ 3] =
 {
    CGColorDataWhite,
@@ -16,19 +14,14 @@ static CGColor  second_colors[ 3] =
    CGColorDataBlue
 };
 
-
-
 static CGColor  third_colors[ 3] =
 {
    CGColorDataBlue,
    CGColorDataGold,
    CGColorDataRed
 };
-
-
 static void   drawStuff( CGContext *context, CGRect canvas)
 {
-   struct NVGcontext   *vg;
    NSUInteger          color_index;
    NSUInteger          numberOfFrames;
 
@@ -38,39 +31,27 @@ static void   drawStuff( CGContext *context, CGRect canvas)
                                                 CGRectUTF8String( canvas),
                                                 context);
 
-   vg                  = CGContextGetNVGContext( context);
    canvas.size.height /= 3.0;
    color_index         = numberOfFrames % 3;
 
    // red stripe
-   nvgBeginPath( vg);
-   nvgRect( vg, canvas.origin.x,
-                canvas.origin.y,
-                canvas.size.width,
-                canvas.size.height);
-   nvgFillColor( vg, first_colors[ color_index]);
-   nvgFill( vg);
+   CGContextBeginPath( context);
+   CGContextRect( context, CGRectMake( canvas.origin.x, canvas.origin.y, canvas.size.width, canvas.size.height));
+   CGContextFillColor( context, first_colors[ color_index]);
+   CGContextFill( context);
 
    // white stripe
-   nvgBeginPath( vg);
-   nvgRect( vg, canvas.origin.x,
-                canvas.origin.y + canvas.size.height * 1,
-                canvas.size.width,
-                canvas.size.height);
-   nvgFillColor( vg, second_colors[ color_index]);
-   nvgFill( vg);
+   CGContextBeginPath( context);
+   CGContextRect( context, CGRectMake( canvas.origin.x, canvas.origin.y + canvas.size.height * 1, canvas.size.width, canvas.size.height));
+   CGContextFillColor( context, second_colors[ color_index]);
+   CGContextFill( context);
 
    // blue stripe
-   nvgBeginPath( vg);
-   nvgRect( vg, canvas.origin.x,
-                canvas.origin.y + canvas.size.height * 2,
-                canvas.size.width,
-                canvas.size.height);
-   nvgFillColor( vg, third_colors[ color_index]);
-   nvgFill( vg);
+   CGContextBeginPath( context);
+   CGContextRect( context, CGRectMake( canvas.origin.x, canvas.origin.y + canvas.size.height * 2, canvas.size.width, canvas.size.height));
+   CGContextFillColor( context, third_colors[ color_index]);
+   CGContextFill( context);
 }
-
-
 static UIWindowDisplayBits   display( UIPureWindow *window,
                                       id <UIGraphicsContext> context,
                                       struct CGFrameInfo *frameInfo,
@@ -79,14 +60,10 @@ static UIWindowDisplayBits   display( UIPureWindow *window,
    drawStuff( (CGContext *) context, CGFrameInfoGetContentRect( frameInfo));
    return( 1);
 }
-
-
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
    UIApplication   *app;
-
-
    app = [UIApplication sharedInstance];
 
    window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 400.0)
@@ -96,11 +73,9 @@ int   main( int argc, char *argv[])
 
    [window setFrameCallback:display];
    [window setFrameRate:FRAMERATE];
-   [window setFrameDelegate:[MulleUIPerf instance]];
+   //[window setFrameDelegate:[MulleUIPerf instance]];
    return( UIApplicationRunWindow( window));
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,

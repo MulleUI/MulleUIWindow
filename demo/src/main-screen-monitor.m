@@ -6,8 +6,6 @@ struct ShapeAppearance
     CGColor  strokeColor;
     CGFloat  strokeWidth;
 };
-
-
 #define ShapeAppearanceData( fc, sc, sw) \
 (struct ShapeAppearance)                 \
 {                                        \
@@ -16,20 +14,20 @@ struct ShapeAppearance
    .strokeWidth = sw                     \
 }
 
-static void  mvgDrawPathWithAppearance( struct NVGcontext *vg,
+static void  drawPathWithAppearance( struct CGContext *context,
                                         struct ShapeAppearance *appearance)
 {
    if( ! CGColorIsTransparent( appearance->fillColor))
    {
-      mvgFillColor(vg, appearance->fillColor);
-      mvgFill( vg);
+      CGContextFillColor( context, appearance->fillColor);
+      CGContextFill( context);
    }
 
    if( appearance->strokeWidth > 0.0)
    {
-      mvgStrokeColor(vg, appearance->strokeColor);
-      mvgStrokeWidth( vg, appearance->strokeWidth);
-      mvgStroke( vg);
+      CGContextStrokeColor( context, appearance->strokeColor);
+      CGContextStrokeWidth( context, appearance->strokeWidth);
+      CGContextStroke( context);
    }
 }
 
@@ -45,19 +43,15 @@ struct TextAppearance
    .textColor = tc,                  \
    .textBackgroundColor = tbc        \
 }
-
-
-static void  mvgTextWithAppearance( struct NVGcontext *vg,
+static void  textWithAppearance( struct CGContext *context,
                                     CGPoint point,
                                     char *text,
                                     struct TextAppearance *appearance)
 {
-   mvgTextColor(vg, appearance->textColor);
-   mvgTextBackgroundColor(vg, appearance->textBackgroundColor);
-   mvgText( vg, point, text, (size_t) -1);
+   CGContextTextColor( context, appearance->textColor);
+   CGContextTextBackgroundColor( context, appearance->textBackgroundColor);
+   CGContextText( context, point, text, (size_t) -1);
 }
-
-
 struct MonitorAppearance
 {
     struct ShapeAppearance   bezel;
@@ -67,8 +61,6 @@ struct MonitorAppearance
     struct TextAppearance    digit;
     struct TextAppearance    info;
 };
-
-
 static struct MonitorAppearance  appearance =
 {
     .bezel  =
@@ -83,13 +75,11 @@ static struct MonitorAppearance  appearance =
     .digit  = TextAppearanceData( CGColorDataGray, CGColorDataWhiteSmoke),
     .info   = TextAppearanceData( CGColorDataWhite, CGColorDataBlack)
 };
-
-
 //
 // the monitor draw function was coded by Cody/Sourcegraph/Claude Sonnet 3.5
 // it's doing a pretty good job.
 //
-static void drawMonitor( struct NVGcontext *vg,
+static void drawMonitor( struct CGContext *context,
                         CGRect frame,
                         NSUInteger index,
                         id <UIScreen> screen,
@@ -121,15 +111,15 @@ static void drawMonitor( struct NVGcontext *vg,
   screenRect.origin.y = CGRectGetMidY(frame) - screenRect.size.height / 2;
 
   // Draw outer rounded rectangle (monitor frame)
-  mvgBeginPath(vg);
+  CGContextBeginPath( context);
   bezelRect = CGRectInset(screenRect, -10, -10);
-  mvgRoundedRect(vg, bezelRect, cornerRadius);
-  mvgDrawPathWithAppearance(vg, &appearance->bezel);
+  CGContextRoundedRect( context, bezelRect, cornerRadius);
+  drawPathWithAppearance(context, &appearance->bezel);
 
   // Draw inner rectangle (screen)
-  mvgBeginPath(vg);
-  mvgRect(vg, screenRect);
-  mvgDrawPathWithAppearance(vg, &appearance->screen);
+  CGContextBeginPath( context);
+  CGContextRect( context, screenRect);
+  drawPathWithAppearance(context, &appearance->screen);
 
   // Draw stand using CGRectGetMaxY(bezelRect) for precise connection
   CGFloat baseWidth = screenRect.size.width * 0.4;
@@ -140,20 +130,20 @@ static void drawMonitor( struct NVGcontext *vg,
   CGFloat neckX = CGRectGetMidX(frame) - neckWidth / 2;
   CGFloat neckTopY = CGRectGetMaxY(bezelRect);
 
-  nvgBeginPath(vg);
-  nvgMoveTo(vg, baseX, baseY + baseHeight);
-  nvgLineTo(vg, baseX + baseWidth, baseY + baseHeight);
-  nvgLineTo(vg, baseX + baseWidth, baseY);
-  nvgLineTo(vg, neckX + neckWidth, baseY);
-  nvgLineTo(vg, neckX + neckWidth, neckTopY);
-  nvgLineTo(vg, neckX, neckTopY);
-  nvgLineTo(vg, neckX, baseY);
-  nvgLineTo(vg, baseX, baseY);
-  nvgClosePath(vg);
-  mvgDrawPathWithAppearance(vg, &appearance->stand);   mvgSave(vg);
+  CGContextBeginPath( context);
+  CGContextMoveTo( context, CGPointMake(baseX, baseY + baseHeight));
+  CGContextLineTo( context, CGPointMake(baseX + baseWidth, baseY + baseHeight));
+  CGContextLineTo( context, CGPointMake(baseX + baseWidth, baseY));
+  CGContextLineTo( context, CGPointMake(neckX + neckWidth, baseY));
+  CGContextLineTo( context, CGPointMake(neckX + neckWidth, neckTopY));
+  CGContextLineTo( context, CGPointMake(neckX, neckTopY));
+  CGContextLineTo( context, CGPointMake(neckX, baseY));
+  CGContextLineTo( context, CGPointMake(baseX, baseY));
+  CGContextClosePath( context);
+  drawPathWithAppearance(context, &appearance->stand);   CGContextSave( context);
 
    // Set up clipping to screenFrame
-   mvgIntersectScissor(vg, screenRect);
+   CGContextIntersectScissor( context, screenRect);
    {
   // Draw big circle
   CGFloat radius = fmin(CGRectGetWidth(screenRect), CGRectGetHeight(screenRect)) * 0.3;
@@ -161,44 +151,40 @@ static void drawMonitor( struct NVGcontext *vg,
   CGPoint center = CGRectGetCenter(circleBounds);
   radius = fmin(CGRectGetWidth(circleBounds), CGRectGetHeight(circleBounds)) * 0.3;
 
-  nvgBeginPath(vg);
-  mvgCircle(vg, CACircleMakeWithCenterAndRadius( center, radius));
-  mvgDrawPathWithAppearance( vg, &appearance->circle);
+  CGContextBeginPath( context);
+  CGContextCircle( context, CACircleMakeWithCenterAndRadius( center, radius));
+  drawPathWithAppearance( context, &appearance->circle);
 
   // Draw index number (assuming index 1 for this example)
-  nvgFontSize(vg, radius);
-  nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+  CGContextFontSize( context, radius);
+  CGContextCombinedTextAlignment( context, CGTextAlignCenter | CGTextAlignMiddle);
   mulle_buffer_do( buffer)
   {
      mulle_buffer_sprintf( buffer, "%tu", index + 1);
-     mvgTextWithAppearance(vg, center, mulle_buffer_get_string( buffer), &appearance->digit);
+     textWithAppearance(context, center, mulle_buffer_get_string( buffer), &appearance->digit);
   }
 
   infoRect = CGRectInset( screenRect, 10, 10);
-  nvgFontSize( vg, 14);
-  nvgTextAlign(vg, NVG_ALIGN_BOTTOM | NVG_ALIGN_LEFT);
+  CGContextFontSize( context, 14);
+  CGContextCombinedTextAlignment( context, CGTextAlignBottom | CGTextAlignLeft);
   CGPoint namePoint = CGRectGetCornerPoint( infoRect, CADirectionBottom|CADirectionLeft);
-  mvgTextWithAppearance(vg, namePoint, [screen nameUTF8String], &appearance->info);
+  textWithAppearance(context, namePoint, [screen nameUTF8String], &appearance->info);
 
-  nvgTextAlign(vg, NVG_ALIGN_TOP | NVG_ALIGN_RIGHT);
+  CGContextCombinedTextAlignment( context, CGTextAlignTop | CGTextAlignRight);
   CGPoint sizePoint = CGRectGetCornerPoint( infoRect, CADirectionTop|CADirectionRight);
-  mvgTextWithAppearance(vg, sizePoint, CGRectUTF8String( [screen frame]), &appearance->info);
+  textWithAppearance(context, sizePoint, CGRectUTF8String( [screen frame]), &appearance->info);
    }
-   mvgRestore(vg);
+   CGContextRestore( context);
 }
-
-
 static void  drawStuff( CALayer *layer, CGContext *context)
 {
    CGRect              canvas;
-   struct NVGcontext   *vg;
    id <UIScreen>       screen;
    NSUInteger          i, n;
    CGRect              rects[ 9]; // h w
    CGRect              *p_rects;
 
    canvas = [layer canvas];
-   vg     = CGContextGetNVGContext( context);
 
    [context useDefaultFont];
 
@@ -235,14 +221,12 @@ static void  drawStuff( CALayer *layer, CGContext *context)
    for( i = 0; i < n; i++)
    {
       screen = [UIApp screenAtIndex:i];
-      drawMonitor(vg, *p_rects++, i, screen, &appearance);
+      drawMonitor(context, *p_rects++, i, screen, &appearance);
    }
 }
 
 @interface ScreenMonitorView : UIView
 @end
-
-
 @implementation ScreenMonitorView
 
 - (instancetype) initWithLayer:(id <UILayer>)layer
@@ -272,8 +256,6 @@ static void  drawStuff( CALayer *layer, CGContext *context)
 }
 
 @end
-
-
 //
 // could also make UIWindow with NoView and then setView: (or create as
 // is and setView:) many different ways to skin that cat
@@ -286,8 +268,6 @@ static void  drawStuff( CALayer *layer, CGContext *context)
 }
 
 @end
-
-
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
@@ -310,8 +290,6 @@ int   main( int argc, char *argv[])
    }
    return( [app runApp]);
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,

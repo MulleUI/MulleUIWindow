@@ -1,11 +1,3 @@
-      { @selector( MulleObjCDeps), @selector( MulleCA) },      // 47a9beb6;MulleObjCDeps;3422b8ab;MulleCA
-      { @selector( MulleObjCDeps), @selector( MulleInvocationQueue) },      // 47a9beb6;MulleObjCDeps;9a5137b3;MulleInvocationQueue
-      { @selector( MulleObjCDeps), @selector( MulleObjCTimeFoundation) },      // 47a9beb6;MulleObjCDeps;cc20d48b;MulleObjCTimeFoundation
-      { @selector( MulleObjCDeps), @selector( MulleThread) },      // 47a9beb6;MulleObjCDeps;c7c34b28;MulleThread
-      { @selector( MulleObjCDeps), @selector( MulleUIApplication) },      // 47a9beb6;MulleObjCDeps;55c305e6;MulleUIApplication
-      { @selector( MulleObjCDeps), @selector( MulleUIBase) },      // 47a9beb6;MulleObjCDeps;3ebba954;MulleUIBase
-      { @selector( MulleObjCDeps), @selector( MulleUIPureWindow) },      // 47a9beb6;MulleObjCDeps;c93157aa;MulleUIPureWindow
-      { @selector( MulleObjCDeps), @selector( MulleUIView) },      // 47a9beb6;MulleObjCDeps;58e9d41b;MulleUIView
       { @selector( CABasicAnimation), @selector( UIView) },      // 1462ac1b;CABasicAnimation;155b6ee8;UIView
       { @selector( UIAnimatableViewPropertiesSnapshot), MULLE_OBJC_NO_CATEGORYID },      // d500f939;UIAnimatableViewPropertiesSnapshot;;
       { @selector( UIMouseTrackingEvent), MULLE_OBJC_NO_CATEGORYID },      // 3320121b;UIMouseTrackingEvent;;

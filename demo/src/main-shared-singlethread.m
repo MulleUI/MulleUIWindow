@@ -1,6 +1,4 @@
 #import "import.h"
-
-
 //
 // This demo shows how you can share a texture between two windows and
 // therefore also two contexts.
@@ -9,12 +7,8 @@
 #define GRUEN  CGColorMakeWithRGBA( 0.1, 0.4, 0.1, 1.0)
 #define WEISS  CGColorMakeWithRGBA( 1.0, 1.0, 1.0, 1.0)
 #define GRAU   CGColorMakeWithRGBA( 0.85, 0.85, 0.85, 0.75)
-
-
 static UIBitmapImage   *image;
 static CGImage         *cgImage;
-
-
 static void  drawPrettyBackground( CGGraphicsLayer *layer, CGContext *context)
 {
    CGFloat             radius;
@@ -22,7 +16,6 @@ static void  drawPrettyBackground( CGGraphicsLayer *layer, CGContext *context)
    CGFont              *font;
    CGRect              canvas;
    CGRect              rect;
-   struct NVGcontext   *vg;
 
    canvas      = [layer canvas];
    strokeWidth = 20.0;
@@ -30,28 +23,25 @@ static void  drawPrettyBackground( CGGraphicsLayer *layer, CGContext *context)
                                   CGRectGetHeight( canvas)) - strokeWidth) / 2;
 
    // draw circle
-   vg = CGContextGetNVGContext( context);
-   nvgBeginPath( vg);
+   CGContextBeginPath( context);
    {
-      nvgCircle( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas), radius);
-      nvgStrokeColor( vg, GRAU);
-      nvgStrokeWidth( vg, strokeWidth);
+      CGContextCircle( context, CACircleMakeWithCenterAndRadius( CGPointMake(CGRectGetMidX( canvas), CGRectGetMidY( canvas)), radius));
+      CGContextStrokeColor( context, GRAU);
+      CGContextStrokeWidth( context, strokeWidth);
    }
-   nvgStroke( vg);
+   CGContextStroke( context);
 
    // draw text
    // load in font first, this will be efficient on subsequent frames
    font = [context fontWithNameUTF8String:"sans"];
    [context useFont:font];
 
-   nvgFontSize( vg, strokeWidth * 8.0);
-   nvgTextAlign( vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-   nvgTextColor( vg, WEISS);
-   nvgTextBackgroundColor( vg, BLAU);
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas), "1848", NULL);
+   CGContextFontSize( context, strokeWidth * 8.0);
+   CGContextCombinedTextAlignment( context, CGTextAlignCenter | CGTextAlignMiddle);
+   CGContextTextColor( context, WEISS);
+   CGContextTextBackgroundColor( context, BLAU);
+   CGContextText( context, CGPointMake( CGRectGetMidX( canvas), CGRectGetMidY( canvas)), "1848", 0);
 }
-
-
 static BOOL  drawStuff( CGGraphicsLayer *layer, CGContext *context)
 {
    struct CGDrawableOptions   options;
@@ -93,8 +83,6 @@ static BOOL  drawStuff( CGGraphicsLayer *layer, CGContext *context)
 
    return( YES);
 }
-
-
 static void   setupSceneInBareWindow( UIWindow *window, CGColor color)
 {
    UIView   *view;
@@ -109,8 +97,6 @@ static void   setupSceneInBareWindow( UIWindow *window, CGColor color)
    [(CGGraphicsLayer *) [view layer] setDrawCallback:drawStuff];
    [window setView:view];
 }
-
-
 int   main( int argc, char *argv[])
 {
    GLFWOSWindow    *glfwWindow[ 2];
@@ -175,8 +161,6 @@ int   main( int argc, char *argv[])
    }
    return( [app terminate]);
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,

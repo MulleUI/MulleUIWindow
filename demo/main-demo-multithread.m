@@ -1,13 +1,9 @@
 #import "import.h"
-
-
 #define BLAU   CGColorMakeWithRGBA( 0.1, 0.1, 0.4, 1.0)
 #define WEISS  CGColorMakeWithRGBA( 1.0, 1.0, 1.0, 1.0)
-
-
 //
 // Just a plain basic setup demo. Nothing special. A good starting point
-// to try out your own nvg calls.
+// to try out your own CGContext calls.
 //
 static void  drawStuff( CALayer *layer, CGContext *context)
 {
@@ -15,7 +11,6 @@ static void  drawStuff( CALayer *layer, CGContext *context)
    CGFloat             strokeWidth;
    CGFont              *font;
    CGRect              canvas;
-   struct NVGcontext   *vg;
 
    canvas      = [layer canvas];
    strokeWidth = 20.0;
@@ -23,29 +18,26 @@ static void  drawStuff( CALayer *layer, CGContext *context)
                                   CGRectGetHeight( canvas)) - strokeWidth) / 2;
 
    // draw circle
-   vg = CGContextGetNVGContext( context);
-   nvgBeginPath( vg);
+   CGContextBeginPath( context);
    {
-      nvgCircle( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas), radius);
-      nvgStrokeColor( vg, WEISS);
-      nvgStrokeWidth( vg, strokeWidth);
+      CGContextCircle( context, CACircleMakeWithCenterAndRadius( CGPointMake(CGRectGetMidX( canvas), CGRectGetMidY( canvas)), radius));
+      CGContextStrokeColor( context, WEISS);
+      CGContextStrokeWidth( context, strokeWidth);
    }
-   nvgStroke( vg);
+   CGContextStroke( context);
 
    // draw text
    // load in font first, this will be efficient on subsequent frames
    font = [context fontWithNameUTF8String:"sans"];
    [context useFont:font];
 
-   nvgFontSize( vg, strokeWidth * 8.0);
-   nvgTextAlign( vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-   nvgTextColor( vg, WEISS);
-   nvgTextBackgroundColor( vg, BLAU);
+   CGContextFontSize( context, strokeWidth * 8.0);
+   CGContextCombinedTextAlignment( context, CGTextAlignCenter | CGTextAlignMiddle);
+   CGContextTextColor( context, WEISS);
+   CGContextTextBackgroundColor( context, BLAU);
 
-   nvgText( vg, CGRectGetMidX( canvas), CGRectGetMidY( canvas), "1848", NULL);
+   CGContextText( context, CGRectGetMidX( canvas), CGRectGetMidY( canvas), "1848", NULL);
 }
-
-
 static void   setupSceneInView( UIView *contentPlane)
 {
    UIView   *view;
@@ -59,8 +51,6 @@ static void   setupSceneInView( UIView *contentPlane)
    [(CGGraphicsLayer *) [view layer] setDrawCallback:(CGGraphicsLayerDrawCallback_t *) drawStuff];
    [contentPlane addSubview:view];
 }
-
-
 int   main( int argc, char *argv[])
 {
    UIWindow        *window[ 2];
@@ -84,8 +74,6 @@ int   main( int argc, char *argv[])
    }
    return( [app runApp]);
 }
-
-
 
 //
 //                           ,╓≤æKª╨╙╙▓█D"╙╙╙*╨¥W▄╓,
