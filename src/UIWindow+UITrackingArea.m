@@ -403,7 +403,8 @@ static void   collect_hit_areas( CGRect rect, void *payload, void *userinfo)
             cursor = [area cursor];
          [_reusableTrackingEvent updateTrackingArea:area
                                                type:UIMouseTrackingEnteredEventType];
-         [[area owner] mouseEntered:_reusableTrackingEvent];
+         owner = [area owner]; // somehat ugly, public ?
+         [owner mouseEntered:_reusableTrackingEvent];
       }
 
       if( options & UITrackingMouseHover)
@@ -520,6 +521,47 @@ static void   collect_hit_areas( CGRect rect, void *payload, void *userinfo)
          cursor = [self defaultCursor];
       [self setCursor:cursor];
    }
+}
+
+
+struct _collect_areas_into_buf_ctxt
+{
+   UITrackingArea   **buf;
+   NSUInteger       maxAreas;
+   NSUInteger       count;
+};
+
+
+static void   collect_areas_into_buf( CGRect rect, void *payload, void *userinfo)
+{
+   struct _collect_areas_into_buf_ctxt   *ctxt = userinfo;
+
+   if( ctxt->count < ctxt->maxAreas)
+      ctxt->buf[ ctxt->count] = (UITrackingArea *) payload;
+   ctxt->count++;
+}
+
+
+- (NSUInteger) getTrackingAreasIntersectingRect:(CGRect) rect
+                                          areas:(UITrackingArea **) buf
+                                       maxAreas:(NSUInteger) maxAreas
+{
+   struct _collect_areas_into_buf_ctxt   ctxt;
+   void                                 *quadtree;
+
+   quadtree = [self quadtree];
+   if( ! quadtree)
+      return( 0);
+
+   ctxt.buf      = buf;
+   ctxt.maxAreas = maxAreas;
+   ctxt.count    = 0;
+
+   mulle_quadtree_find_intersecting_rect( quadtree,
+                                          rect,
+                                          collect_areas_into_buf,
+                                          &ctxt);
+   return( ctxt.count);
 }
 
 @end

@@ -68,6 +68,12 @@ enum
 
 - (void) startMouseHoverOverTrackingArea:(UITrackingArea *) area;
 
+// Returns total number of intersecting areas found.
+// Fills buf with up to maxAreas results. Return value may exceed maxAreas.
+- (NSUInteger) getTrackingAreasIntersectingRect:(CGRect) rect
+                                          areas:(UITrackingArea **) buf
+                                       maxAreas:(NSUInteger) maxAreas;
+
 @end
 
 

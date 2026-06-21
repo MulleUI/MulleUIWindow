@@ -14,4 +14,8 @@
 
 @interface UIWindow( Styling)
 
+- (void) style;
+- (void) setNeedsStyling;
+- (BOOL) needsStyling;
+
 @end

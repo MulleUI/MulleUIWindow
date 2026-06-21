@@ -79,29 +79,6 @@
    [super dealloc];
 }
 
-//
-// should be done by: _MulleObjCObjectGainOrRelinquishAccessToIvars
-//
-
-//- (void) mulleGainAccessWithUniquingSet:(struct mulle_pointerset *) uniquing
-//{
-//   // add ivars to NOT transfer
-//   [super mulleGainAccessWithUniquingSet:uniquing];
-//
-//   [_hoverTimer mulleRelinquishAccessWithUniquingSet:uniquing];
-//   [_userInfo mulleRelinquishAccessWithUniquingSet:uniquing];
-//}
-//
-//
-//- (void) mulleRelinquishAccessWithUniquingSet:(struct mulle_pointerset *) uniquing
-//{
-//   // add ivars to NOT transfer
-//   [_userInfo mulleRelinquishAccessWithUniquingSet:uniquing];
-//   [_hoverTimer mulleRelinquishAccessWithUniquingSet:uniquing];
-//
-//   [super mulleRelinquishAccessWithUniquingSet:uniquing];
-//}
-
 
 - (BOOL) isTrackingActiveAtLocation:(CGPoint) location
                            inWindow:(UIWindow *) window

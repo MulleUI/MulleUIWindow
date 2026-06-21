@@ -13,7 +13,7 @@
 
 // To remove the following dependency (headers and library) completely:
 //   `mulle-sde dependency remove MulleUIPureWindow`
-// (Use 351B9014-576D-48A2-9B6D-5D25A5AAA0B0 instead of MulleUIPureWindow, if there are duplicate entries)
+// (Use 9406EAA9-90C8-44D8-8EF1-E3F1D8FA6B84 instead of MulleUIPureWindow, if there are duplicate entries)
 //
 // You can tweak the following #import with these commands:
 //    remove #import      : `mulle-sde dependency mark MulleUIPureWindow no-header`

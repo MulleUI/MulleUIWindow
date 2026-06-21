@@ -8,6 +8,7 @@
 #import "UIWindow+DebugPrivate.h"
 #import "UIWindow+Layout.h"
 #import "UIWindow+RenderQueue.h"
+#import "UIWindow+Styling.h"
 
 //#define LAYOUT_ANIMATIONS
 //#define RENDER_DEBUG
@@ -75,7 +76,10 @@
 
 @implementation UIWindow( Render)
 
+@dependency UIWindow( Layout);
 
+// this will or oughta be only called by UIWindow when running init
+// it's not clobbered by anything
 - (void) initCategory
 {
    _frameCallback  = UIWindowDefaultRenderViews;
@@ -207,6 +211,12 @@ UIWindowDisplayBits
 
    // first two functions should happen outside of any context being
    // active or not, we are still adding bits to displayBits here
+   if( displayBits & UIWindowDisplayNeedsStyling)
+   {
+      [self style];
+      displayBits &= ~UIWindowDisplayNeedsStyling;
+      displayBits |= UIWindowDisplayNeedsLayout | UIWindowDisplayNeedsRedraw;
+   }
    displayBits = UIWindowDefaultLayoutViews( self, info, displayBits);
    displayBits = UIWindowDefaultPrepareRenderQueue( self, context, info, displayBits);
    returnBits  = displayBits & ~0xFFFF;

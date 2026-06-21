@@ -30,7 +30,7 @@ static void   drawStuff( CGContext *context, CGRect canvas)
    CGContextFillColor( context, CGColorMakeWithRGBA( 0.0, 0.0, 1.0, 1.0));
    CGContextFill( context);
 }
-static int   display( UIWindow *window,
+static UIWindowDisplayBits   display( UIPureWindow *window,
                       id <UIGraphicsContext> context,
                       struct CGFrameInfo *frameInfo,
                       UIWindowDisplayBits displayBits)

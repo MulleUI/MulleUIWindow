@@ -8,6 +8,7 @@
 
 @implementation UIView( UIFirstResponder)
 
+@dependency UIView( UIEvent);
 MULLE_OBJC_DEPENDS_ON_CATEGORY( UIView, UIEvent);
 
 - (BOOL) becomeFirstResponder

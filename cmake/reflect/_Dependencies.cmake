@@ -27,7 +27,7 @@ else()
 endif()
 
 #
-# Generated from sourcetree: 351B9014-576D-48A2-9B6D-5D25A5AAA0B0;MulleUIPureWindow;no-singlephase;
+# Generated from sourcetree: 9406EAA9-90C8-44D8-8EF1-E3F1D8FA6B84;MulleUIPureWindow;no-singlephase;
 # Disable with : `mulle-sourcetree mark MulleUIPureWindow no-link`
 # Disable for this platform: `mulle-sourcetree mark MulleUIPureWindow no-cmake-platform-${MULLE_UNAME}`
 # Disable for a sdk: `mulle-sourcetree mark MulleUIPureWindow no-cmake-sdk-<name>`
@@ -82,9 +82,17 @@ else()
             # use explicit path to avoid "surprises"
             if( IS_DIRECTORY "${_TMP_MULLE_UI_PURE_WINDOW_DIR}")
                list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_UI_PURE_WINDOW_DIR}")
+               # we only want top level INHERIT_OBJC_DEPS, so disable them
+               if( NOT NO_INHERIT_OBJC_DEPS)
+                  set( NO_INHERIT_OBJC_DEPS OFF)
+               endif()
+               list( APPEND _TMP_INHERIT_OBJC_DEPS ${NO_INHERIT_OBJC_DEPS})
+               set( NO_INHERIT_OBJC_DEPS ON)
                #
                include( "${_TMP_MULLE_UI_PURE_WINDOW_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
                #
+               list( GET _TMP_INHERIT_OBJC_DEPS -1 NO_INHERIT_OBJC_DEPS)
+               list( REMOVE_AT _TMP_INHERIT_OBJC_DEPS -1)
                list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_UI_PURE_WINDOW_DIR}")
                #
                unset( MULLE_UI_PURE_WINDOW_DEFINITIONS)
@@ -179,9 +187,17 @@ else()
             # use explicit path to avoid "surprises"
             if( IS_DIRECTORY "${_TMP_MULLE_UI_VIEW_DIR}")
                list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_UI_VIEW_DIR}")
+               # we only want top level INHERIT_OBJC_DEPS, so disable them
+               if( NOT NO_INHERIT_OBJC_DEPS)
+                  set( NO_INHERIT_OBJC_DEPS OFF)
+               endif()
+               list( APPEND _TMP_INHERIT_OBJC_DEPS ${NO_INHERIT_OBJC_DEPS})
+               set( NO_INHERIT_OBJC_DEPS ON)
                #
                include( "${_TMP_MULLE_UI_VIEW_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
                #
+               list( GET _TMP_INHERIT_OBJC_DEPS -1 NO_INHERIT_OBJC_DEPS)
+               list( REMOVE_AT _TMP_INHERIT_OBJC_DEPS -1)
                list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_UI_VIEW_DIR}")
                #
                unset( MULLE_UI_VIEW_DEFINITIONS)
@@ -276,9 +292,17 @@ else()
             # use explicit path to avoid "surprises"
             if( IS_DIRECTORY "${_TMP_MULLE_CA_DIR}")
                list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_CA_DIR}")
+               # we only want top level INHERIT_OBJC_DEPS, so disable them
+               if( NOT NO_INHERIT_OBJC_DEPS)
+                  set( NO_INHERIT_OBJC_DEPS OFF)
+               endif()
+               list( APPEND _TMP_INHERIT_OBJC_DEPS ${NO_INHERIT_OBJC_DEPS})
+               set( NO_INHERIT_OBJC_DEPS ON)
                #
                include( "${_TMP_MULLE_CA_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
                #
+               list( GET _TMP_INHERIT_OBJC_DEPS -1 NO_INHERIT_OBJC_DEPS)
+               list( REMOVE_AT _TMP_INHERIT_OBJC_DEPS -1)
                list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_CA_DIR}")
                #
                unset( MULLE_CA_DEFINITIONS)

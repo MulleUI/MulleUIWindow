@@ -304,7 +304,7 @@ static void  UIResponderSearchAddView( struct UIFirstResponderSearch *p,
 }
 
 
-@implementation UIView( UIResponderSearch)
+@implementation UIView( UIFirstResponderSearch)
 
 
 - (void) _firstResponderSearch:(struct UIFirstResponderSearch *) search

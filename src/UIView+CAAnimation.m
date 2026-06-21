@@ -187,63 +187,13 @@ UI_VIEW_ANIMATABLE_PROPERTIES;
 /* "properties" */
 
 
-+ (id) animationDelegate
++ (void) setAnimationDelegate:(id) delegate
 {
    CATransaction   *transaction;
 
    transaction = CATransactionGetCurrentTransaction();
    assert( transaction);
-   return( [transaction animationDelegate]);
-}
-
-
-+ (SEL) animationDidStopSelector
-{
-   CATransaction   *transaction;
-
-   transaction = CATransactionGetCurrentTransaction();
-   assert( transaction);
-   return( [transaction animationDidStopSelector]);
-}
-
-
-+ (SEL) animationWillStartSelector
-{
-   CATransaction   *transaction;
-
-   transaction = CATransactionGetCurrentTransaction();
-   assert( transaction);
-   return( [transaction animationWillStartSelector]);
-}
-
-
-+ (void) setAnimationDelegate:(id) value
-{
-   CATransaction   *transaction;
-
-   transaction = CATransactionGetCurrentTransaction();
-   assert( transaction);
-   [transaction setAnimationDelegate:value];
-}
-
-
-+ (void) setAnimationDidStopSelector:(SEL) value
-{
-   CATransaction   *transaction;
-
-   transaction = CATransactionGetCurrentTransaction();
-   assert( transaction);
-   [transaction setAnimationDidStopSelector:value];
-}
-
-
-+ (void) setAnimationWillStartSelector:(SEL) value
-{
-   CATransaction   *transaction;
-
-   transaction = CATransactionGetCurrentTransaction();
-   assert( transaction);
-   [transaction setAnimationWillStartSelector:value];
+   [transaction setAnimationDelegate:delegate];
 }
 
 

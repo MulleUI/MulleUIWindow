@@ -10,7 +10,11 @@
 #import "UIView+RenderQueue.h"
 
 
+
 @implementation UIWindow ( RenderQueue)
+
+@dependency UIWindow( Layout);
+
 
 - (UIWindowDisplayBits) willLayoutWithAbsoluteTime:(mulle_absolutetime_t) renderStart
 {

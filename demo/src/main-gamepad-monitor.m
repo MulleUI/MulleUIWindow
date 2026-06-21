@@ -7,7 +7,7 @@
 //
 // drawGamepad: written by Cody mostly
 //
-static void    drawGamepad(struct CGContext *context, CGRect canvas, id <UIGamepad> gamepad, CGColor bgColor)
+static void    drawGamepad(CGContext *context, CGRect canvas, id <UIGamepad> gamepad, CGColor bgColor)
 {
    float width = canvas.size.width * 0.8;
    float height = canvas.size.height * 0.6;

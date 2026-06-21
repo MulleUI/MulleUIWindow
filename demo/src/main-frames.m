@@ -1,6 +1,7 @@
 #import "import.h"
 
 #include <GLFW/glfw3.h>
+#include <GL/gl.h>
 static void  usage( void)
 {
    fprintf( stderr, "Usage: frames [frame frequency] [display mode] [other flags]\n"

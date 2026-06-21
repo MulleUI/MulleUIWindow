@@ -35,7 +35,7 @@ static struct
 {
    struct MulleObjCIMPArray   _initCategoryIMPs;
    struct MulleObjCIMPArray   _deallocCategoryIMPs;
-} Self;
+} ClassStatic;
 
 
 + (void) initialize
@@ -47,15 +47,15 @@ static struct
       return;
 
    allocator = MulleObjCClassGetAllocator( self);
-   MulleObjCIMPArrayInitCategoryOnly( &Self._initCategoryIMPs, self, @selector( initCategory), allocator);
-   MulleObjCIMPArrayInitCategoryOnly( &Self._deallocCategoryIMPs, self, @selector( deallocCategory), allocator);
+   MulleObjCIMPArrayInitCategoryOnly( &ClassStatic._initCategoryIMPs, self, @selector( initCategory), allocator);
+   MulleObjCIMPArrayInitCategoryOnly( &ClassStatic._deallocCategoryIMPs, self, @selector( deallocCategory), allocator);
 }
 
 
 + (void) deinitialize
 {
-   MulleObjCIMPArrayDone( &Self._deallocCategoryIMPs);
-   MulleObjCIMPArrayDone( &Self._initCategoryIMPs);
+   MulleObjCIMPArrayDone( &ClassStatic._deallocCategoryIMPs);
+   MulleObjCIMPArrayDone( &ClassStatic._initCategoryIMPs);
 }
 
 
@@ -254,7 +254,7 @@ static struct
 
    // this calls _init on all categories, protocolclasses and classes from
    // UIWindow up
-   MulleObjCIMPArrayCallReverse( &Self._initCategoryIMPs, self, self);
+   MulleObjCIMPArrayCallReverse( &ClassStatic._initCategoryIMPs, self, self);
 
    return( self);
 }
@@ -334,7 +334,7 @@ static struct
 
 - (void) dealloc
 {
-   MulleObjCIMPArrayCall( &Self._deallocCategoryIMPs, self, self);
+   MulleObjCIMPArrayCall( &ClassStatic._deallocCategoryIMPs, self, self);
 
    [_postLayoutAnimator release];
    [_preLayoutAnimator release];
@@ -347,10 +347,6 @@ static struct
    mulle_pointerarray_done( &_enteredAreas);
    mulle_pointerarray_done( &_layoutDelegates);
    mulle_pointerarray_done( &_renderQueue);
-
-
-   // now done locally in _dealloc
-   //_mulle__pointerset_done( &_layoutedViews, MulleObjCInstanceGetAllocator( self));
 
    mulle_quadtree_destroy( _quadtree);
 
@@ -383,7 +379,8 @@ static struct
    assert( mulle_pointerset_get( uniquing, self) == self);
 
    // at this point should we tidy up some more stuff ?
-   _mulle__pointerset_reset( &_layoutedViews);
+   // TODO: __not__ sure about this
+   mulle_concurrent_pointerset_reset( &_layoutedViews);
 
    if( mulle_pointerset_insert( uniquing, _postLayoutAnimator))
       [_postLayoutAnimator mulleRelinquishAccessWithUniquingSet:uniquing];
@@ -498,7 +495,7 @@ static struct
 
 - (void) setNeedsAnimation
 {
-   [self setNeedsDisplayBit:UIWindowDisplayNeedsAnimation];
+   [self setNeedsDisplayBits:UIWindowDisplayNeedsAnimation];
 }
 
 
@@ -626,4 +623,12 @@ static struct
    fflush( mulleui_log_fp);
 }
 
+- (void) style
+{
+   [_view style];
+}
+
 @end
+
+
+// MEMO: should UIWindow by default forward to UIView instead to GLFWOSWindow ?

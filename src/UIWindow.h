@@ -1,6 +1,5 @@
 #import "import.h"
 
-// TODO: remove UIView from UIWindow. Let UIWindow base on UIApplication and
 //       UIView then be based on UIWindow.
 //
 //       So a UIViewlessWindow in its pristine state, would just accept event
@@ -72,7 +71,7 @@ typedef UIView   UIWindowPlane;
 @private
    // each view, that gets a -layout call can add itself here, and then
    // check that -layout isn't called twice during a layout
-   struct mulle__pointerset        _layoutedViews;
+   struct mulle_concurrent_pointerset   _layoutedViews;
 
 // these values are only accessible to the main thread
 @private
@@ -94,7 +93,7 @@ typedef UIView   UIWindowPlane;
 @property( assign, getter=isLoadingDefaultFont) BOOL   loadDefaultFont;
 
 //
-@property( retain) id                                  styler;
+@property( retain) id                                  styleSheet;
 
 //
 // This is useful to add custom drawing stuff on the bottom.
@@ -220,6 +219,7 @@ typedef UIView   UIWindowPlane;
 
 - (BOOL) isWindowPlane:(UIView *) view;
 
+// the default calls -style on rootView
+- (void) style;
 @end
-
 

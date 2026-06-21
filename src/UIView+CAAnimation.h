@@ -50,8 +50,6 @@ typedef NS_OPTIONS( NSUInteger, UIViewForgetImplicitAnimationsMode)
 + (BOOL) areAnimationsEnabled;
 
 + (void) setAnimationDelegate:(id) delegate;
-+ (void) setAnimationWillStartSelector:(SEL) selector;
-+ (void) setAnimationDidStopSelector:(SEL) selector;
 
 + (NSUInteger) animationCurve;
 + (void) setAnimationCurve:(NSUInteger) curve;

@@ -23,7 +23,7 @@
 - (BOOL) isLayoutedView:(UIView *) view
 {
 #if DEBUG_DUPLICATE_LAYOUT
-   return( _mulle__pointerset_get( &_layoutedViews, view) ? YES : NO);
+   return( _mulle_concurrent_pointerset_member( &_layoutedViews, view) ? YES : NO);
 #else
    return( NO);
 #endif
@@ -33,9 +33,9 @@
 - (void) addLayoutedView:(UIView *) view
 {
 #if DEBUG_DUPLICATE_LAYOUT
-   assert( ! _mulle__pointerset_get( &_layoutedViews, view));
+   assert( ! _mulle_concurrent_pointerset_member( &_layoutedViews, view));
    if( _isLayouting)
-      _mulle__pointerset_insert( &_layoutedViews, view, MulleObjCInstanceGetAllocator( self));
+      _mulle_concurrent_pointerset_insert( &_layoutedViews, view);
 #endif
 }
 
@@ -109,15 +109,17 @@
 
 
 #if DEBUG_DUPLICATE_LAYOUT
+// this will or oughta be only called by UIWindow when running init
+// it's not clobbered by anything
 - (void) initCategory
 {
-   _mulle__pointerset_init( &_layoutedViews, 64, MulleObjCInstanceGetAllocator( self));
+   _mulle_concurrent_pointerset_init( &_layoutedViews, 64, MulleObjCInstanceGetAllocator( self));
 }
 
 
 - (void) deallocCategory
 {
-   _mulle__pointerset_done( &_layoutedViews, MulleObjCInstanceGetAllocator( self));
+   _mulle_concurrent_pointerset_done( &_layoutedViews);
 }
 #endif
 
@@ -129,8 +131,8 @@
 #if DEBUG_DUPLICATE_LAYOUT
    assert( ! _isLayouting);
    _isLayouting = YES;
-   _mulle__pointerset_done( &_layoutedViews, MulleObjCInstanceGetAllocator( self));
-   _mulle__pointerset_init( &_layoutedViews, 64, MulleObjCInstanceGetAllocator( self));
+   _mulle_concurrent_pointerset_done( &_layoutedViews);
+   _mulle_concurrent_pointerset_init( &_layoutedViews, 64, MulleObjCInstanceGetAllocator( self));
 #endif
 
    bounds = [self bounds];
@@ -144,7 +146,7 @@
    assert( UIEdgeInsetsEqualToEdgeInsets( [self->_view margins], UIEdgeInsetsZero));
 
 #if DEBUG_DUPLICATE_LAYOUT
-   _mulle__pointerset_reset( &_layoutedViews);
+   mulle_concurrent_pointerset_reset( &_layoutedViews);
    _isLayouting = NO;
 #endif
    _quadtreeNeedsSetup = YES;

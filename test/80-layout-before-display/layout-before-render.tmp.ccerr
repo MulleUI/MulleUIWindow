@@ -1,0 +1,117 @@
+mulle-clang -O0 -g -fobjc-tao -o /home/src/srcO/MulleUI/MulleUIWindow/test/80-layout-before-display/layout-before-render.exe layout-before-render.m -DMULLE_TEST=1 -I/home/src/srcO/MulleUI/MulleUIWindow/test -I/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include -L/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/lib -Wl,--no-as-needed -lMulleUIWindow -Wl,--as-needed -Wl,--no-as-needed -lMulleUIPureWindow -Wl,--as-needed -Wl,--no-as-needed -lMulleInvocationQueue -Wl,--as-needed -Wl,--no-as-needed -lMulleThread -Wl,--as-needed -Wl,--no-as-needed -lMulleUIView -Wl,--as-needed -Wl,--no-as-needed -lMulleUIApplication -Wl,--as-needed -Wl,--no-as-needed -lMulleObjCTimeFoundation -Wl,--as-needed -Wl,--no-as-needed -lMulleCA -Wl,--as-needed -Wl,--no-as-needed -lMulleUIBase -Wl,--as-needed -lmulle-gfx -Wl,--export-dynamic -lz -Wl,--export-dynamic -lm -Wl,--no-as-needed -lMulleObjC -Wl,--as-needed -Wl,--no-as-needed -lmulle-objc-runtime -Wl,--as-needed -lmulle-core -Wl,--export-dynamic -Wl,--whole-archive -Wl,--no-as-needed -lmulle-core-all-load -Wl,--as-needed -Wl,--no-whole-archive -lmulle-objc-debug -Wl,--export-dynamic -Wl,--whole-archive -Wl,--no-as-needed -lMulleObjC-startup -Wl,--as-needed -Wl,--no-whole-archive -Wl,--no-as-needed -lmulle-testallocator -Wl,--as-needed -Wl,--export-dynamic -lpthread -Wl,--export-dynamic -ldl -Wl,--export-dynamic -Wl,--whole-archive -Wl,--no-as-needed -lbacktrace -Wl,--as-needed -Wl,--no-whole-archive -Wl,-rpath=/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/lib
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:30:17: warning: method 'os_setCursorCaptured:' in protocol 'UIOSWindow' not implemented [-Wprotocol]
+   30 | @implementation FakeOSWindow
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIApplication/UIWindowTypes.h:495:1: note: method 'os_setCursorCaptured:' declared here
+  495 | - (void) os_setCursorCaptured:(BOOL) captured     MULLE_UI_MAIN_THREAD_ONLY;
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:30:17: warning: method 'os_pressedKeys:count:' in protocol 'UIOSWindow' not implemented [-Wprotocol]
+   30 | @implementation FakeOSWindow
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIApplication/UIWindowTypes.h:501:1: note: method 'os_pressedKeys:count:' declared here
+  501 | - (NSUInteger) os_pressedKeys:(NSUInteger *) keys
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:30:17: warning: method 'pressedKeys:count:' in protocol 'UIOSWindow' not implemented [-Wprotocol]
+   30 | @implementation FakeOSWindow
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIApplication/UIWindowTypes.h:506:1: note: method 'pressedKeys:count:' declared here
+  506 | - (NSUInteger) pressedKeys:(NSUInteger *) keys
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'keyStates' in protocol 'UIGraphicsContext' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIApplication/UIWindowTypes.h:635:1: note: method 'keyStates' declared here
+  635 | - (struct UIKeyStates) keyStates      MULLE_OBJC_THREADSAFE_METHOD;
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'fillRect:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:12:1: note: method 'fillRect:hexColor:' declared here
+   12 | - (void) fillRect:(CGRect) rect
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'blitRect:image:scale:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:19:1: note: method 'blitRect:image:scale:' declared here
+   19 | - (void) blitRect:(CGRect) rect
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'fillRect:bitmap:scale:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:28:1: note: method 'fillRect:bitmap:scale:' declared here
+   28 | - (void) fillRect:(CGPoint) position
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'strokeRect:strokeWidth:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:32:1: note: method 'strokeRect:strokeWidth:hexColor:' declared here
+   32 | - (void) strokeRect:(CGRect) rect
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'fillCircle:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:36:1: note: method 'fillCircle:hexColor:' declared here
+   36 | - (void) fillCircle:(CACircle) circle
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'strokeCircle:strokeWidth:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:39:1: note: method 'strokeCircle:strokeWidth:hexColor:' declared here
+   39 | - (void) strokeCircle:(CACircle) circle
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'fillPoint:pointSize:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:44:1: note: method 'fillPoint:pointSize:hexColor:' declared here
+   44 | - (void) fillPoint:(CGPoint) point
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'strokeLineFromPoint:toPoint:strokeWidth:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:48:1: note: method 'strokeLineFromPoint:toPoint:strokeWidth:hexColor:' declared here
+   48 | - (void) strokeLineFromPoint:(CGPoint) from
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'fillPath:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:53:1: note: method 'fillPath:hexColor:' declared here
+   53 | - (void) fillPath:(struct CGPath *) path
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'strokePath:strokeWidth:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:56:1: note: method 'strokePath:strokeWidth:hexColor:' declared here
+   56 | - (void) strokePath:(struct CGPath *) path
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:315:17: warning: method 'drawAtPoint:textUTF8String:fontNameUTF8String:fontSize:hexColor:' in protocol 'UIGraphicsDrawing' not implemented [-Wprotocol]
+  315 | @implementation FakeContext
+      |                 ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIBase/UIGraphicsDrawing.h:60:1: note: method 'drawAtPoint:textUTF8String:fontNameUTF8String:fontSize:hexColor:' declared here
+   60 | - (void) drawAtPoint:(CGPoint) position
+      | ^
+In file included from layout-before-render.m:3:
+./../fake-ui-application-glue.inc:613:1: warning: method 'os_sendEmptyEvent' is already declared in category 'OS'; add '@dependency 'UIApplication'('OS')' to suppress this warning [-Wmulle-method-implementation]
+  613 | - (void) os_sendEmptyEvent
+      | ^
+/home/nat/.mulle/var/cache/sde/MulleUIWindow-980b5997/dependency/Debug/include/MulleUIApplication/UIApplication.h:236:1: note: previous declaration is here
+  236 | - (void) os_sendEmptyEvent       MULLE_OBJC_THREADSAFE_METHOD;
+      | ^
+./../fake-ui-application-glue.inc:611:17: note: no @interface 'UIApplication'('Mockery') found; check for a category name typo
+  611 | @implementation UIApplication( Mockery)
+      |                 ^
+16 warnings generated.

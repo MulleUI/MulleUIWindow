@@ -12,9 +12,7 @@ endif()
 #
 set( SOURCES
 src/main-candycrash.m
-src/main-copy-window2.m
-src/main-copy-window3.m
-src/main-copy-window.m
+src/main-collision.m
 src/main-cursor.m
 src/main-demo.m
 src/main-demo-resizable.m
@@ -22,8 +20,8 @@ src/main-distance.m
 src/main-fps.m
 src/main-frames.m
 src/main-gamepad-monitor.m
-src/main-glfw-sharing.m
-src/main-glfw-texture.m
+src/main-keyboard-monitor.m
+src/main-keyboard-poll.m
 src/main-mouse-signals.m
 src/main-oswindow-draw-simple.m
 src/main-screen-monitor.m
@@ -34,7 +32,6 @@ src/main-star.m
 src/main-swapinterval.m
 src/main-trackingarea-animated.m
 src/main-trackingarea.m
-src/main-trackingarea-scrollview.m
 src/main-window-accumulate.m
 src/main-window-buffered.m
 src/main-window-draw-simple.m

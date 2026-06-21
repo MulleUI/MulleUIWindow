@@ -16,10 +16,10 @@
 
 // debug method, depending on how UIWindow is compiled, this will
 // check for duplicated -layout calls to a UIView
-- (void) addLayoutedView:(UIView *) view;
+- (void) addLayoutedView:(UIView *) view     MULLE_OBJC_THREADSAFE_METHOD;
 
 // used in setFrame: to catch subviews "managing" a superview state
-- (BOOL) isLayoutedView:(UIView *) view;
+- (BOOL) isLayoutedView:(UIView *) view      MULLE_OBJC_THREADSAFE_METHOD;
 
 
 //
@@ -42,7 +42,7 @@
 
 
 
-@interface UIWindow( Layout_Forward)
+@interface UIWindow( LayoutFuture) < MulleObjCFuture>
 
 - (void) createRenderQueueForFrame:(struct CGFrameInfo *) info
                    graphicsContext:(id <UIGraphicsContext>) context;

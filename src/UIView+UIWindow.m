@@ -195,4 +195,9 @@
 }
 
 
+- (void) style
+{
+   // does nothing by default (MulleUIWidget will override this)   
+}
+
 @end

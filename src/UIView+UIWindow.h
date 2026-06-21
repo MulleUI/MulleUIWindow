@@ -22,13 +22,15 @@
 // returns nil, if view is not in a window or the window isn't configured with
 // planes
 - (UIWindowPlane *) windowPlane;
-- (CGFloat) pixelsPerInchOfCurrentScreen;
 
-- (void) setNeedsDisplay      MULLE_OBJC_THREADSAFE_METHOD;
+- (CGFloat) pixelsPerInchOfCurrentScreen  MULLE_OBJC_THREADSAFE_METHOD;
+- (void) setNeedsDisplay                  MULLE_OBJC_THREADSAFE_METHOD;
 
 // this flag is forwarded to the enclosing UIWindow
 // will assert if none is present
 - (void) setNeedsLayout;
 - (BOOL) needsLayout;
+
+- (void) style;
 
 @end

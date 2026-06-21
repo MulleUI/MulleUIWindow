@@ -14,7 +14,7 @@ struct ShapeAppearance
    .strokeWidth = sw                     \
 }
 
-static void  drawPathWithAppearance( struct CGContext *context,
+static void  drawPathWithAppearance( CGContext *context,
                                         struct ShapeAppearance *appearance)
 {
    if( ! CGColorIsTransparent( appearance->fillColor))
@@ -43,7 +43,7 @@ struct TextAppearance
    .textColor = tc,                  \
    .textBackgroundColor = tbc        \
 }
-static void  textWithAppearance( struct CGContext *context,
+static void  textWithAppearance( CGContext *context,
                                     CGPoint point,
                                     char *text,
                                     struct TextAppearance *appearance)
@@ -79,7 +79,7 @@ static struct MonitorAppearance  appearance =
 // the monitor draw function was coded by Cody/Sourcegraph/Claude Sonnet 3.5
 // it's doing a pretty good job.
 //
-static void drawMonitor( struct CGContext *context,
+static void drawMonitor( CGContext *context,
                         CGRect frame,
                         NSUInteger index,
                         id <UIScreen> screen,
@@ -203,7 +203,7 @@ static void  drawStuff( CALayer *layer, CGContext *context)
 
    case 3 :
    case 4 :
-      CGRectPartition2x2( canvas, CGSizeMake( 20, 20), (CGRect *) rects);
+      CGRectPartition2x2( canvas, CGSizeMake( 20, 20), (CGRect (*)[2]) rects);
       p_rects = (CGRect *) rects;
       break;
 
@@ -213,7 +213,7 @@ static void  drawStuff( CALayer *layer, CGContext *context)
    case 8 :
    default :
          n = n >= 9 ? 9 : n;
-         CGRectPartition3x3( canvas, CGSizeMake( 20, 20), (CGRect *) rects);
+         CGRectPartition3x3( canvas, CGSizeMake( 20, 20), (CGRect (*)[3]) rects);
          p_rects = (CGRect *) rects;
          break;
    }

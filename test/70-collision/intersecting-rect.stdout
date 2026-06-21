@@ -1,0 +1,5 @@
+query (60,60,20,20): 2 hits
+query (310,310,10,10): 1 hits
+query (200,200,10,10): 0 hits
+query (0,0,400,400): 3 hits
+query (0,0,400,400) maxAreas=1: 3 hits
