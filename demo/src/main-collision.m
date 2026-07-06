@@ -373,11 +373,10 @@ static UIWindowDisplayBits   display( UIPureWindow *window,
 int   main( int argc, char *argv[])
 {
    UIWindow            *window;
-   UIApplication       *app;
    Game                *game;
    UIWindowStyleMask   styleMask;
 
-   app        = [UIApplication sharedInstance];
+   (void) [UIApplication sharedInstance];
    styleMask  = UIWindowStyleMaskDefault; //UIWindowStyleMaskNonRetained
    styleMask |= UIWindowStyleInputPolling;
    window     = [UIWindow windowWithFrame:CGRectMake( 0, 0, WINDOW_W, WINDOW_H)

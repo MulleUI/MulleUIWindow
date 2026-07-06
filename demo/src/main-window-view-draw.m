@@ -197,8 +197,8 @@ static UIWindowDisplayBits   display( UIPureWindow *window,
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
-   UIApplication   *app;
-   app = [UIApplication sharedInstance];
+
+   (void) [UIApplication sharedInstance];
 
    window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 400.0)
                       titleUTF8String:"Demo"

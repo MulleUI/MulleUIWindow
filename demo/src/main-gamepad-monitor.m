@@ -16,7 +16,6 @@ static void    drawGamepad(CGContext *context, CGRect canvas, id <UIGamepad> gam
    float fontSize;
    CGColor   color;
    CGFloat   gray;
-   struct UIGamepadInfo   info;
    float     axes[ 3];
 
    if( ! gamepad)
@@ -35,9 +34,6 @@ static void    drawGamepad(CGContext *context, CGRect canvas, id <UIGamepad> gam
    CGContextStrokeWidth( context, canvas.size.width * 0.002);
    CGContextStroke( context);
 
-   // Button states (1 for pressed, 0 for not pressed)
-   int buttonA = 0, buttonB = 0, buttonC = 0, buttonD = 0;
-
    // Joystick positions (range from -1 to 1 for both x and y)
    float leftStickX = 0, leftStickY = 0;
    float rightStickX = 0, rightStickY = 0;
@@ -48,7 +44,7 @@ static void    drawGamepad(CGContext *context, CGRect canvas, id <UIGamepad> gam
    // Add this after drawing all the gamepad elements
    if (gamepad)
    {
-      const char *name = [gamepad nameUTF8String];
+      char *name = (char *) [gamepad nameUTF8String];
       fontSize = CGFloatClamp( canvas.size.width * 0.02, 5.0, 44.0);
       CGContextFontSize( context, fontSize);
 
@@ -165,7 +161,6 @@ static void   drawStuff( CGContext *context, CGRect canvas)
    CGColor             color;
    id <UIGamepad>      gamepad;
    NSUInteger          i;
-   CGFont              *font;
    static CGColor      stripes[ 3] =
    {
       CGColorDataPapaya,
@@ -202,9 +197,8 @@ static UIWindowDisplayBits   display( UIPureWindow *window,
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
-   UIApplication   *app;
 
-   app = [UIApplication sharedInstance];
+   (void) [UIApplication sharedInstance];
 
    window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 400.0)
                       titleUTF8String:"Demo"

@@ -128,7 +128,6 @@ void   setupScene( UIWindow *window)
 
 int   main()
 {
-   CGContext       *context;
    UIWindow        *window;
    UIApplication   *app;
 

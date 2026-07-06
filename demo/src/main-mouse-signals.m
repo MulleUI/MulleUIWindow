@@ -53,11 +53,8 @@ static struct mouse_history_item   mouse_history_get_item( struct mouse_history 
 
 static void   draw( CALayer *layer, CGContext *context)
 {
-   CGFloat                       size;
    CGPoint                       mouse;
-   CGPoint                       center;
    CGRect                        canvas;
-   CGFloat                       max;
    NSUInteger                    state;
    unsigned int                  i;
    static struct mouse_history   history;

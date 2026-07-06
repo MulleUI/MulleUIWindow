@@ -1,4 +1,0 @@
-OSwindow "Offscreen"
-OSwindow "Test"
-warning: MulleObjCSingleton are ephemeral
-26304.238624 [38;5;37m<NSThread "NSMainThread">[0m: <UIApplication>  -[UIApplication loadStandardCursors]  Cursor shapes not available, as -[UIApplication os_createStandardCursor:] is undefined

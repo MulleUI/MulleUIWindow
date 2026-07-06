@@ -3,12 +3,6 @@
 #### 🛸 MulleUIWindow provides UIWindow and extends UIView functionality
 
 
-# 🛸 MulleUIWindow
-
-#### 🛸 MulleUIWindow provides UIWindow and extends UIView functionality
-
-![](mulle-tiny-logo-255x256.png)
-
 See live on stream how it progresses: [https://www.twitch.tv/mulle_kybernetik_tv/](). Every Wednesday at 14:00-18:00 CEST.
 
 
@@ -17,13 +11,15 @@ See live on stream how it progresses: [https://www.twitch.tv/mulle_kybernetik_tv
 There is no actual "drawing" code in MulleUIWindow. Use "MulleGraphics" for
 drawing. See "MulleUIControl" for widgets.
 
+![](mulle-tiny-logo-255x256.png)
 
 
 
 
-| Release Version                                       | Release Notes
-|-------------------------------------------------------|--------------
-| ![Mulle kybernetiK tag](https://img.shields.io/github/tag/MulleUI/MulleUIWindow.svg) [![Build Status](https://github.com/MulleUI/MulleUIWindow/workflows/CI/badge.svg)](//github.com/MulleUI/MulleUIWindow/actions) | [RELEASENOTES](RELEASENOTES.md) |
+
+| Release Version                                       | Release Notes  | AI Documentation
+|-------------------------------------------------------|----------------|---------------
+| ![Mulle kybernetiK tag](https://img.shields.io/github/tag/MulleUI/MulleUIWindow.svg) [![Build Status](https://github.com/MulleUI/MulleUIWindow/workflows/CI/badge.svg)](//github.com/MulleUI/MulleUIWindow/actions) | [RELEASENOTES](RELEASENOTES.md) | [DeepWiki for MulleUIWindow](https://deepwiki.com/MulleUI/MulleUIWindow)
 
 
 
@@ -157,9 +153,11 @@ Download the latest [tar](https://github.com/MulleUI/MulleUIWindow/archive/refs/
 Install **MulleUIWindow** into `/usr/local` with [cmake](https://cmake.org):
 
 ``` sh
-cmake -B build \
-      -DCMAKE_INSTALL_PREFIX=/usr/local \
-      -DCMAKE_PREFIX_PATH=/usr/local \
+PREFIX_DIR="/usr/local"
+cmake -B build                               \
+      -DMULLE_SDK_PATH="${PREFIX_DIR}"       \
+      -DCMAKE_INSTALL_PREFIX="${PREFIX_DIR}" \
+      -DCMAKE_PREFIX_PATH="${PREFIX_DIR}"    \
       -DCMAKE_BUILD_TYPE=Release &&
 cmake --build build --config Release &&
 cmake --install build --config Release

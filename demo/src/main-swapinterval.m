@@ -87,8 +87,6 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *_context)
    CGFloat    diameter;
    CGRect     canvas;
    CGRect     rect;
-   CGPoint    a;
-   CGPoint    b;
 
    canvas      = [layer canvas];
    rect        = UIEdgeInsetsInsetRect( canvas, UIEdgeInsetsMake( 50, 50, 50, 50));
@@ -133,11 +131,9 @@ int   main( int argc, char *argv[])
    UIWindow        *window;
    UIApplication   *app;
    MulleUIPerf     *perf;
-   CGFloat         rate;
    NSUInteger      swapInterval;
 
    swapInterval = 0;
-   rate = UIWindowFrameRateSynced;
    if( argc > 1)
       swapInterval = atoi( argv[ 1]);
 

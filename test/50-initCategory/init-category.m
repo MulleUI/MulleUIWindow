@@ -16,6 +16,8 @@
 
 // Implementation for the first category
 @implementation UIWindow( TestCategoryA)
+MULLE_OBJC_DEPENDS_ON_CATEGORY( UIWindow, Render);
+MULLE_OBJC_DEPENDS_ON_CATEGORY( UIWindow, Layout);
 
 @dynamic categoryAValue;
 
@@ -37,6 +39,8 @@
 // Implementation for the second category with dependency on the first
 @implementation UIWindow( TestCategoryB)
 MULLE_OBJC_DEPENDS_ON_CATEGORY( UIWindow, TestCategoryA);
+MULLE_OBJC_DEPENDS_ON_CATEGORY( UIWindow, Render);
+MULLE_OBJC_DEPENDS_ON_CATEGORY( UIWindow, Layout);
 
 @dynamic categoryBValue;
 

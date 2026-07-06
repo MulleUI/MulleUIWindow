@@ -117,6 +117,8 @@ static BOOL   draw( CGGraphicsLayer *layer, CGContext *context)
 
    return( YES);
 }
+
+#ifdef RECORD_GIF
 static void  didDraw( UIWindow *window,
                       id <UIGraphicsContext> context,
                       struct CGFrameInfo *info)
@@ -144,11 +146,11 @@ static void  didDraw( UIWindow *window,
    [gif addBitmap:screenshotBitmap
      freeWhenDone:YES];
 }
+#endif
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
    UIApplication   *app;
-   UIAnimatedGIF   *gif;
 
    app = [UIApplication sharedInstance];
    {
@@ -162,12 +164,16 @@ int   main( int argc, char *argv[])
       [app addWindow:window];
 
 #ifdef RECORD_GIF
-      gif = [UIAnimatedGIF animatedGIFWithUTF8String:"animated.gif"
-                                          bitmapSize:CGPixelSizeMake( 360, 200)
-                                       animationRate:1.0 / 60.0
-                                                loop:YES];
-      [window setUserInfo:gif];
-      [window setDidDrawCallback:didDraw];
+      {
+         UIAnimatedGIF   *gif;
+
+         gif = [UIAnimatedGIF animatedGIFWithUTF8String:"animated.gif"
+                                             bitmapSize:CGPixelSizeMake( 360, 200)
+                                          animationRate:1.0 / 60.0
+                                                   loop:YES];
+         [window setUserInfo:gif];
+         [window setDidDrawCallback:didDraw];
+      }
 #endif
    }
    return( [app runApp]);

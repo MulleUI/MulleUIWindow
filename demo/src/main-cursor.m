@@ -103,7 +103,6 @@ void   setupScene( UIWindow *window)
    UIView         *view;
    SensitiveView  *subview;
    CGRect         frame;
-   CGRect         bounds;
    UIEdgeInsets   insets;
 
    contentView = [window contentView];
@@ -168,7 +167,6 @@ void   setupScene( UIWindow *window)
 
 int   main()
 {
-   CGContext       *context;
    UIWindow        *window;
    UIApplication   *app;
 

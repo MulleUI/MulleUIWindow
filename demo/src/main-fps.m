@@ -87,8 +87,6 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *_context)
    CGFloat    diameter;
    CGRect     canvas;
    CGRect     rect;
-   CGPoint    a;
-   CGPoint    b;
 
    canvas      = [layer canvas];
    rect        = UIEdgeInsetsInsetRect( canvas, UIEdgeInsetsMake( 50, 50, 50, 50));

@@ -16,6 +16,7 @@
       { @selector( UIWindow), @selector( OneFrame) },      // 895a123f;UIWindow;a74e7344;OneFrame
       { @selector( UIWindow), @selector( Render) },      // 895a123f;UIWindow;50cf42d3;Render
       { @selector( UIWindow), @selector( RenderQueue) },      // 895a123f;UIWindow;1cf3a909;RenderQueue
+      { @selector( UIWindow), @selector( Styling) },      // 895a123f;UIWindow;fae4061a;Styling
       { @selector( UIWindow), @selector( UIEvent) },      // 895a123f;UIWindow;f88bf69f;UIEvent
       { @selector( UIWindow), @selector( UIResponder) },      // 895a123f;UIWindow;48335ff7;UIResponder
       { @selector( UIWindow), @selector( UITrackingArea) },      // 895a123f;UIWindow;bc289a32;UITrackingArea

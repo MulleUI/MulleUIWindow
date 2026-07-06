@@ -248,8 +248,8 @@ static struct
 
    // don't use ~0 it traces ugly
    displayBits = UIWindowDisplayNeedsLayout
-                 | UIWindowDisplayNeedsAnimation
-                 | UIWindowDisplayNeedsRedraw;
+                 | UIWindowDisplayNeedsNextFrame
+                 | UIWindowDisplayNeedsDisplay;
    _mulle_atomic_pointer_nonatomic_write( &_needsDisplay, (void *) displayBits);
 
    // this calls _init on all categories, protocolclasses and classes from
@@ -469,18 +469,6 @@ static struct
 }
 
 
-- (void) setNeedsStyling
-{
-   [self setNeedsDisplayBit:UIWindowDisplayNeedsStyling];
-}
-
-
-- (BOOL) needsStyling
-{
-   return( [self needsDisplay] & UIWindowDisplayNeedsStyling ? YES : NO);
-}
-
-
 - (void) setNeedsLayout
 {
    [self setNeedsDisplayBit:UIWindowDisplayNeedsLayout];
@@ -495,25 +483,25 @@ static struct
 
 - (void) setNeedsAnimation
 {
-   [self setNeedsDisplayBits:UIWindowDisplayNeedsAnimation];
+   [self setNeedsDisplayBits:UIWindowDisplayNeedsNextFrame];
 }
 
 
 - (BOOL) needsAnimation
 {
-   return( [self needsDisplay] & UIWindowDisplayNeedsAnimation ? YES : NO);
+   return( [self needsDisplay] & UIWindowDisplayNeedsNextFrame ? YES : NO);
 }
 
 
-- (void) setNeedsRedraw
+- (void) setNeedsRenderLayers
 {
-   [self setNeedsDisplayBit:UIWindowDisplayNeedsRedraw];
+   [self setNeedsDisplayBit:UIWindowDisplayNeedsDisplay];
 }
 
 
-- (BOOL) needsRedraw
+- (BOOL) needsRenderLayers
 {
-   return( [self needsDisplay] & UIWindowDisplayNeedsRedraw ? YES : NO);
+   return( [self needsDisplay] & UIWindowDisplayNeedsDisplay ? YES : NO);
 
 }
 
@@ -621,11 +609,6 @@ static struct
 {
    [self dumpAnimationsToFILE:mulleui_log_fp];
    fflush( mulleui_log_fp);
-}
-
-- (void) style
-{
-   [_view style];
 }
 
 @end

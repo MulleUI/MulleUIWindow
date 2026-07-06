@@ -189,23 +189,21 @@ typedef UIView   UIWindowPlane;
 - (BOOL) isTracking;
 - (BOOL) receivesMouseMotionEvents;
 //
-// needs Display is a combination of needsLayout and needsRedraw, needsAnimation
-// bits defined in UIWindowDisplayBits
+// needsDisplay bits control the frame pipeline:
+//   NeedsDisplay (0x1), NeedsLayout (0x2), NeedsStyling (0x4), NeedsNextFrame (0x8)
 //
 
-// force re-layout on next render, setting this flag does not affect other
-// flags
+// force re-layout on next render (cascades to NeedsDisplay)
 - (void) setNeedsLayout                      MULLE_OBJC_THREADSAFE_METHOD;
 - (BOOL) needsLayout                         MULLE_OBJC_THREADSAFE_METHOD;
 
-// this flag means, that the there are animations running
+// animations are running, schedule next frame at animation rate
 - (void) setNeedsAnimation                   MULLE_OBJC_THREADSAFE_METHOD;
 - (BOOL) needsAnimation                      MULLE_OBJC_THREADSAFE_METHOD;
 
-// this flag means, that the UIView hierarchy needs to be drawn into
-// the framebuffer
-- (void) setNeedsRedraw                      MULLE_OBJC_THREADSAFE_METHOD;
-- (BOOL) needsRedraw                         MULLE_OBJC_THREADSAFE_METHOD;
+// rebuild render queue and draw layers (no layout)
+- (void) setNeedsRenderLayers                MULLE_OBJC_THREADSAFE_METHOD;
+- (BOOL) needsRenderLayers                   MULLE_OBJC_THREADSAFE_METHOD;
 
 - (CAAnimator *) preLayoutAnimator;
 - (CAAnimator *) postLayoutAnimator;
@@ -219,7 +217,5 @@ typedef UIView   UIWindowPlane;
 
 - (BOOL) isWindowPlane:(UIView *) view;
 
-// the default calls -style on rootView
-- (void) style;
 @end
 

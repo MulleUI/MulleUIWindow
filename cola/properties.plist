@@ -8,8 +8,8 @@
       name="MulleUIWindow";
       user="MulleUI";
       repo="MulleUIWindow";
-      homepage="https://github.com/MulleUI/MulleUIWindow";
-      license="BSD-3-LICENSED";
+      homepage="https://github.com/MulleUI/MulleUICore";
+      license="UNLICENSED";
    };
    dependencies =
    (

@@ -204,7 +204,7 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
    if( (displayBits & UIWindowDisplayNeedsLayout) || animationDisplayBits)
    {
       [self layoutFrame:info];
-      returnBits |= UIWindowDisplayNeedsRedraw | UIWindowDisplayNeedsAnimation;
+      returnBits |= UIWindowDisplayNeedsDisplay | UIWindowDisplayNeedsNextFrame;
 
       // MEMO: this gets triggered too often
       returnBits |= UIWindowDisplayNeedsMouseEvent;
@@ -231,7 +231,7 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
    /*
     * Animate
     */
-   if( ! (displayBits & UIWindowDisplayNeedsAnimation))
+   if( ! (displayBits & UIWindowDisplayNeedsNextFrame))
       return( displayBits);
 
    animationRate = UIWindowGetAnimationRate( self);
@@ -251,7 +251,7 @@ UIWindowDisplayBits   UIWindowDefaultLayoutViews( UIWindow *self,
    if( didAnimate)
    {
       displayBits |= UIWindowDisplayDidAnimate;
-      displayBits |= UIWindowDisplayNeedsRedraw;
+      displayBits |= UIWindowDisplayNeedsDisplay;
    }
    UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( displayBits));
    return( displayBits);

@@ -87,7 +87,6 @@ static void drawMonitor( CGContext *context,
 {
   CGRect screenRect;
   CGRect bezelRect;
-  CGRect standRect;
   CGRect infoRect;
   CGFloat cornerRadius = 10.0;
   CGRect circleBounds;

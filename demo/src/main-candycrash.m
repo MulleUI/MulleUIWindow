@@ -200,7 +200,6 @@ static void   gainBalls( UIWindow *window, NSThread *thread)
    NSUInteger   next;
    NSUInteger   prev;
    CGFloat      offset;
-   CGPoint      p;
 
    for( i = 0; i < _numSegment; i++)
    {
@@ -261,7 +260,6 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *_context)
    CGRect       canvas;
    NSUInteger   i;
    NSUInteger   j;
-   static int   rounds;
 
 //#ifdef DEBUG
 //   mulle_fprintf( stderr, "%s\n", __PRETTY_FUNCTION__);
@@ -284,7 +282,6 @@ static void   setupSceneInView( UIView *contentPlane)
 {
    CGRect               contentRect;
    NSUInteger           i;
-   Ball                 *ball;
    CGFloat              r;
    CGPoint              p;
    struct CAPolarPoint  v;

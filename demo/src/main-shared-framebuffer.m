@@ -8,14 +8,12 @@
 #define WEISS  CGColorMakeWithRGBA( 1.0, 1.0, 1.0, 1.0)
 #define GRAU   CGColorMakeWithRGBA( 0.85, 0.85, 0.85, 0.75)
 static UIBitmapImage   *image;
-static CGImage         *cgImage;
 static void  drawPrettyBackground( CGGraphicsLayer *layer, CGContext *context)
 {
    CGFloat             radius;
    CGFloat             strokeWidth;
    CGFont              *font;
    CGRect              canvas;
-   CGRect              rect;
 
    canvas      = [layer canvas];
    strokeWidth = 20.0;

@@ -30,11 +30,8 @@ static BOOL   drawStuff( CGGraphicsLayer *layer, CGContext *context)
    auto char               buf[ 64];
    CGFont                  *font;
    CGRect                  canvas;
-   char                    *s;
    double                  frameRate;
    GLFWOSWindow            *osWindow;
-   NSUInteger              counter;
-   struct CGFrameInfo      *info;
    struct UIOSWindowInfo   windowInfo;
    UIWindow                *window;
 

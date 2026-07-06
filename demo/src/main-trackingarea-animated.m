@@ -63,7 +63,6 @@ void   setupSceneInWindow( UIWindow *window)
    UIView            *contentView;
    TrackingView      *view;
    CGRect            frame;
-   CGRect            rect;
    CGRect            contentRect;
    UITrackingArea    *area;
    CATransaction     *ta;
@@ -119,7 +118,6 @@ void   setupSceneInWindow( UIWindow *window)
 
 int   main()
 {
-   CGContext       *context;
    UIWindow        *window;
    UIApplication   *app;
 

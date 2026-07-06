@@ -211,7 +211,6 @@ static void   rect_draw( struct rect *r,
    NSInteger                        level;
    NSUInteger                       maxLevel;
    NSUInteger                       maxVisibleLevel;
-   NSUInteger                       i;
    struct scene                     scene;
    struct CGFrameInfo               *frameInfo;
    CGFloat                          x;

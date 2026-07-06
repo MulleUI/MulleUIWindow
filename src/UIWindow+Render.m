@@ -209,23 +209,21 @@ UIWindowDisplayBits
 
    UIWindowDisplayBitsLogVerbose( "enters (%s)", UIWindowDisplayBitsUTF8String( displayBits));
 
-   // first two functions should happen outside of any context being
-   // active or not, we are still adding bits to displayBits here
+   // Cascade: Styling → Layout → Display
+   // Each stage implies the next.
    if( displayBits & UIWindowDisplayNeedsStyling)
    {
       [self style];
       displayBits &= ~UIWindowDisplayNeedsStyling;
-      displayBits |= UIWindowDisplayNeedsLayout | UIWindowDisplayNeedsRedraw;
+      displayBits |= UIWindowDisplayNeedsLayout;
    }
    displayBits = UIWindowDefaultLayoutViews( self, info, displayBits);
    displayBits = UIWindowDefaultPrepareRenderQueue( self, context, info, displayBits);
    returnBits  = displayBits & ~0xFFFF;
 
-   if( displayBits & UIWindowDisplayNeedsRedraw)
-   {
-      [self renderLayersInFrame:info
-                graphicsContext:context];
-   }
+   // Drawing always happens when a frame runs.
+   [self renderLayersInFrame:info
+             graphicsContext:context];
 
    UIWindowDisplayBitsLogVerbose( "returns (%s)", UIWindowDisplayBitsUTF8String( returnBits));
    return( returnBits);
