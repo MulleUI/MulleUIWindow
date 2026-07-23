@@ -1,5 +1,5 @@
 # MulleUIWindow Library Documentation for AI
-<!-- Keywords: window, view, tracking, animation, responder, rendering, events -->
+<!-- Keywords: window, view, styling, tracking, animation, rendering, events -->
 
 ## 1. Introduction & Purpose
 
@@ -37,9 +37,13 @@ The architecture is designed to support multi-threaded rendering where animation
 
 **Display Bits System:**
 UIWindow uses a display bits system (`UIWindowDisplayBits`) to track what needs updating:
-- `needsLayout` - View hierarchy needs layout
-- `needsAnimation` - Animations are running
-- `needsRedraw` - Framebuffer needs redrawing
+- `NeedsDisplay` (0x1) - Framebuffer needs redrawing
+- `NeedsLayout` (0x2) - View hierarchy needs layout (cascades to NeedsDisplay)
+- `NeedsStyling` (0x4) - View hierarchy needs styling (cascades to NeedsLayout)
+- `NeedsNextFrame` (0x8) - Schedule another frame (for continuous animation)
+
+**Styling System:**
+UIWindow integrates a styling subsystem where a `styleSheet` object can apply styles to views. Styling runs before layout in the frame pipeline: Styling → Layout → Animation → Render. Views and windows expose `-style` and `-setNeedsStyling`/`-needsStyling` methods to participate in this pipeline.
 
 **Controller as Maestro:**
 View controllers act as managers for one or multiple views, coordinating behavior and data flow. They can be added to the window's controller array for automatic retention.
@@ -61,7 +65,7 @@ UIWindow provides a sophisticated tracking area system using quadtrees for effic
 - `@property( retain) UIPasteboard *pasteboard` - Pasteboard for copy/paste
 - `@property( assign) BOOL trackingAreasEnabled` - Enable/disable tracking areas
 - `@property( assign) BOOL loadDefaultFont` - Whether to load default font (default: YES)
-- `@property( retain) id styler` - Optional styler object for view styling
+- `@property( retain) id styleSheet` - Optional style sheet object for view styling (renamed from `styler`)
 - `@property( retain) UIView *contentView` - Convenience accessor to content view
 
 **Window Planes** (available when `UIWindowStylePlanes` is set in style mask):
@@ -101,13 +105,14 @@ UIWindow provides a sophisticated tracking area system using quadtrees for effic
 
 ```objc
 // Display management (thread-safe)
+// needsDisplay bits: NeedsDisplay(0x1), NeedsLayout(0x2), NeedsStyling(0x4), NeedsNextFrame(0x8)
 - (void) setNeedsLayout      MULLE_OBJC_THREADSAFE_METHOD;
 - (BOOL) needsLayout         MULLE_OBJC_THREADSAFE_METHOD;
 - (void) setNeedsAnimation   MULLE_OBJC_THREADSAFE_METHOD;
 - (BOOL) needsAnimation      MULLE_OBJC_THREADSAFE_METHOD;
-- (void) setNeedsRedraw      MULLE_OBJC_THREADSAFE_METHOD;
-- (BOOL) needsRedraw         MULLE_OBJC_THREADSAFE_METHOD;
-
+- (void) setNeedsRenderLayers                MULLE_OBJC_THREADSAFE_METHOD;
+- (BOOL) needsRenderLayers                   MULLE_OBJC_THREADSAFE_METHOD;
+// Previously named setNeedsRedraw / needsRedraw
 // Content view management
 - (UIView *) contentView;
 - (void) setContentView:(UIView *) view;
@@ -130,6 +135,23 @@ UIWindow provides a sophisticated tracking area system using quadtrees for effic
 
 // Plane checking
 - (BOOL) isWindowPlane:(UIView *) view;
+```
+
+### 3.1.5. `UIWindow+Styling.h`
+
+**Purpose:** Styling subsystem for applying a style sheet to the view hierarchy. Styling runs before layout in the frame pipeline.
+
+```objc
+@interface UIWindow( Styling)
+
+// Trigger the styling pass on the view hierarchy (runs before layout)
+- (void) style;
+
+// Request styling on next render (cascades to NeedsLayout and NeedsDisplay)
+- (void) setNeedsStyling;
+- (BOOL) needsStyling;
+
+@end
 ```
 
 ### 3.2. `UITrackingArea.h`
@@ -238,9 +260,9 @@ typedef NS_OPTIONS( NSUInteger, UITrackingAreaOptions)
 ```objc
 @interface UIWindow( Layout)
 
-// Debug method to track which views were laid out
-- (void) addLayoutedView:(UIView *) view;
-- (BOOL) isLayoutedView:(UIView *) view;
+// Debug method to track which views were laid out (thread-safe)
+- (void) addLayoutedView:(UIView *) view     MULLE_OBJC_THREADSAFE_METHOD;
+- (BOOL) isLayoutedView:(UIView *) view      MULLE_OBJC_THREADSAFE_METHOD;
 
 // Animation and layout pipeline
 - (UIWindowDisplayBits) preLayoutAnimations:(struct CGFrameInfo *) info;
@@ -370,6 +392,13 @@ enum
 // Start hover timer
 - (void) startMouseHoverOverTrackingArea:(UITrackingArea *) area;
 
+// Query tracking areas intersecting a rect in window coordinates
+- (NSUInteger) getTrackingAreasIntersectingRect:(CGRect) rect
+                                          areas:(UITrackingArea **) buf
+                                       maxAreas:(NSUInteger) maxAreas;
+// Returns total number of intersecting areas.
+// Fills buf with up to maxAreas results. Return value may exceed maxAreas.
+
 @end
 ```
 
@@ -383,15 +412,18 @@ enum
 // Get the window plane containing this view (if window uses planes)
 - (UIWindowPlane *) windowPlane;
 
-// Get pixels per inch of the screen containing the view
-- (CGFloat) pixelsPerInchOfCurrentScreen;
+// Get pixels per inch of the screen containing the view (thread-safe)
+- (CGFloat) pixelsPerInchOfCurrentScreen  MULLE_OBJC_THREADSAFE_METHOD;
 
 // Request display update (thread-safe)
-- (void) setNeedsDisplay      MULLE_OBJC_THREADSAFE_METHOD;
+- (void) setNeedsDisplay                  MULLE_OBJC_THREADSAFE_METHOD;
 
 // Request layout (forwarded to window)
 - (void) setNeedsLayout;
 - (BOOL) needsLayout;
+
+// Trigger styling pass from this view (new in latest version)
+- (void) style;
 
 @end
 ```
@@ -455,6 +487,47 @@ enum
 @end
 ```
 
+### 3.10.5. `UIView+UIFirstResponderSearch.h`
+
+**Purpose:** Spatial search for navigating the first responder chain based on geometric direction, enabling keyboard-based focus movement between views.
+
+```objc
+struct UIFirstResponderSearch
+{
+   UIView        *referenceView;
+   CGRect        referenceViewFrame;
+
+   UIView        *best;
+   CGRect        bestScreenFrame;
+
+   CADirection   primaryDirection;
+   CADirection   secondaryDirection;
+
+   CGFloat       fummelX;
+   CGFloat       fummelY;
+};
+
+void  UIFirstResponderSearchInit( struct UIFirstResponderSearch *p,
+                                   id <UIResponder> responder,
+                                   CADirection primaryDirection,
+                                   CADirection secondaryDirection);
+
+static inline UIView   *UIFirstResponderSearchGetResult( struct UIFirstResponderSearch *p)
+{
+   return( p ? p->best : nil);
+}
+
+static inline void  UIFirstResponderSearchDone( struct UIFirstResponderSearch *p)
+{
+}
+
+@interface UIView( UIFirstResponderSearch)
+
+- (void) _firstResponderSearch:(struct UIFirstResponderSearch *) search;
+
+@end
+```
+
 ### 3.11. `UIView+CAAnimation.h`
 
 **Purpose:** Implicit animation support for UIView using CAAnimation.
@@ -494,10 +567,8 @@ typedef NS_OPTIONS( NSUInteger, UIViewForgetImplicitAnimationsMode)
 // Animation enabled state
 + (BOOL) areAnimationsEnabled;
 
-// Animation callbacks
+// Animation callbacks (delegate pattern — set delegate on CAAnimationGroup)
 + (void) setAnimationDelegate:(id) delegate;
-+ (void) setAnimationWillStartSelector:(SEL) selector;
-+ (void) setAnimationDidStopSelector:(SEL) selector;
 
 // Animation parameters
 + (NSUInteger) animationCurve;
@@ -633,7 +704,8 @@ struct UIRenderQueueContext
 - Animation updates run every frame at display refresh rate (typically 60Hz)
 
 **Thread-Safety:**
-- Display bit operations (setNeedsLayout, setNeedsAnimation, setNeedsRedraw) are thread-safe
+- Display bit operations (setNeedsLayout, setNeedsStyling, setNeedsRenderLayers, setNeedsAnimation) are thread-safe
+- Layouted view tracking uses a concurrent pointerset for thread safety
 - View hierarchy modifications require the viewHierarchyLock (recursive lock)
 - Rendering occurs on dedicated window thread if multi-threaded
 - Main thread can safely request display updates via thread-safe methods
@@ -703,6 +775,13 @@ struct UIRenderQueueContext
    - Use invocation queues for cross-thread communication
    - Callbacks run on window thread, be mindful of thread affinity
 
+8. **Styling:**
+   - Set `styleSheet` property to provide a style sheet object
+   - Use `-setNeedsStyling` to request a styling pass (cascades to layout)
+   - Views implement `-style` to apply style sheet properties
+   - Styling runs before layout in the frame pipeline
+   - Call `-[UIView style]` to trigger styling on individual views
+
 **Common Pitfalls:**
 
 1. **Tracking Area Ownership:**
@@ -711,9 +790,11 @@ struct UIRenderQueueContext
    - If you store a tracking area, be aware it might be deallocated
 
 2. **Display Bits Confusion:**
-   - `setNeedsLayout` only sets layout bit, doesn't trigger redraw
-   - `setNeedsDisplay` sets redraw bit
-   - `setNeedsAnimation` indicates animations are running
+   - Display bits cascade: NeedsStyling → NeedsLayout → NeedsDisplay
+   - `setNeedsRenderLayers` re-renders layers without layout
+   - `setNeedsLayout` also sets NeedsDisplay
+   - `setNeedsStyling` also sets NeedsLayout
+   - `setNeedsAnimation` schedules next frame at animation rate
    - Usually need to set multiple bits for complete update
 
 3. **Layout Reentrancy:**

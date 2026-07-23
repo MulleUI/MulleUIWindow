@@ -1,4 +1,4 @@
-<!-- keywords: mulle-ui-tracking, tracking, hover, mouseEntered, mouseExited, mouseMoved, UITrackingArea, cursor -->
+<!-- keywords: mulle-ui-tracking, tracking, hover, mouseEntered, mouseExited, mouseMoved, UITrackingArea, cursor, quadtree -->
 # mulle-ui-tracking
 
 Use this topic when you need hover detection, mouse entered/exited events, or cursor changes based on mouse position.
@@ -18,7 +18,10 @@ mulle-sde code search mouseEntered
 - `src/UITrackingArea.h`
 - `src/UIWindow+UITrackingArea.h`
 - `src/UIView+UITrackingArea.h`
+- `demo/src/main-trackingarea.m`
 - `demo/src/main-trackingarea-animated.m`
+- `demo/src/main-cursor.m`
+- `test/70-collision/intersecting-rect.m`
 
 ## Quick recipe: basic hover tracking
 
@@ -46,9 +49,14 @@ Then implement handlers:
    // mouse left the tracking area
 }
 
-- (void) mouseHovered:(UIMouseMotionEvent *) event
+- (void) mouseHoverStarted:(UIMouseTrackingEvent *) event
 {
    // mouse hovered for hoverTimeInterval (default 1.0s)
+}
+
+- (void) mouseHoverEnded:(UIMouseTrackingEvent *) event
+{
+   // mouse stopped hovering or left the area
 }
 ```
 
@@ -57,10 +65,48 @@ Then implement handlers:
 | Option | What it does |
 |--------|-------------|
 | `UITrackingMouseMoved` | Receive `mouseMoved:` while inside area |
-| `UITrackingMouseHover` | Receive `mouseHovered:` after hover delay |
+| `UITrackingSetCursor` | Auto-switch cursor to `[area cursor]` on enter |
+| `UITrackingMouseHover` | Receive `mouseHoverStarted:` / `mouseHoverEnded:` after hover delay |
 | `UITrackingActiveWhenFirstResponder` | Only active when view is first responder |
 | `UITrackingVisibleRectOnly` | Track only the visible (unobscured) portion |
 | `UITrackingAssignUserInfo` | Disable retain/release on userInfo |
+
+## Multiple tracking areas on one view
+
+Attach several areas with different rects and cursors. Each fires its own events:
+
+```objc
+area1 = [UITrackingArea trackingAreaWithRect:outerRect
+                                     options:0
+                                       owner:self
+                                    userInfo:nil];
+[area1 setCursor:[UIApp cursorWithStandardShape:UICursorDrag]];
+[self addTrackingArea:area1];
+
+area2 = [UITrackingArea trackingAreaWithRect:innerRect
+                                     options:0
+                                       owner:self
+                                    userInfo:nil];
+[area2 setCursor:[UIApp cursorWithStandardShape:UICursorCrosshair]];
+[self addTrackingArea:area2];
+```
+
+See `demo/src/main-cursor.m` for a full example.
+
+## Spatial queries
+
+Query the tracking quadtree directly:
+
+```objc
+UITrackingArea   *hits[8];
+NSUInteger       n;
+
+n = [window getTrackingAreasIntersectingRect:someRect
+                                       areas:hits
+                                    maxAreas:8];
+```
+
+Returns total intersecting count (may exceed `maxAreas`). See `test/70-collision/intersecting-rect.m`.
 
 ## Moving tracked views
 
