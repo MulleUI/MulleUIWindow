@@ -1,17 +1,19 @@
 # MulleUIWindow
 
-#### 🛸 MulleUIWindow provides UIWindow and extends UIView functionality
+Part of [MulleUI](https://github.com/MulleUI) — UIKit-shaped modular GUI libraries for mulle-objc.
+
+#### 🎪 MulleUIWindow provides UIWindow and extends UIView functionality
 
 
-See live on stream how it progresses: [https://www.twitch.tv/mulle_kybernetik_tv/](). Every Wednesday at 14:00-18:00 CEST.
+See live on stream how it progresses: [Twitch](https://www.twitch.tv/mulle_kybernetik_tv/). Every Wednesday at 14:00-18:00 CEST.
 
 
-![](demos/candycrash.png)
+![candycrash demo](demo/candycrash.png)
 
 There is no actual "drawing" code in MulleUIWindow. Use "MulleGraphics" for
 drawing. See "MulleUIControl" for widgets.
 
-![](mulle-tiny-logo-255x256.png)
+![mulle tiny logo](mulle-tiny-logo-255x256.png)
 
 
 
@@ -24,82 +26,112 @@ drawing. See "MulleUIControl" for widgets.
 
 
 
+## Documentation & Guides
+
+* [API Summary](asset/dox/api/toc)
+* [Coder Guide](asset/howto/coder/mulle-ui-tracking)
+* [Debugger Guide](asset/howto/debugger/mulle-ui-tracking)
+* [Verifier Guide](asset/howto/verifier/mulle-ui-window)
+
+## Usage
+
+`UIWindow` is the top of the view hierarchy. Create one, attach it to the
+application and run the event loop. All rendering happens in the `CALayer`s
+that make up the window's views:
+
+``` objc
+#import <MulleUIWindow/MulleUIWindow.h>
+
+int  main( void)
+{
+   UIApplication  *app;
+   UIWindow       *window;
+
+   app = [UIApplication sharedInstance];
+
+   window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 300.0)
+                      titleUTF8String:"Hello, MulleUIWindow"
+                            styleMask:UIWindowStyleMaskDefault];
+
+   [window setBackgroundColor:CGColorMakeWhite()];
+
+   [app addWindow:window];
+   return( [app runApp]);
+}
+```
+
+There is no drawing code in MulleUIWindow itself: the window routes input
+events through the responder chain and owns the views that make up its
+content. If `UIWindowStylePlanes` is set, the window provides overlay
+`UIWindowPlane`s — a `UIWindowPlane` is just a `UIView` — for content, menu,
+tooltip, alert and drag-and-drop that stack on top of each other;
+`contentPlane` is the window's `contentView`.
+
+## Build the demo
+
+The `demo/` folder is a [mulle-sde](//github.com/mulle-sde) project:
+
+``` sh
+cd demo
+mulle-sde craft
+```
 
 # Introduction to MulleUIWindow Framework
 
-The MulleUIWindow framework offers a robust and flexible approach to building user interfaces. It provides a hierarchical structure that elegantly separates concerns between drawing, event handling, and overall management. Let's dive into the key components and their relationships.
+The MulleUIWindow framework separates concerns between event handling
+(UIWindow, UIView) and drawing (CALayer).
 
-## UIWindow: The Grand Orchestrator
+## UIWindow
 
-At the pinnacle of our UI hierarchy stands UIWindow. Think of it as the conductor of an orchestra, coordinating all the visual elements of your application. UIWindow is responsible for:
+UIWindow is the root container of an application's user interface:
 
-- Managing the overall screen real estate
-- Coordinating the display of content
-- Serving as the root container for your application's user interface
+- Manages the overall screen real estate
+- Coordinates the display of content
+- Routes events to the views below it
 
-## UIView: The Interactive Canvas
+## UIView
 
-UIView objects are the true workhorses of your user interface. They're like talented musicians in our orchestra, each playing a crucial role. UIViews are responsible for:
+UIViews form a hierarchy of interactive containers:
 
-- Handling user interactions
-- Responding to events
-- Managing the layout of their subviews
-- Interpreting user input
-- Updating the visual representation based on user actions
+- Handle user interactions and respond to events
+- Manage the layout of their subviews
+- Update their visual representation based on user actions
 
-UIViews form the backbone of your application's interactive elements, ensuring a responsive and engaging user experience.
+A UIView does no drawing itself, that is delegated to its CALayers.
 
-## CALayer (or id <UILayer>): The Visual Virtuoso
+## CALayer
 
-The CALayer (or id <UILayer>) protocol is our framework's artistic specialist. It's solely dedicated to drawing and visual representation, much like a master painter focused entirely on creating stunning visuals. Key aspects include:
+CALayer is solely dedicated to drawing and rendering:
 
-- Exclusive focus on drawing and rendering
 - No handling of user interactions or event interpretation
 - Efficient rendering and animation capabilities
-
-This separation of concerns allows for a more streamlined and performant visual layer.
 
 ## Key Architectural Points
 
 1. **Clear Separation of Responsibilities**:
-   - UIView: Interaction and layout
-   - CALayer: Drawing and animation
+   - UIView: interaction and layout
+   - CALayer: drawing and animation
 
-2. **Controller as the Maestro**:
-   Controllers act as managers for one or multiple views, much like a conductor guiding different sections of an orchestra. They coordinate behavior and data flow, ensuring all parts work in harmony.
+2. **Process Design**:
+   The animation and drawing of layers can run in a separate render thread.
+   This limits callbacks to view code and keeps a clear boundary between
+   visual rendering and logical operations.
 
-3. **Innovative Process Design**:
-   The animation and drawing of layers are cleverly designed to potentially run in a separate process. This architectural choice:
-   - Limits or eliminates callbacks to view code
-   - Enhances overall performance
-   - Enables smoother animations
-   - Provides a clear boundary between visual rendering and logical operations
+## Component Hierarchy
 
-## The Symphony of UI Components
-
-By orchestrating these elements - UIWindow, UIView, and CALayer - the MulleUIWindow framework creates a symphony of UI components. This structure offers developers a powerful and flexible toolkit for crafting complex, efficient, and visually appealing user interfaces.
-
-The framework's design philosophy emphasizes clarity, performance, and separation of concerns, allowing developers to create harmonious and responsive applications with ease.
-
-- UIWindow (at the top)
+```
+UIWindow (at the top)
   |
-  +-- Controller 1
+  +-- UIView (contentPlane)
   |   |
-  |   +-- UIView 1
-  |   |   |
-  |   |   +-- CALayer 1
-  |   |
-  |   +-- UIView 2
-  |       |
-  |       +-- CALayer 2
-  |       +-- CALayer 3
-  |       +-- CALayer 4
+  |   +-- CALayer 1
+  |   +-- CALayer 2
   |
-  +-- Controller 2
+  +-- UIView (menuPlane)
       |
-      +-- UIView 3
-          |
-          +-- CALayer 5
+      +-- CALayer 3
+      +-- CALayer 4
+```
 
 ### You are here
 
@@ -143,9 +175,9 @@ Install the requirements:
 
 | Requirements                                 | Description
 |----------------------------------------------|-----------------------
-| [MulleUIPureWindow](https://github.com/MulleUI/MulleUIPureWindow)             | 👁️‍🗨️ MulleUIPureWindow - Windows without Views
+| [MulleUIPureWindow](https://github.com/MulleUI/MulleUIPureWindow)             | 🪑 MulleUIPureWindow - Windows without Views
 | [MulleUIView](https://github.com/MulleUI/MulleUIView)             | ![](mulle-tiny-logo-255x256.png)
-| [MulleCA](https://github.com/MulleUI/MulleCA)             | 🍃 Animate properties in real time with mulle-objc
+| [MulleCA](https://github.com/MulleUI/MulleCA)             | 🫧 Animate properties in real time with mulle-objc
 | [mulle-objc-list](https://github.com/mulle-objc/mulle-objc-list)             | 📒 Lists mulle-objc runtime information contained in executables.
 
 Download the latest [tar](https://github.com/MulleUI/MulleUIWindow/archive/refs/tags/latest.tar.gz) or [zip](https://github.com/MulleUI/MulleUIWindow/archive/refs/tags/latest.zip) archive and unpack it.

@@ -10,7 +10,6 @@ int   main( void)
    NSInvocation           *invocation;
 
    window = [UIWindow instance];
-   [window _initInvocationQueues];
 
    queue = [window invocationQueueForNameUTF8String:"whatevs"];
    if( ! queue)
@@ -22,6 +21,7 @@ int   main( void)
    invocation = [NSInvocation instance];
    [queue addInvocation:invocation];
    [window removeInvocationQueueForNameUTF8String:"whatevs"];
+   [window _doneInvocationQueues];
 
    return( 0);
 }

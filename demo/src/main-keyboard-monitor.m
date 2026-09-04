@@ -212,8 +212,9 @@ int   main( int argc, char *argv[])
    UIWindow        *window;
    KeyboardView    *view;
    NSUInteger      styleMask;
+   UIApplication   *app;
 
-   [UIApplication sharedInstance];
+   app = [UIApplication sharedInstance];
 
    styleMask = UIWindowStyleMaskDefault & ~UIWindowStyleRetained;
    window    = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, WINDOW_W, WINDOW_H)
@@ -230,5 +231,5 @@ int   main( int argc, char *argv[])
    [[window contentView] addSubview:view];
    [view becomeFirstResponder];
 
-   return( UIApplicationRunWindow( window));
+   return( [app runWindow:window]);
 }

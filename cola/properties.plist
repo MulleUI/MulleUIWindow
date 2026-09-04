@@ -1,7 +1,7 @@
 {
    project =
    {
-      description="🛸 MulleUIWindow provides UIWindow and extends UIView functionality";
+      description="🎪 MulleUIWindow provides UIWindow and extends UIView functionality";
       domain="github";
       language="c";
       dialect="objc";
@@ -10,11 +10,12 @@
       repo="MulleUIWindow";
       homepage="https://github.com/MulleUI/MulleUICore";
       license="UNLICENSED";
+      version="0.0.2";
    };
    dependencies =
    (
       {
-         description="👁️‍🗨️ MulleUIPureWindow - Windows without Views";
+         description="🪑 MulleUIPureWindow - Windows without Views";
          domain="github";
          name="MulleUIPureWindow";
          repo="MulleUIPureWindow";
@@ -30,7 +31,7 @@
          user="MulleUI";
       },
       {
-         description="🍃 Animate properties in real time with mulle-objc";
+         description="🫧 Animate properties in real time with mulle-objc";
          domain="github";
          name="MulleCA";
          repo="MulleCA";

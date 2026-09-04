@@ -66,8 +66,9 @@ static UIWindowDisplayBits   display( UIPureWindow *window,
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
+   UIApplication   *app;
 
-   (void) [UIApplication sharedInstance];
+   app = [UIApplication sharedInstance];
 
    window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 400.0)
                       titleUTF8String:"Demo"
@@ -77,7 +78,7 @@ int   main( int argc, char *argv[])
    [window setFrameCallback:display];
    [window setFrameRate:FRAMERATE];
    [window setFrameDelegate:[MulleUIPerf instance]];
-   return( UIApplicationRunWindow( window));
+   return( [app runWindow:window]);
 }
 
 //

@@ -178,10 +178,11 @@ static UIWindowDisplayBits   display( UIPureWindow *window,
 
 int   main( int argc, char *argv[])
 {
-   UIWindow     *window;
-   NSUInteger   styleMask;
+   UIWindow        *window;
+   NSUInteger      styleMask;
+   UIApplication   *app;
 
-   [UIApplication sharedInstance];
+   app = [UIApplication sharedInstance];
 
    styleMask = UIWindowStyleMaskDefault & ~UIWindowStyleRetained;
    window    = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, WINDOW_W, WINDOW_H)
@@ -193,5 +194,5 @@ int   main( int argc, char *argv[])
    [window setFrameRate:UIWindowFrameRateSynced];
    [window setBackgroundColor:CGColorMakeWithRGBA( 0.1, 0.1, 0.12, 1.0)];
 
-   return( UIApplicationRunWindow( window));
+   return( [app runWindow:window]);
 }

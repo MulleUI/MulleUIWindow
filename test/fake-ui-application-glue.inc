@@ -29,6 +29,13 @@
 
 @implementation FakeOSWindow
 
++ (NSUInteger) effectiveWindowStyleMask:(NSUInteger) styleMask
+                          graphicsHints:(UIOSWindowGraphicsHints) hints
+{
+   return( styleMask);
+}
+
+
 - (instancetype)init
 {
     if (self = [super init]) {
@@ -68,6 +75,11 @@
         }
     }
     return self;
+}
+
+- (BOOL) haveGraphicsContext
+{
+   return( YES);
 }
 
 - (NSInteger)shareID

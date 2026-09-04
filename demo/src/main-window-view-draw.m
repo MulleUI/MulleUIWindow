@@ -117,7 +117,7 @@
 //     at /home/src/srcO/mulle-objc/mulle-objc-runtime/src/mulle-objc-call.c:538
 // #50 0x000055555570fc41 in mulle_objc_object_call (obj=0x555556230890, methodid=189943689, parameter=0x0)
 //     at /home/src/srcO/mulle-objc/mulle-objc-runtime/src/mulle-objc-call.c:98
-// #51 0x0000555555777c9d in UIApplicationRunWindow (window=0x555556287e60)
+// #51 0x0000555555777c9d in -[UIApplication runWindow:] (window=0x555556287e60)
 //     at /home/src/srcO/MulleUI/MulleUIApplication/src/UIApplication.m:1457
 // #52 0x000055555566747e in main (argc=1, argv=0x7fffffffcc98) at /home/src/srcO/MulleUI/MulleUIWindow/demo/src/main-window-view-draw.m:114
 // (gdb)
@@ -197,8 +197,9 @@ static UIWindowDisplayBits   display( UIPureWindow *window,
 int   main( int argc, char *argv[])
 {
    UIWindow        *window;
+   UIApplication   *app;
 
-   (void) [UIApplication sharedInstance];
+   app = [UIApplication sharedInstance];
 
    window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 400.0)
                       titleUTF8String:"Demo"
@@ -208,7 +209,7 @@ int   main( int argc, char *argv[])
    [window setFrameCallback:display];
    [window setFrameRate:FRAMERATE];
    [window setFrameDelegate:[MulleUIPerf instance]];
-   return( UIApplicationRunWindow( window));
+   return( [app runWindow:window]);
 }
 
 //

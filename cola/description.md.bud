@@ -1,12 +1,12 @@
 
-See live on stream how it progresses: [https://www.twitch.tv/mulle_kybernetik_tv/](). Every Wednesday at 14:00-18:00 CEST.
+See live on stream how it progresses: [Twitch](https://www.twitch.tv/mulle_kybernetik_tv/). Every Wednesday at 14:00-18:00 CEST.
 
 
-![](demos/candycrash.png)
+![candycrash demo](demo/candycrash.png)
 
 There is no actual "drawing" code in MulleUIWindow. Use "MulleGraphics" for
 drawing. See "MulleUIControl" for widgets.
 
-![](mulle-tiny-logo-255x256.png)
+![mulle tiny logo](mulle-tiny-logo-255x256.png)
 
 

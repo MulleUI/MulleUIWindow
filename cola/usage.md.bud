@@ -1,0 +1,42 @@
+## Usage
+
+`UIWindow` is the top of the view hierarchy. Create one, attach it to the
+application and run the event loop. All rendering happens in the `CALayer`s
+that make up the window's views:
+
+``` objc
+#import <MulleUIWindow/MulleUIWindow.h>
+
+int  main( void)
+{
+   UIApplication  *app;
+   UIWindow       *window;
+
+   app = [UIApplication sharedInstance];
+
+   window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 400.0, 300.0)
+                      titleUTF8String:"Hello, MulleUIWindow"
+                            styleMask:UIWindowStyleMaskDefault];
+
+   [window setBackgroundColor:CGColorMakeWhite()];
+
+   [app addWindow:window];
+   return( [app runApp]);
+}
+```
+
+There is no drawing code in MulleUIWindow itself: the window routes input
+events through the responder chain and owns the views that make up its
+content. If `UIWindowStylePlanes` is set, the window provides overlay
+`UIWindowPlane`s — a `UIWindowPlane` is just a `UIView` — for content, menu,
+tooltip, alert and drag-and-drop that stack on top of each other;
+`contentPlane` is the window's `contentView`.
+
+## Build the demo
+
+The `demo/` folder is a [mulle-sde](//github.com/mulle-sde) project:
+
+``` sh
+cd demo
+mulle-sde craft
+```
