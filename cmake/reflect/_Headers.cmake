@@ -80,6 +80,5 @@ src/UIWindow+UIEvent.h
 src/UIWindow+UIResponder.h
 src/UIWindow+UITrackingArea.h
 src/UIWindow.h
-src/reflect/_MulleUIWindow-versioncheck.h
 )
 
