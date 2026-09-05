@@ -68,6 +68,7 @@
 // not id <UIGraphicsContext> context is intentional
 
 
+MULLE_UI_WINDOW_GLOBAL
 UIWindowDisplayBits
    UIWindowDefaultRenderViews( UIPureWindow *self_in,
                              id <UIGraphicsContext> context,

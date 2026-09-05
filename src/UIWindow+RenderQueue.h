@@ -60,6 +60,7 @@
 
 // returns UIWindowAnimationDidHappened if animations were run
 // otherwise zero
+MULLE_UI_WINDOW_GLOBAL
 UIWindowDisplayBits
    UIWindowDefaultPrepareRenderQueue( UIWindow *self,
                                       id <UIGraphicsContext> context,

@@ -102,6 +102,7 @@
 // +-----------------------+
 
 
+MULLE_UI_WINDOW_GLOBAL
 UIWindowDisplayBits
    UIWindowDefaultLayoutViews( UIWindow *self,
                                struct CGFrameInfo *info,

@@ -59,6 +59,7 @@ struct UIFirstResponderSearch
 };
 
 
+MULLE_UI_WINDOW_GLOBAL
 void  UIFirstResponderSearchInit( struct UIFirstResponderSearch *p,
                                   id <UIResponder> responder,
                                   CADirection primaryDirection,
