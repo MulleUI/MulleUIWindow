@@ -274,6 +274,7 @@ typedef NS_OPTIONS( NSUInteger, UITrackingAreaOptions)
 @end
 
 // Standard layout function used by default frame callback
+MULLE_UI_WINDOW_GLOBAL
 UIWindowDisplayBits
    UIWindowDefaultLayoutViews( UIWindow *self,
                                struct CGFrameInfo *info,
@@ -300,6 +301,7 @@ UIWindowDisplayBits
 @end
 
 // Standard render queue preparation
+MULLE_UI_WINDOW_GLOBAL
 UIWindowDisplayBits
    UIWindowDefaultPrepareRenderQueue( UIWindow *self,
                                       id <UIGraphicsContext> context,
@@ -321,11 +323,12 @@ UIWindowDisplayBits
 @end
 
 // Complete render pipeline (layout + prepare + draw)
+MULLE_UI_WINDOW_GLOBAL
 UIWindowDisplayBits
-   UIWindowDefaultRenderViews( UIPureWindow *self,
-                               id <UIGraphicsContext> context,
-                               struct CGFrameInfo *info,
-                               UIWindowDisplayBits displayBits);
+   UIWindowDefaultRenderViews( UIPureWindow *self_in,
+                             id <UIGraphicsContext> context,
+                             struct CGFrameInfo *info,
+                             UIWindowDisplayBits displayBits);
 
 struct UIWindowDebugInfo
 {
@@ -507,6 +510,7 @@ struct UIFirstResponderSearch
    CGFloat       fummelY;
 };
 
+MULLE_UI_WINDOW_GLOBAL
 void  UIFirstResponderSearchInit( struct UIFirstResponderSearch *p,
                                    id <UIResponder> responder,
                                    CADirection primaryDirection,
