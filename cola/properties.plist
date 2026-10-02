@@ -10,7 +10,7 @@
       repo="MulleUIWindow";
       homepage="https://github.com/MulleUI/MulleUICore";
       license="UNLICENSED";
-      version="0.0.2";
+      version="0.0.3";
    };
    dependencies =
    (

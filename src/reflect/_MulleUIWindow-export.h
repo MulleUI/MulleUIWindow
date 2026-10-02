@@ -3,11 +3,11 @@
  *   `mulle-sde reflect` and any edits will be lost.
  *   Suppress generation of this file with:
  *
- *      mulle-sde environment set MULLE_MATCH_TO_C_OBJC_HEADERS_FILE DISABLE
+ *      mulle-sde environment --global set MULLE_MATCH_TO_C_OBJC_HEADERS_FILE DISABLE
  *
  *   To not let mulle-match-to-c generate any header files:
  *
- *      mulle-sde environment set MULLE_MATCH_TO_C_RUN DISABLE
+ *      mulle-sde environment --global set MULLE_MATCH_TO_C_RUN DISABLE
  */
 #ifndef _mulle_ui_window__export_h__
 #define _mulle_ui_window__export_h__
@@ -17,20 +17,20 @@
 #import "UITrackingArea.h"
 #import "UIView+CAAnimation.h"
 #import "UIView+RenderQueue.h"
-#import "UIView+UIFirstResponderSearch.h"
 #import "UIView+UIFirstResponder.h"
+#import "UIView+UIFirstResponderSearch.h"
 #import "UIView+UITrackingArea.h"
 #import "UIView+UIWindow.h"
+#import "UIWindow.h"
 #import "UIWindow+FrameInfo.h"
 #import "UIWindow+Layout.h"
 #import "UIWindow+OneFrame.h"
-#import "UIWindow+RenderQueue.h"
 #import "UIWindow+Render.h"
+#import "UIWindow+RenderQueue.h"
 #import "UIWindow+Styling.h"
 #import "UIWindow+UIEvent.h"
 #import "UIWindow+UIResponder.h"
 #import "UIWindow+UITrackingArea.h"
-#import "UIWindow.h"
 
 
 #endif
